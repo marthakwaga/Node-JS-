@@ -1,0 +1,85 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Sales Registration
+  link(rel='stylesheet' type='text/css' href='nyondo.css')
+.container
+  .sidebar
+    .profile.picture
+      img(src='stockshop.jpg' alt='Nyondo Stock' width='100%')
+      h3 Nyondo Stock
+    .menu
+      h2 Explore More
+      div
+        div
+          a.menu-btn(href='index.html') Home
+        a.menu-btn(href='dashboard.html') Stock Inventory
+      div
+        a.menu-btn(href='supplier-registration.html') Suppliers
+  br
+  .content
+    form(action='' method='get')
+      // section 1
+      h1 Sales Registration
+      section
+        div
+          label(for='SalesDate') Sales Date:
+          input#SalesDate(type='date' name='')
+        div
+          label(for='SalesPerson') Sales Person:
+          select#SalesPerson(name='')
+            option(value='' disabled='' selected='') Select a representative
+            option(value='mw') Martha Wasukira
+            option(value='mk') Martha Kwaga
+            option(value='sw') Steve Wasukira
+            option(value='sm') Steve Medson
+      h2 Customer Details
+      // Section 2
+      section
+        div
+          label(for='Name') Name:
+          input(type='text' placeholder='Enter full name')
+        div
+          label(for='Phone Number') Phone Number:
+          input(type='tel' placeholder='+2567xxxxxxxx')
+      br
+      section
+        div
+          label(for='Email') Email:
+          input(type='email' placeholder='youremail@example.com')
+        div
+          label(for='Customer Type') Customer Type:
+          select(name='' id='Customer Type')
+            option(value='' disabled='' selected='') Select customer type
+            option(value='1') Retail
+            option(value='2') Wholesale
+            option(value='3') Broker
+      h2 Items
+      // items
+      section
+        div
+          label(for='pdtld') Pdtld:
+          input(type='text' name='pdtld')
+        div
+          label(for='quantity') Quantity:
+          input#quantity(type='number')
+        div
+          label(for='unitprice') Unit Price:
+          input#unitprice(type='number' name='')
+      br
+      section
+        div
+          label(for='pdtld') Pdtld:
+          input(type='text' name='pdtld')
+        div
+          label(for='quantity') Quantity:
+          input#quantity(type='number')
+        div
+          label(for='unitprice') Unit Price:
+          input#unitprice(type='number' name='')
+      br
+      // final bit
+      section#btn-section
+        button(type='reset') Cancel
+        button(type='submit') Submit

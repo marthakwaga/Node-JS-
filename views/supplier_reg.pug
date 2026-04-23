@@ -1,0 +1,210 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Supplier Registration
+  link(rel='stylesheet' type='text/css' href='nyondo.css')
+.container
+  .sidebar
+    .profile.picture
+      img(src='stockshop.jpg' alt='Nyondo Stock' width='100%')
+      h3 Nyondo Stock
+    .menu
+      h2 Explore More
+      div
+        div
+          a.menu-btn(href='index.html') Home
+        a.menu-btn(href='dashboard.html') Stock Inventory
+      div
+        a.menu-btn(href='supplier-registration.html') Suppliers
+  br
+  .content
+    form(action='' method='get')
+      // section 1
+      h1 Sales Registration
+      section
+        div
+          label(for='SalesDate') Sales Date:
+          input#SalesDate(type='date' name='')
+        div
+          label(for='SalesPerson') Sales Person:
+          select#SalesPerson(name='')
+            option(value='' disabled='' selected='') Select a representative
+            option(value='mw') Martha Wasukira
+            option(value='mk') Martha Kwaga
+            option(value='sw') Steve Wasukira
+            option(value='sm') Steve Medson
+      h2 Customer Details
+      // Section 2
+      section
+        div
+          label(for='Name') Name:
+          input(type='text' placeholder='Enter full name')
+        div
+          label(for='Phone Number') Phone Number:
+          input(type='tel' placeholder='+2567xxxxxxxx')
+      br
+      section
+        div
+          label(for='Email') Email:
+          input(type='email' placeholder='youremail@example.com')
+        div
+          label(for='Customer Type') Customer Type:
+          select(name='' id='Customer Type')
+            option(value='' disabled='' selected='') Select customer type
+            option(value='1') Retail
+            option(value='2') Wholesale
+            option(value='3') Broker
+      h2 Items
+      // items
+      section
+        div
+          label(for='pdtld') Pdtld:
+          input(type='text' name='pdtld')
+        div
+          label(for='quantity') Quantity:
+          input#quantity(type='number')
+        div
+          label(for='unitprice') Unit Price:
+          input#unitprice(type='number' name='')
+      br
+      head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(http-equiv='x-ua-compatible' content='ie=edge')
+        title HOMEPAGE
+        // MDB icon
+        link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
+        // Font Awesome
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+        // Google Fonts Roboto
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
+        // MDB
+        link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
+        link(rel='stylesheet' href='css/mdb.min.css')
+        link(rel='stylesheet' href='nyondo.css')
+      // Background image
+      #intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+        // BACKGROUD IMAGE
+        .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+          .d-flex.justify-content-center.align-items-center.h-100
+            // FORM
+            .container.bg-white.min-vh-100
+              // SIDEBAR
+              .sidebar.p-3
+                .profile-picture
+                  img(src='https://static.vecteezy.com/system/resources/thumbnails/047/536/822/small/warehouse-of-building-materials-in-an-industrial-store-generated-by-artificial-intelligence-photo.jpg' alt='Nyondo stock' width='100%')
+                  h3  Nyondo Stock
+                .menu
+                  h2 Explore More
+                  a.menu-btn(href='index.html') Home
+                  a.menu-btn(href='#') Suppliers
+                  a.menu-btn(href='#') Products
+                  a.menu-btn(href='#') Orders
+                  a.menu-btn(href='#') Contact Us
+              // CONTENT
+              br
+              .content
+                // <h2>Partner with us. Supply with confidence.</h2>
+                form(action='/registersupplier.html' method='post')
+                  // Supplier Details
+                  h1 1. Supplier Details
+                  section
+                    div
+                      label(for='BusinessName') Business Name:
+                      input#BusinessName(type='text' name='' placeholder=' Enter business name here')
+                    div
+                      label(for='') TIN Number:
+                      input#TINnumber(type='text' name='' placeholder=' Enter TIN here')
+                  // Contact Information
+                  h2 2. Contact Information
+                  section
+                    div
+                      label(for='Contactperson') Contact Person:
+                      input#SalesDate(type='text' name='' placeholder=' Enter name here')
+                    div
+                      label(for='phonenumber') Phone Number:
+                      input#phonenumber(type='tel' name='' placeholder='+2567xxxxxxxx')
+                    div
+                      label(for='Email') Email:
+                      input#Email(type='email' name='' placeholder='youremail@example.com')
+                  // Address
+                  h2 3. Address
+                  section
+                    div
+                      label(for='PhysicalAddress') Physical Address:
+                      input#PhysicalAddress(type='text' name='' placeholder=' Enter address here')
+                    div
+                      label(for='City') City:
+                      input#City(type='text' name='' placeholder='Mbale')
+                    div
+                      label(for='Country') Country:
+                      input#Country(type='text' name='' placeholder='Uganda')
+                  // Business Details
+                  h2 4. Business Details
+                  section
+                    div
+                      label(for='choices') Nature of Business:
+                      select#choices(name='choices' onchange='checkOther(this);')
+                        option(value='' disabled='' selected='') Select Business
+                        option(value='af') Agriculture and Farming
+                        option(value='m') Manufacturing
+                        option(value='tl') Transport and Logistics
+                        option(value='eh') Electrical and Hardware Supplies
+                        option(value='ie') Import and Export
+                        option(value='other') Other
+                      #otherInputDiv(style='display: none;')
+                        label(for='otherOption') Specify other:
+                        input#otherOption(type='text' name='otherOption')
+                    br
+                    div
+                      label(for='Products Supplied') Products Supplied:
+                      input(type='text' name='' id='Products Supplied')
+                  // Payment Details
+                  h2 5. Payment Details
+                  section
+                    div
+                      label(for='Bank') Bank:
+                      select#choices(name='choices' onchange='checkother(this);')
+                        option(value='' disabled='' selected='') Select a Bank
+                        option(value='option 1') ABSA
+                        option(value='option 2') DFCU
+                        option(value='option 3') Stanbic Bank
+                        option(value='sm') Centenary Bank
+                        option(value='sm') Standard Chattered
+                    div
+                      label(for='Account Number') Account Number:
+                      input(type='text' name='' id='Account Number')
+                  // final bit
+                  br
+                  section#btn-section
+                    button(type='reset') Cancel
+                    button(type='submit') Submit
+              // End of Form
+          // Background image
+          // FOOTER WITH COPYRIGHT
+          footer.bg-body-warning.text-center
+            .text-center.p-3(style='background-color: rgba(0, 0, 0, 0.05);')
+            a.bg-body-warning.text-center(class='class=' ;='' href='https://mdbootstrap.com/')  &copy; 2026 Copyright: NyondoGeneralHardware.com
+          // Grid column
+        // End of .container
+        // MDB
+        script(type='text/javascript' src='js/mdb.umd.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+        // Custom scripts
+        script(type='text/javascript').
+      section
+        div
+          label(for='pdtld') Pdtld:
+          input(type='text' name='pdtld')
+        div
+          label(for='quantity') Quantity:
+          input#quantity(type='number')
+        div
+          label(for='unitprice') Unit Price:
+          input#unitprice(type='number' name='')
+      br
+      // final bit
+      section#btn-section
+        button(type='reset') Cancel
+        button(type='submit') Submit

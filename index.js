@@ -8,7 +8,9 @@ const app = express();
 const port = 3000;
 
 //3. Configurations
-
+//Set templating engine to Pug
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname,'views'))
 
 //4. Middleware
 // Simple request time logger
@@ -104,6 +106,8 @@ app.post('/sales',(req,res)=>{
 app.get('/dog', (req,res)=>{
   res.send('I am looking for a dog from ' + req.query.origin + ' which is a ' + req.query.breed + ' and is ' +req.query.colour+ ' in color ')
 })
+
+
 
 
 
