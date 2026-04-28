@@ -1,0 +1,105 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(http-equiv='x-ua-compatible' content='ie=edge')
+  title HOMEPAGE
+  // MDB icon
+  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
+  // Font Awesome
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+  // Google Fonts Roboto
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
+  // MDB
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='/css/mdb.min.css')
+  link(rel='stylesheet' href='/nyondo.css')
+#intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  // BACKGROUD IMAGE
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+    .d-flex.justify-content-center.align-items-center.h-100
+      // SIDEBAR
+      .col-md-4.col-lg-2.bg-light.p-4.vh-150.row.d-grid.gap-4
+        br
+        .logo.bg-white.p-4.rounded.shadow.mx-auto
+        a.btn.btn-outline-primary(href='#') Dashboard
+        a.btn.btn-outline-primary(href='#') Stock
+        a.btn.btn-outline-primary(href='#') POS
+        a.btn.btn-outline-primary(href='#') Sales
+        a.btn.btn-outline-primary(href='#') Suppliers
+        a.btn.btn-outline-primary(href='#') Deposits
+        a.btn.btn-outline-primary(href='#') Reports
+        a.btn.btn-outline-primary(href='#') transport
+      // MAIN CONTENT
+      .main.container-fluid.p-4.border-end.vh-100
+        // TOP NAV
+        .d-flex.justify-content-between.align-items-center.mb-4.bg-white
+          h3 Dashboard
+          button.fw-bold logout
+        // KPI CARDS
+        .row.g-3
+          .col-md-3
+            .card.p-3.shadow-sm
+              h6 Total Stock Value
+              h4 UGX 8,500,000
+          .col-md-3
+            .card.p-3.shadow-sm
+              h6 Today&apos;s Sales
+              h4 UGX 450,000
+          .col-md-3
+            .card.p-3.shadow-sm
+              h6 Suppliers
+              h4 12
+          .col-md-3
+            .card.p-3.shadow-sm
+              h6 Deposits
+              h4 UGX 2,300,000
+        // TABLES
+        .row.mt-4
+          // SALES
+          .col-md-6
+            .card.p-3.shadow-sm
+              h5 Recent Sales
+              table.table.table-sm
+                thead
+                  tr
+                    th Product
+                    th Qty
+                    th Total
+                tbody
+                  tr
+                    td Cement
+                    td 5
+                    td 160,000
+                  tr
+                    td Iron Bars
+                    td 10
+                    td 300,000
+          // LOW STOCK
+          .col-md-6
+            .card.p-3.shadow-sm
+              h5
+                a(href='')
+                  i.fas.fa-bell.text-danger  
+                | Low Stock Alerts
+              table.table.table-sm
+                thead
+                  tr
+                    th Product
+                    th Qty
+                tbody
+                  tr.text-danger
+                    td Nails
+                    td 5
+                  tr.text-danger
+                    td Paint
+                    td 3
+        // CHART
+        .card.mt-4.p-3.shadow-sm
+          h5 Sales Overview
+          canvas#salesChart(height='100')
+  // Background image
+  script(type='text/javascript' src='js/mdb.umd.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+  // Custom scripts
+  script(type='text/javascript').

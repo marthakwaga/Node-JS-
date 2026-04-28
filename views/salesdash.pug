@@ -1,0 +1,57 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title NGH Attendant Dashboard
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='css/mdb.min.css')
+  link(rel='stylesheet' href='/css/salesdash.css')
+  style.
+// SIDEBAR
+.sidebar
+  h5 NGH Staff
+  a(href='#') Dashboard
+  a(href='pos.html') POS
+  a(href='#') Stock
+// MAIN
+.main
+  // TOP
+  .d-flex.justify-content-between.mb-4
+    h3 Sales Dashboard
+    span Attendant
+  // KPI
+  .row.g-3
+    .col-md-4
+      .card.p-3.shadow-sm
+        h6 Today&apos;s Sales
+        h4 UGX 450,000
+    .col-md-4
+      .card.p-3.shadow-sm
+        h6 Transactions
+        h4 18
+    .col-md-4
+      .card.p-3.shadow-sm
+        h6 Items Sold
+        h4 75
+  // QUICK ACTION
+  .mt-4
+    a.btn.btn-success.btn-lg.w-100(href='pos.html')
+      | Start New Sale
+  // LOW STOCK
+  .card.mt-4.p-3.shadow-sm
+    h5
+      i.fas.fa-bell.text-danger
+      |  Low Stock Alerts
+    table.table
+      thead
+        tr
+          th Product
+          th Qty
+      tbody
+        tr.text-danger
+          td Nails
+          td 5
+        tr.text-danger
+          td Paint
+          td 3
+script(src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js')
