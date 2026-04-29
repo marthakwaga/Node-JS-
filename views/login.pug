@@ -12,65 +12,24 @@ head
   link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
   // MDB
   link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='css/mdb.min.css')
+  link(rel='stylesheet' href='/css/mdb.min.css')
   link(rel='stylesheet' href='/css/nyondo.css')
-  link(rel='stylesheet' href='/public/images/background-tools.jpeg')
 // Background image
 #intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  // NAVIGATION BAR
-  nav.navbar.navbar-expand-lg.bg-white.fixed-top
-    // Container wrapper
-    .container-fluid
-      // Toggle button
-      button.navbar-toggler(data-mdb-collapse-init='' type='button' data-mdb-target='#navbarLeftAlignExample' aria-controls='navbarLeftAlignExample' aria-expanded='false' aria-label='Toggle navigation')
-        i.bi.bi-browser-chrome
-      // Collapsible wrapper
-      #navbarLeftAlignExample.collapse.navbar-collapse
-        // Left links
-        ul.navbar-nav.me-auto.mb-2.mb-lg-0
-          li.nav-item
-            a.nav-link.active(aria-current='page' href='index.html') Home
-          li.nav-item
-            a.nav-link(href='#') Visit Us
-          // Navbar dropdown
-          li.nav-item.dropdown
-            a#navbarDropdown.nav-link.dropdown-toggle(data-mdb-dropdown-init='' href='#' role='button' aria-expanded='false')
-              | More
-            // Dropdown menu
-            ul.dropdown-menu(aria-labelledby='navbarDropdown')
-              li
-                a.dropdown-item(href='#') Get in Touch
-              li
-                a.dropdown-item(href='#') Our Products
-              li
-                hr.dropdown-divider
-              li
-                a.dropdown-item(href='#') About Us
-        // Left links
-        // Right icon
-        div
-          a#navbarDropdownMenuLink.link-secondary.me-3.dropdown-toggle.hidden-arrow(data-mdb-dropdown-init='' href='#' role='button' aria-expanded='false')
-        // END OF RIGHT ICON
-      // Collapsible wrapper
-    // Container wrapper
   // BACKGROUD IMAGE
   .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
     .d-flex.justify-content-center.align-items-center.h-100
       // FORM
-      .bg-danger.bg-opacity-10.p-4.rounded.shadow(style='max-width: 600px; width: 50%; min: vh-100px')
-        .d-flex.align-items-center.justify-content-center.justify-content-lg-start.bg-white.p-4.rounded.shadow
-          p.lead.fw-normal.mb-0.me-3 Continue sign in with
-          button.btn.btn-tertiary.btn-floating.mx-1(type='button' data-mdb-button-init='' data-mdb-ripple-init='')
-            i.bi.bi-google
-        .divider.d-flex.align-items-center.my-4
-          p.text-center.fw-bold.mx-3.mb-0 Or
+      .bg-danger.bg-opacity-10.p-4.rounded.shadow(style='max-width: 400px; width: 50%; min: vh-100px')
+        .logo.bg-white.p-4.rounded.shadow.mx-auto
+        br
         // Email input
         .form-outline.mb-4.p-1(data-mdb-input-init='')
-          input#form3Example3.form-control.form-control-lg(type='email' placeholder='Enter a valid email address')
+          input#form3Example3.form-control.form-control-lg(name='email' type='email' placeholder='Enter a valid email address')
           label.form-label(for='form3Example3') Email address
         // Password input
         .form-outline.mb-4.p-1(data-mdb-input-init='')
-          input#form3Example4.form-control.form-control-lg(type='password' placeholder='Enter password')
+          input#form3Example4.form-control.form-control-lg(name='password' type='password' placeholder='Enter password')
           label.form-label(for='form3Example4') Password
         .d-flex.justify-content-between.align-items-center
           // Checkbox
@@ -79,20 +38,13 @@ head
             label.form-check-label(for='form2Example3')
               | Remember me
           a.text-body(href='forgot-password.pug') Forgot password?
-        .text-center.text-lg-start.mt-4.pt-2
-          button.btn.btn-primary.btn-lg(type='button' data-mdb-button-init='' data-mdb-ripple-init='' style='padding-left: 2.5rem; padding-right: 2.5rem;') Login
+        .text-center.text-lg-center.mt-4.pt-2
+          button.btn.btn-outline-warning.btn-lg(type='submit' data-mdb-button-init='' data-mdb-ripple-init='' style='padding-left: 2.5rem; padding-right: 2.5rem;') Login
           p.small.text-center-floating.mt-2.pt-1.mb-0
             | Don&apos;t have an account? 
             a.link-warning(href='#!') Register
   // Background image
-  // FOOTER WITH COPYRIGHT
-  footer.bg-body-warning.text-center.p-3
-    .text-center.p-3(style='background-color: rgba(0, 0, 0, 0.05);')
-    a.bg-body-warning.text-center(class='class=' ;='' href='')  &copy; 2026 Copyright: NyondoGeneralHardware.com
-  // Grid column
-// End of .container
-// MDB
-script(type='text/javascript' src='js/mdb.umd.min.js')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-// Custom scripts
-script(type='text/javascript').
+  script(type='text/javascript' src='js/mdb.umd.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+  // Custom scripts
+  script(type='text/javascript').
