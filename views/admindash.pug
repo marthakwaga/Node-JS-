@@ -13,29 +13,30 @@ head
   // MDB
   link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
   link(rel='stylesheet' href='/css/mdb.min.css')
-  link(rel='stylesheet' href='/nyondo.css')
+  link(rel='stylesheet' href='/css/nyondo.css')
+
 #intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
   // BACKGROUD IMAGE
   .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
     .d-flex.justify-content-center.align-items-center.h-100
       // SIDEBAR
-      .col-md-4.col-lg-2.bg-light.p-4.vh-150.row.d-grid.gap-4
+      .col-md-4.col-lg-2.bg-tertiary.p-4.vh-150.row.d-grid.gap-4
         br
         .logo.bg-white.p-4.rounded.shadow.mx-auto
-        a.btn.btn-outline-primary(href='#') Dashboard
-        a.btn.btn-outline-primary(href='#') Stock
-        a.btn.btn-outline-primary(href='#') POS
-        a.btn.btn-outline-primary(href='#') Sales
-        a.btn.btn-outline-primary(href='#') Suppliers
-        a.btn.btn-outline-primary(href='#') Deposits
-        a.btn.btn-outline-primary(href='#') Reports
-        a.btn.btn-outline-primary(href='#') transport
+        a.btn.btn-outline-warning(href='#') Home
+        a.btn.btn-outline-warning(href='#') Stock
+        a.btn.btn-outline-warning(href='#') POS
+        a.btn.btn-outline-warning(href='#') Sales
+        a.btn.btn-outline-warning(href='#') Suppliers
+        a.btn.btn-outline-warning(href='#') Deposits
+        a.btn.btn-outline-warning(href='#') Reports
+        a.btn.btn-outline-warning(href='#') transport
       // MAIN CONTENT
       .main.container-fluid.p-4.border-end.vh-100
         // TOP NAV
         .d-flex.justify-content-between.align-items-center.mb-4.bg-white
           h3 Dashboard
-          button.fw-bold logout
+          a.btn.fw-bold(href='/logout') logout
         // KPI CARDS
         .row.g-3
           .col-md-3

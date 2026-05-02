@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>HOMEPAGE</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/mdb.min.css" />
+    <link rel="stylesheet" href="/nyondo.css">
+  </head>
+
+
+  <body class="d-flex flex-column min-vh-100">
+  <!-- Background image -->
+  <div
+    id="intro-example"
+    class="p-5 text-center bg-image" style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');" 
+  >
+  <!-- BACKGROUD IMAGE -->
+   
+    <div class="mask mask-custom" style="background-color: rgba(25, 12, 36, 0.7);">
+     <div class="register-card p-5">
+          <h4 class="text-center mb-4">Register New Staff</h4>
+
+          <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Username / Phone</label>
+                <input type="text" class="form-control" id="username" placeholder="e.g. 0782xxxxxx" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email (Optional)</label>
+              <input type="email" class="form-control" id="email">
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" required>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">User Role</label>
+              <select class="form-select" id="role" required>
+                <option value="">Select Role</option>
+                <option value="sales">Sales Attendant</option>
+                <option value="manager">Store Manager</option>
+                <option value="admin">Accounts / Admin</option>
+              </select>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus"></i> Create Account
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <p class="mb-0">
+              Already have an account? 
+              <a href="index.html" class="text-success fw-bold">Login Here</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <small class="text-muted">Nyondo General Hardware LTD • Nansana</small>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+  <!-- Background image -->
+
+
+
+    <script type="text/javascript" src="js/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>
+
+

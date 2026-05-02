@@ -14,7 +14,8 @@ const registrationSchema = new mongoose.Schema({
   },
 role: {
     type: String,
-     required: true
+     required: true,
+     enum: ['attendant','manager', 'admin']
   },
 phoneNumber: {
     type: Number,

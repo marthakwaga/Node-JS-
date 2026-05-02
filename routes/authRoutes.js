@@ -1,14 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Registration = require("../models/Registration");
+const passport = require("passport");
 
-// Get login page
-router.get("/login", (req, res) => {
-  res.render("login");
-});
-router.post("/login", (req, res) => {
-  console.log(req.body);
-});
+
+//Importing a model
+const Registration = require("../models/Registration");
 
 //Get register user page
 router.get("/userreg", (req, res) => {
@@ -16,7 +12,7 @@ router.get("/userreg", (req, res) => {
 });
 router.post("/userreg", async (req, res) => {
   try {
-    const { fullName, email, role, phoneNumber, NIN } = req.body;
+    const { fullName, email, password, role, phoneNumber, NIN } = req.body;
     //Check if user already exists
     let existingUser = await Registration.findOne({
       email: email.toLowerCase(),
@@ -32,69 +28,48 @@ router.post("/userreg", async (req, res) => {
       email: email.toLowerCase(),
       role,
       phoneNumber,
-      NIN: NIN.toUppercase,
+      NIN: NIN.toUpperCase(),
     });
     console.log(newUser);
     await Registration.register(newUser, req.body.password, (err) => {
       if (err) {
         return res.redirect("/userreg");
       }
-      res.redirect("auth/login");
     });
+    res.redirect("/login");
   } catch (error) {
     console.error(error);
     res.render("userreg", { error: error.message });
   }
 });
 
-//Supplier Registration
-router.get("/supplierreg", (req, res) => {
-  res.render("supplier-registration");
+// Get login page
+router.get("/login", (req, res) => {
+  res.render("login");
 });
-router.post("/registration", async (req, res) => {
-  try {
-    const { fullname, phoneNumber, email } = req.body;
-    // check if user exists using destructuring
-    let existingUser = await Registration.findOne({
-      email: email.toLowerCase(),
-    });
-    if (existingUser) {
-      return res.render("supplier-registration", {
-        error: "Email is already registered",
-      });
+router.post("/login", passport.authenticate('local',{failureRedirect:'/login'}), (req, res) => {
+ if(req.user.role ==='admin') {
+  res.redirect('/admin-dash')
+ } else if(req.user.role ==='attendant'){
+  res.redirect('/sales-dash')
+ } else if(req.user.role ==='manager') {
+  res.redirect('/manager-dash')
+ } else{
+  res.redirect('/')
+ }
+});
+
+//Logout Route
+router.get('/logout', (req, res, next) =>{
+  req.logout( (err)=>{
+    if(err) {
+      return next(err);
     }
-    // create a new user
-    const newUser = new Registration({
-      fullname,
-      phoneNumber,
-      email: email.toLowerCase,
-      nin: nin.toUppercase,
-    });
-    console.log(newUser);
-    await newUser.save();
-    res.redirect();
-    res.redirect("/auth/supplier");
-  } catch (error) {
-    console.error(error);
-    res.render("supplier-registration", { error: errot.message });
-  }
+    res.redirect('/')
+  })
 });
 
-// //Admin Dashboard route
-// router.get('/admindash', (req,res)=>{
-//     res.render('admindash')
-// });
-// router.post('/admindash', (req,res)=>{
-//     console.log(req.body)
-// })
 
-// //Sales Dashboard Route
-// router.get('/admindash', (req,res)=>{
-//     res.render('admindash')
-// });
-// router.post('/salesdash', (req,res)=>{
-//     console.log(req.body)
-// })
 
 module.exports = router;
 

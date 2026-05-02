@@ -2,7 +2,7 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Sales Registration
+  title ADD SALE
   link(rel='stylesheet' type='text/css' href='nyondo.css')
 .container
   .sidebar
@@ -25,10 +25,10 @@ head
       section
         div
           label(for='SalesDate') Sales Date:
-          input#SalesDate(type='date' name='')
+          input#SalesDate(type='date' name='date')
         div
-          label(for='SalesPerson') Sales Person:
-          select#SalesPerson(name='')
+          label(for='salesPerson') Sales Person:
+          select#SalesPerson(name='salesPerson')
             option(value='' disabled='' selected='') Select a representative
             option(value='mw') Martha Wasukira
             option(value='mk') Martha Kwaga
@@ -39,45 +39,36 @@ head
       section
         div
           label(for='Name') Name:
-          input(type='text' placeholder='Enter full name')
+          input(name='name' type='text' placeholder='Enter full name')
         div
-          label(for='Phone Number') Phone Number:
-          input(type='tel' placeholder='+2567xxxxxxxx')
+          label(for='phoneNumber') Phone Number:
+          input(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx')
       br
       section
         div
-          label(for='Email') Email:
+          label(for='email') Email:
           input(type='email' placeholder='youremail@example.com')
         div
-          label(for='Customer Type') Customer Type:
-          select(name='' id='Customer Type')
+          label(for='customerType') Customer Type:
+          select(name='customerType' id='Customer Type')
             option(value='' disabled='' selected='') Select customer type
-            option(value='1') Retail
-            option(value='2') Wholesale
-            option(value='3') Broker
+            option(value='1') Retailer
+            option(value='2') Wholesaler
       h2 Items
       // items
       section
         div
-          label(for='pdtld') Pdtld:
-          input(type='text' name='pdtld')
+          label(for='Item') Item:
+          input(type='text' name='item')
+          each item in items 
+          option(value='item._id') #{item.productname} (stock:#(item.quantity) | price:#{item.sellingprice}UGX)
         div
           label(for='quantity') Quantity:
-          input#quantity(type='number')
+          input#quantity(name='quantity' type='number')
         div
-          label(for='unitprice') Unit Price:
-          input#unitprice(type='number' name='')
-      br
-      section
-        div
-          label(for='pdtld') Pdtld:
-          input(type='text' name='pdtld')
-        div
-          label(for='quantity') Quantity:
-          input#quantity(type='number')
-        div
-          label(for='unitprice') Unit Price:
-          input#unitprice(type='number' name='')
+          label(for='unitPrice') Unit Price:
+          input#unitprice(name='unitPrice' type='number' name='')
+      
       br
       // final bit
       section#btn-section

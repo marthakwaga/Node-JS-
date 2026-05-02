@@ -62,10 +62,10 @@ head
         .row.g-3.my-3
           .col
             label.form-label(for='formGroupExampleInput') Product Name:
-            input.form-control(type='text' placeholder='Enter name' aria-label='First name')
+            input.form-control(name='productname' type='text' placeholder='Enter name' aria-label='First name')
           .col
             label.form-label(for='formGroupExampleInput') Product Code:
-            input.form-control(type='text' placeholder='' aria-label='Last name')
+            input.form-control(name='productcode' type='text' placeholder='' aria-label='Last name')
           .col
             label.form-label(for='formGroupExampleInput') Product type:
             select.form-select(aria-label='Default select example')
@@ -84,10 +84,10 @@ head
         h3.text-center.fw-bold Stock Details
         .row.g-3.my-3
           .col
-            label.form-label(for='formGroupExampleInput') Quantity:
-            input.form-control(type='number' placeholder='' aria-label='First name')
+            label.form-label(for='quantity') Quantity:
+            input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
           .col
-            label.form-label(for='formGroupExampleInput') Unit of Measure:
+            label.form-label(for='unit of measure') Unit of Measure:
             select.form-select(aria-label='Default select example')
               option(selected='') Choose option below
               option(value='kg') Kilogram (kg)
@@ -104,13 +104,13 @@ head
         .row.g-3
           .col
             label.form-label(for='formGroupExampleInput') Supplier Name:
-            input.form-control(type='text' placeholder='Enter name here' aria-label='First name')
+            input.form-control(name="supplierName" type='text' placeholder='Enter name here' aria-label='First name')
           .col
             label.form-label(for='formGroupExampleInput') Phone Number:
-            input.form-control(type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
+            input.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
           .col
-            label.form-label(for='formGroupExampleInput') Email:
-            input.form-control(type='email' placeholder='youremail@example.com' aria-label='Email')
+            label.form-label(for='email') Email:
+            input.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')
         // End of supplier details
         // pricing
         h3.text-center.fw-bold Pricing
@@ -119,17 +119,21 @@ head
             label.form-label Cost Price:
             .input-group
               span#basic-addon1.input-group-text
-                svg.bi.bi-currency-dollar(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                  path(d='M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z')
-              input.form-control(type='text' placeholder='' aria-label='input GroupExample')
-          // dollar sign input
+                
+              input.form-control(name='costPrice' type='text' placeholder='' aria-label='input GroupExample')
           .col
-            label.form-label Selling Price:
+            label.form-label Transport Price:
             .input-group
               span#basic-addon1.input-group-text
-                svg.bi.bi-currency-dollar(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                  path(d='M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z')
-              input.form-control(type='text' placeholder='' aria-label='input GroupExample')
+                
+              input.form-control(name='tpCost' type='text' placeholder='' aria-label='input GroupExample')
+          
+          .col
+            label.form-label(for='sellingPrice') Selling Price:
+    
+            .input-group
+              span#basic-addon1.input-group-text
+              input.form-control(name='sellingPrice' type='text' placeholder='' aria-label='input GroupExample')
         // end of pricing
         // submission
         h3.text-center.fw-bold Comments

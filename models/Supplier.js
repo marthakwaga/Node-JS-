@@ -1,45 +1,42 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
-const stockSchema = new mongoose.Schema({
-    productname: {
+const supplierSchema = new mongoose.Schema({
+  date: {
     type: Date,
     default: Date.now
 
   },
- productcode: {
+ salesperson: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'Registration',
     trim: true,
      required: true,
   },
-producttype: {
+name: {
     type: String,
   },
-quantity: {
+phoneNumber: {
     type: Number,
 
   },
-unitofmeasure: {
-    type: Number,   
+pdtId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Stock',   
     required: true
       },
-sellingprice: {
+quantity: {
     type: Number,
-    required: true,
-    validate:{
-        validator:function(value){
-            return value >this.costprice;
-        },
-        message: 'Selling price must be greater than cost price'
-    }
+    trim: true,
+    required: true
       },
-comment: {
+pdtId: {
     type: String,
     trim: true,
+    required: true
       },
 });
-stockSchema.plugin(passportLocalMongoose,{
+supplierSchema.plugin(passportLocalMongoose,{
   usernameField: 'email'
 });
-module.exports = mongoose.model('Stock', stockSchema);
+module.exports = mongoose.model('Supplier', supplierSchema);

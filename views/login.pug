@@ -3,7 +3,7 @@ head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(http-equiv='x-ua-compatible' content='ie=edge')
-  title HOMEPAGE
+  title LOGIN
   // MDB icon
   link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
   // Font Awesome
@@ -21,7 +21,7 @@ head
     .d-flex.justify-content-center.align-items-center.h-100
       // FORM
       .bg-danger.bg-opacity-10.p-4.rounded.shadow(style='max-width: 400px; width: 50%; min: vh-100px')
-        .logo.bg-white.p-4.rounded.shadow.mx-auto
+        .logo.bg-white.p-4.rounded.shadow.mx-auto(style="background-image: url('/css/logo.png');")
         br
         // Email input
         .form-outline.mb-4.p-1(data-mdb-input-init='')
@@ -37,12 +37,12 @@ head
             input#form2Example3.form-check-input.me-2(type='checkbox' value='')
             label.form-check-label(for='form2Example3')
               | Remember me
-          a.text-body(href='forgot-password.pug') Forgot password?
+          a.text-body(href='/views/forgot-password.pug') Forgot password?
         .text-center.text-lg-center.mt-4.pt-2
           button.btn.btn-outline-warning.btn-lg(type='submit' data-mdb-button-init='' data-mdb-ripple-init='' style='padding-left: 2.5rem; padding-right: 2.5rem;') Login
           p.small.text-center-floating.mt-2.pt-1.mb-0
             | Don&apos;t have an account? 
-            a.link-warning(href='#!') Register
+            a.link-warning(href='/views/userreg') Register
   // Background image
   script(type='text/javascript' src='js/mdb.umd.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')

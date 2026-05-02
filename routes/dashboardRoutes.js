@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/supplier-reg', (req,res)=>{
-    res.render('supplier_reg')
+router.get('/admin-dash', (req,res)=>{
+    res.render('admindash')
 })
-router.post('/supplier_reg', (req,res)=>{
-    console.log(req.body)
+router.get('/sales-dash', (req,res)=>{
+   res.render('salesdash')
+})
+router.get('/manager-dash', (req,res)=>{
+   res.render('managerdash')
 })
 
 module.exports = router;
