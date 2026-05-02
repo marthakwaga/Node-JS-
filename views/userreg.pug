@@ -1,62 +1,54 @@
 doctype html
-html(lang=eng)
-  head
-    meta(charset='UTF-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-    meta(http-equiv='x-ua-compatible' content='ie=edge')
-    title User Registration
-   
-    // Font Awesome
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
-    // Google Fonts Roboto
-    link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
-    // MDB
-    //- link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-    link(rel='stylesheet' href='/css/mdb.min.css')
-    link(rel='stylesheet' href='/css/nyondo.css')
-
-  // Background image
-  #intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-    // BACKGROUD IMAGE
-    .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
-      .d-flex.justify-content-center.align-items-center.h-100
-        .bg-danger.bg-opacity-10.p-4.rounded.shadow(style='max-width: 600px; width: 50%; min: vh-100px')
-          .logo.bg-white.p-4.rounded.shadow.mx-auto
-          br
-          // FORM
-          form(action='/userreg' method='post')
-            .form-outline.mb-4.p-1(data-mdb-input-init='')
-              input#fullName.form-control.form-control-lg(name='fullName' type='text')
-              label.form-label(for='fullName') Full Name
-            // Email
-            .form-outline.mb-4.p-1(data-mdb-input-init='')
-              input#email.form-control.form-control-lg(name='email' type='email')
-              label.form-label(for='email') Email Address
-            // Password input
-            .form-outline.mb-4.p-1(data-mdb-input-init='')
-              input#password.form-control.form-control-lg(name='password' type='password' placeholder='Enter password')
-              label.form-label(for='password') Password
-            // Role
-            .form-outline.mb-4.p-1.bg-opacity(data-mdb-input-init='')
-              select#role.form-select.form-control(name='role')
-                option(value='' disabled='' selected='') Select Role
-                option(value='attendant') Sales Attendant
-                option(value='manager') Manager
-                option(value='admin') Admin
-            // Phone number and Nin
-            .row
-              .col-md-6
-                .form-outline.mb-4(data-mdb-input-init='')
-                  input#phone.form-control(name="phoneNumber" type='phone')
-                  label.form-label(for='phone') Phone Number
-              .col-md-6
-                .form-outline.mb-4(data-mdb-input-init='')
-                  input#nin.form-control(name="NIN" type='text')
-                  label.form-label(for='nin') NIN
-            // Button
-            .text-center.text-lg-centre
-              button.btn.btn-outline-warning.btn-lg(type='submit' data-mdb-button-init='' data-mdb-ripple-init='') Register
-    
-    script(type='text/javascript' src='js/mdb.umd.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-  
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title HOMEPAGE
+  // MDB
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='/css/mdb.min.css')
+  link(rel='stylesheet' href='/css/nyondo.css')
+// Background Image Container
+#intro-example.bg-image.d-flex.align-items-center.justify-content-center.min-vh-100.p-4(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  // Dark Overlay
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.75);')
+    .register-card.p-5.mx-auto(style='max-width: 700px;')
+      .bg-danger.bg-opacity-10.p-4.rounded.shadow
+        h4.text-center.mb-4.text-white
+          u REGISTER NEW STAFF
+        form#registerForm(onsubmit='handleRegister(event)')
+          .row
+            .col-md-6.mb-3
+              label.form-label.text-white Full Name
+              input#fullName.form-control(name='fullName' type='text' required='' placeholder='Full name')
+            .col-md-6.mb-3
+              label.form-label.text-white Phone Number
+              input#phoneNumber.form-control(type='text' placeholder=' 0782xxxxxx' required='')
+          .mb-3
+            label.form-label.text-white Email (Optional)
+            input#email.form-control(name='email' type='email' placeholder='Email')
+          .row
+            .col-md-6.mb-3
+              label.form-label.text-white Password
+              input#password.form-control(name='password' type='password' placeholder='Enter password' required='')
+            .col-md-6.mb-3
+              label.form-label.text-white Confirm Password
+              input#confirmPassword.form-control(name='confirmPassword' type='password' placeholder='Confirm password' required='')
+          .mb-4
+            label.form-label.text-white User Role
+            select#role.form-select(name='userRole' required='')
+              option(value='') Select Role
+              option(value='sales') Sales Attendant
+              option(value='manager') Store Manager
+              option(value='admin') Accounts / Admin
+          .d-grid
+            button.btn.btn-warning.btn-lg(type='submit')
+              i.fas.fa-user-plus
+              |  Create Account
+        .text-center.mt-4
+          p.mb-0.text-white
+            | Already have an account? 
+            a.text-warning.fw-bold(href='index.html') Login Here
+      .text-center.mt-5
+        small.text-muted Nyondo General Hardware LTD
+// Scripts
+script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')

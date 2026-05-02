@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOMEPAGE</title>
+
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/mdb.min.css" />
+  <link rel="stylesheet" href="/css/nyondo.css">
+</head>
+
+<body>
+  <!-- Background Image Container -->
+  <div id="intro-example" 
+       class="bg-image d-flex align-items-center justify-content-center min-vh-100 p-4"
+       style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');">
+
+    <!-- Dark Overlay -->
+    <div class="mask mask-custom" style="background-color: rgba(25, 12, 36, 0.75);">
+      
+      <div class="register-card p-5 mx-auto" style="max-width: 700px;">
+         <div class="bg-danger bg-opacity-10 p-4 rounded shadow" >
+        <h4 class="text-center mb-4 text-white"><u>REGISTER NEW STAFF</u></h4>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+        
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-white">Full Name</label>
+              <input name="fullName" type="text" class="form-control" id="fullName" required placeholder="Full name">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-white">Username / Phone</label>
+              <input type="text" class="form-control" id="username" placeholder=" 0782xxxxxx" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-white">Email (Optional)</label>
+            <input name="email" type="email" class="form-control" id="email" placeholder="Email">
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-white">Password</label>
+              <input name="password" type="password" class="form-control" id="password" placeholder="Enter password" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-white">Confirm Password</label>
+              <input name="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label text-white">User Role</label>
+            <select name="userRole" class="form-select" id="role" required>
+              <option value="">Select Role</option>
+              <option value="sales">Sales Attendant</option>
+              <option value="manager">Store Manager</option>
+              <option value="admin">Accounts / Admin</option>
+            </select>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-warning btn-lg">
+              <i class="fas fa-user-plus"></i> Create Account
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mt-4">
+          <p class="mb-0 text-white">
+            Already have an account? 
+            <a href="index.html" class="text-warning fw-bold">Login Here</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <small class="text-muted">Nyondo General Hardware LTD</small>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+</body>
+</html>

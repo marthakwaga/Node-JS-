@@ -3,7 +3,7 @@ head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(http-equiv='x-ua-compatible' content='ie=edge')
-  title LOGIN
+  title STOCK
   // MDB icon
   link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
   // Font Awesome
@@ -12,149 +12,157 @@ head
   link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
   // MDB
   link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='/css/mdb.min.css')
+  link(rel='stylesheet' href='css/mdb.min.css')
   link(rel='stylesheet' href='/css/nyondo.css')
-// main body
-.container-fluid.main-body
-  .row
-    // Sidebar
-    .col-md-4.col-lg-2.bg-light.p-3.border-end.vh-150
-      // Profile Image
-      .text-center.mb-4
-        #carouselExampleAutoplaying.carousel.slide(data-bs-ride='carousel')
-          .carousel-inner
-            .carousel-item.active
-              img.d-block.w-100(src='https://cdn.pixabay.com/photo/2017/08/09/09/50/shopping-2613984_1280.jpg' alt='...')
-            .carousel-item
-              img.d-block.w-100(src='https://incorpuk.com/blog/content/images/2024/09/73328.jpg' alt='...')
-            .carousel-item
-              img.d-block.w-100(src='https://img.freepik.com/free-photo/top-view-mechanical-tools-arrangement_23-2149552411.jpg' alt='Image of man in a stock shop')
-          button.carousel-control-prev(type='button' data-bs-target='#carouselExampleAutoplaying' data-bs-slide='prev')
-            span.carousel-control-prev-icon(aria-hidden='true')
-            span.visually-hidden Previous
-          button.carousel-control-next(type='button' data-bs-target='#carouselExampleAutoplaying' data-bs-slide='next')
-            span.carousel-control-next-icon(aria-hidden='true')
-            span.visually-hidden Next
-      // Title
-      h5.mb-4.fw-bold Explore More
-
-      // Sidebar Navigation Buttons
-      .d-grid.gap-3
-        a.btn.btn-outline-secondary(href='index.html')
-          | Home
-        a.btn.btn-outline-primary(href='supplier.html')
-          | Suppliers Credit
-        a.btn.btn-outline-warning(href='#')
-          | stock
-        a.btn.btn-outline-success(href='sales.html')
-          | Sales
-        a.btn.btn-outline-danger(href='#')
-          | Contact Us
-    // End of sidebar
-    
-    // Section for main content
-    .col.bg-body-tertiary.p-2
-      form(action='/add-stock' method='post')
-        // Product information
-        h2.text-center.fw-bold
-          u Stock Registration
-        h3.text-center.fw-bold  Product Information
-        .row.g-3.my-3
-          .col
-            label.form-label(for='formGroupExampleInput') Product Name:
-            input.form-control(name='productname' type='text' placeholder='Enter name' aria-label='First name')
-          .col
-            label.form-label(for='formGroupExampleInput') Product Code:
-            input.form-control(name='productcode' type='text' placeholder='' aria-label='Last name')
-          .col
-            label.form-label(for='formGroupExampleInput') Product type:
-            select.form-select(aria-label='Default select example')
-              option(selected='') Choose option below
-              option(value='Building material') Building Materials
-              option(value='Hand tools') Hand Tools
-              option(value='Power tools') Power Tools
-              option(value='Plumbing supplies') Plumbing Supplies
-              option(value='Electrial supplies') Electrical Supplies
-              option(value='Finishing material') Paint &amp; Finishing Materials
-              option(value='fittings') Doors, Windows &amp; Fittings
-              option(value='Carpentry') Carpentry
-              option(value='Fixing') Fastners &amp; Fixings
-              option(value='Safety Equipment') Safety Equipment
-        // Stock details
-        h3.text-center.fw-bold Stock Details
-        .row.g-3.my-3
-          .col
-            label.form-label(for='quantity') Quantity:
-            input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
-          .col
-            label.form-label(for='unit of measure') Unit of Measure:
-            select.form-select(aria-label='Default select example')
-              option(selected='') Choose option below
-              option(value='kg') Kilogram (kg)
-              option(value='g') Gram (g)
-              option(value='pc') Piece (pcs)
-              option(value='b') Box
-              option(value='crt') Carton
-              option(value='t') Tray
-              option(value='ltr') Litre (L)
-              option(value='ml') Millilitre (ml)
-        // End of stock details
-        // Supplier details
-        h3.text-center.fw-bold Supplier Details
-        .row.g-3
-          .col
-            label.form-label(for='formGroupExampleInput') Supplier Name:
-            input.form-control(name="supplierName" type='text' placeholder='Enter name here' aria-label='First name')
-          .col
-            label.form-label(for='formGroupExampleInput') Phone Number:
-            input.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
-          .col
-            label.form-label(for='email') Email:
-            input.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')
-        // End of supplier details
-        // pricing
-        h3.text-center.fw-bold Pricing
-        .row.g-3.my-3
-          .col
-            label.form-label Cost Price:
-            .input-group
-              span#basic-addon1.input-group-text
-                
-              input.form-control(name='costPrice' type='text' placeholder='' aria-label='input GroupExample')
-          .col
-            label.form-label Transport Price:
-            .input-group
-              span#basic-addon1.input-group-text
-                
-              input.form-control(name='tpCost' type='text' placeholder='' aria-label='input GroupExample')
-          
-          .col
-            label.form-label(for='sellingPrice') Selling Price:
-    
-            .input-group
-              span#basic-addon1.input-group-text
-              input.form-control(name='sellingPrice' type='text' placeholder='' aria-label='input GroupExample')
-        // end of pricing
-        // submission
-        h3.text-center.fw-bold Comments
-        .row.g-3.my-3
-          .col
-            .form-floating
-              textarea#floatingTextarea2.form-control(placeholder='Leave a comment here' style='height: 100px')
-              label(for='floatingTextarea2') Leave a comment here
-        // End of submission
-        // Buttons
-        .row.g-3
-          .col
-            button.btn.btn-primary.btn-lg.w-100.mt-3(type='submit') Register Stock
-// FOOTER WITH COPYRIGHT
-footer.bg-body-warning.text-center.p-3
-  div
-    a.text-black.text-decoration-none(href='#')
-      | &copy; 2026 Copyright: NyondoGeneralHardware.com
-// End of .container
-// MDB
-script(type='text/javascript' src='js/mdb.umd.min.js')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-// Custom scripts
-script(type='text/javascript').
+#intro-example.p-5.text-center.bg-image.d-flex.flex-column.min-vh-100(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  // BACKGROUD IMAGE
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+    // main body
+    .container-fluid.main-body
+      .row
+        // Sidebar
+        nav.sidebar.p-3.text-white(style='width: 260px; background: rgba(242, 240, 242, 0.336);')
+          .logo.mx-auto.mb-4(style="background-image: url('/public/images/logo.png'); \
+          width: 150px; height: 150px; \
+          background-size: contain; \
+          background-repeat: no-repeat;")
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link.text-white(href='dashboard.html')
+                i.fas.fa-tachometer-alt
+                span(data-translate='dashboard') Dashboard
+            li.nav-item
+              a.nav-link.text-white(href='products.html')
+                i.fas.fa-boxes
+                span(data-translate='products') Products &amp; Stock
+            li.nav-item
+              a.nav-link.text-white.active(href='stock-in.html')
+                i.fas.fa-truck-loading
+                span(data-translate='stockIn') Stock In
+            li.nav-item
+              a.nav-link.text-white(href='sales.html')
+                i.fas.fa-shopping-cart
+                span(data-translate='sales') Sales
+            li.nav-item
+              a.nav-link.text-white(href='deposits.html')
+                i.fas.fa-hand-holding-usd
+                span(data-translate='deposits') Deposit Scheme
+            li.nav-item
+              a.nav-link.text-white(href='suppliers.html')
+                i.fas.fa-users
+                span(data-translate='suppliers') Suppliers
+            li.nav-item
+              a.nav-link.text-white(href='reports.html')
+                i.fas.fa-chart-bar
+                span(data-translate='reports') Reports
+            li.nav-item
+              a.nav-link.text-white(href='offline.html')
+                i.fas.fa-wifi
+                span(data-translate='offline') Offline Mode
+          button.btn.btn-outline-light.w-100.mt-4(onclick='logout()' data-translate='logout') Logout
+        // End of sidebar
+        // Section for main content
+        form.col.overflow-y-auto
+          .card.mb-4
+            .card-header.bg-warning.text-white
+              h5.mb-0
+                i.fas.fa-qrcode
+                |  Scan Incoming Stock
+            div
+              #qr-reader-stock.scanner-container
+              p.text-muted.text-center.mt-3 Point your camera at the product QR code or barcode
+          div
+            // Product information
+            h3.text-center.fw-bold.text-white
+              u STOCK REGISTRATION
+            .row.g-3
+              .col
+                label.form-label.text-white(for='product name') Product Name:
+                select.form-select(aria-label='Default select example')
+                  option(selected='') Choose option below
+                  option(value='kg') Cement
+                  option(value='g') Nails
+                  option(value='pc') Varnish
+                  option(value='bg') Paint
+                  option(value='crt') Angle bars
+                  option(value='t') Hinge
+                  option(value='ltr') Iron bars
+                  option(value='ml') Thinners
+                  option(value='ml') Sealant
+                  option(value='ml') Roofing sheets
+                  option(value='ml') Tarpaulins
+                  option(value='ml') Wire mesh
+                  option(value='ml') Paint brush
+                  option(value='ml') Y16
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Product Code:
+                input.form-control(name='productCode' type='text' placeholder='' aria-label='productCode')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Product Type:
+                select.form-select(aria-label='Default select example')
+                  option(selected='') Choose option below
+                  option(value='') Building Materials
+                  option(value='') Hand Tools
+                  option(value='') Power Tools
+                  option(value='') Plumbing Supplies
+                  option(value='') Electrical Supplies
+                  option(value='') Paint &amp; Finishing Materials
+                  option(value='') Doors, Windows &amp; Fittings
+                  option(value='') Carpentry
+                  option(value='') Fastners &amp; Fixings
+                  option(value='') Safety Equipment
+            // Stock details
+            .row.g-3
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Quantity:
+                input.form-control(type='number' placeholder='' aria-label='First name')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Unit of Measure:
+                select.form-select(aria-label='Default select example')
+                  option(selected='') Choose option below
+                  option(value='kg') Kilogram (kg)
+                  option(value='g') Gram (g)
+                  option(value='pc') Piece(s)
+                  option(value='bg') Bag(s)
+                  option(value='crt') Carton
+                  option(value='t') Box
+                  option(value='ltr') Litre (L)
+                  option(value='ml') Millilitre (ml)
+            // End of stock details
+            .row.g-3
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Supplier Name:
+                input.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Phone Number:
+                input.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Email:
+                input.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')
+            // Pricing
+            .row.g-3
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Cost Price:
+                input.form-control(name='costPrice' type='text' aria-label='costPrice')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Transport Cost:
+                input.form-control(name='tpCost' type='tel' aria-label='Number')
+              .col
+                label.form-label.text-white(for='formGroupExampleInput') Selling Price:
+                input.form-control(name='sellingPrice' type='email' placeholder='youremail@example.com' aria-label='Email')
+          // submission
+          h3.text-center.fw-bold.my-3.text-white Comments
+          div
+            .col
+              .form-floating
+                textarea#floatingTextarea2.form-control(placeholder='Leave a comment here' style='height: 50px')
+                label(for='floatingTextarea2')
+          // End of submission
+          // Buttons
+          .row.g-3
+            .col
+              input.btn.btn-warning.btn-lg.w-20.mt-3(type='submit' value='Register Stock')
+  script(type='text/javascript' src='js/mdb.umd.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+  // Custom scripts
+  script(type='text/javascript').

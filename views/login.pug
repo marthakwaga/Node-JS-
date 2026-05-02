@@ -1,50 +1,44 @@
 doctype html
 head
   meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-  meta(http-equiv='x-ua-compatible' content='ie=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title LOGIN
-  // MDB icon
-  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
-  // Font Awesome
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
-  // Google Fonts Roboto
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
   // MDB
   link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
   link(rel='stylesheet' href='/css/mdb.min.css')
   link(rel='stylesheet' href='/css/nyondo.css')
-// Background image
-#intro-example.p-5.text-center.bg-image(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  // BACKGROUD IMAGE
-  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+// Background Image
+#intro-example.bg-image.d-flex.align-items-center.justify-content-center.min-vh-100.p-4(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  // Dark Overlay
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.75);')
     .d-flex.justify-content-center.align-items-center.h-100
-      // FORM
-      .bg-danger.bg-opacity-10.p-4.rounded.shadow(style='max-width: 400px; width: 50%; min: vh-100px')
-        .logo.bg-white.p-4.rounded.shadow.mx-auto(style="background-image: url('/css/logo.png');")
-        br
-        // Email input
-        .form-outline.mb-4.p-1(data-mdb-input-init='')
-          input#form3Example3.form-control.form-control-lg(name='email' type='email' placeholder='Enter a valid email address')
-          label.form-label(for='form3Example3') Email address
-        // Password input
-        .form-outline.mb-4.p-1(data-mdb-input-init='')
-          input#form3Example4.form-control.form-control-lg(name='password' type='password' placeholder='Enter password')
-          label.form-label(for='form3Example4') Password
-        .d-flex.justify-content-between.align-items-center
-          // Checkbox
-          .form-check.mb-0
-            input#form2Example3.form-check-input.me-2(type='checkbox' value='')
-            label.form-check-label(for='form2Example3')
-              | Remember me
-          a.text-body(href='/views/forgot-password.pug') Forgot password?
-        .text-center.text-lg-center.mt-4.pt-2
-          button.btn.btn-outline-warning.btn-lg(type='submit' data-mdb-button-init='' data-mdb-ripple-init='' style='padding-left: 2.5rem; padding-right: 2.5rem;') Login
-          p.small.text-center-floating.mt-2.pt-1.mb-0
+      // Login Card
+      .bg-danger.bg-opacity-10.p-5.rounded-4.shadow-lg(style='max-width: 420px; width: 100%; backdrop-filter: blur(8px);')
+        // Logo
+        .logo.mx-auto.mb-4(style="background-image: url('/public/images/logo.png'); \
+        width: 150px; height: 150px; \
+        background-size: contain; \
+        background-repeat: no-repeat;")
+        h3.text-center.mb-4.text-white Welcome Back!
+        // Login Form
+        form
+          // Email
+          .form-outline.mb-4(data-mdb-input-init='')
+            input#form3Example3.form-control.form-control-lg(type='email' placeholder='Enter email')
+            label.form-label.text-white(for='form3Example3') Email address
+          // Password
+          .form-outline.mb-4(data-mdb-input-init='')
+            input#form3Example4.form-control.form-control-lg(type='password' placeholder='Enter password')
+            label.form-label.text-white(for='form3Example4') Password
+          .d-flex.justify-content-between.align-items-center.mb-4
+            .form-check
+              input#form2Example3.form-check-input(type='checkbox' value='')
+              label.form-check-label.text-white(for='form2Example3') Remember me
+            a.text-white(href='#') Forgot password?
+          .text-center
+            button.btn.btn-outline-warning.btn-lg.px-5(type='submit') Login
+          p.text-center.text-white.mt-4.mb-0
             | Don&apos;t have an account? 
-            a.link-warning(href='/views/userreg') Register
-  // Background image
-  script(type='text/javascript' src='js/mdb.umd.min.js')
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-  // Custom scripts
-  script(type='text/javascript').
+            a.link-warning.fw-bold(href='/views/userreg') Register
+// Scripts
+script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
