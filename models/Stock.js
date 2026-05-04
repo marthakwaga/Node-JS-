@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
 const stockSchema = new mongoose.Schema({
-    productname: {
+    date: {
     type: Date,
     default: Date.now
 

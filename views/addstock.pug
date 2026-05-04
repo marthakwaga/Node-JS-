@@ -21,8 +21,8 @@ head
     .container-fluid.main-body
       .row
         // Sidebar
-        nav.sidebar.p-3.text-white(style='width: 260px; background: rgba(242, 240, 242, 0.336);')
-          .logo.mx-auto.mb-4(style="background-image: url('/public/images/logo.png'); \
+        nav.sidebar.p-3.text-white(style='width: 260px; background: rgba(93, 48, 106, 0.36);')
+          .logo.mx-auto.mb-4(style="background-image: url('/images/logo.png'); \
           width: 150px; height: 150px; \
           background-size: contain; \
           background-repeat: no-repeat;")
@@ -59,10 +59,10 @@ head
               a.nav-link.text-white(href='offline.html')
                 i.fas.fa-wifi
                 span(data-translate='offline') Offline Mode
-          button.btn.btn-outline-light.w-100.mt-4(onclick='logout()' data-translate='logout') Logout
+          button.btn.btn-warning.w-100.mt-4(onclick='logout()' data-translate='logout') Logout
         // End of sidebar
         // Section for main content
-        form.col.overflow-y-auto
+        form.col.overflow-y-auto(action='/add_stock' method='post')
           .card.mb-4
             .card-header.bg-warning.text-white
               h5.mb-0
@@ -78,28 +78,28 @@ head
             .row.g-3
               .col
                 label.form-label.text-white(for='product name') Product Name:
-                select.form-select(aria-label='Default select example')
+                select.form-select(name='productName' aria-label='Default select example')
                   option(selected='') Choose option below
-                  option(value='kg') Cement
-                  option(value='g') Nails
-                  option(value='pc') Varnish
-                  option(value='bg') Paint
-                  option(value='crt') Angle bars
-                  option(value='t') Hinge
-                  option(value='ltr') Iron bars
-                  option(value='ml') Thinners
-                  option(value='ml') Sealant
-                  option(value='ml') Roofing sheets
-                  option(value='ml') Tarpaulins
-                  option(value='ml') Wire mesh
-                  option(value='ml') Paint brush
-                  option(value='ml') Y16
+                  option(value='cement') Cement
+                  option(value='nails') Nails
+                  option(value='varnish') Varnish
+                  option(value='paint') Paint
+                  option(value='angle bars') Angle bars
+                  option(value='hinge') Hinge
+                  option(value='IBZ') Iron bars
+                  option(value='thinners') Thinners
+                  option(value='sealant') Sealant
+                  option(value='roofing sheets') Roofing sheets
+                  option(value='tarpaulins') Tarpaulins
+                  option(value='wire mesh') Wire mesh
+                  option(value='paint brush') Paint brush
+                  option(value='Y16') Y16
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Product Code:
                 input.form-control(name='productCode' type='text' placeholder='' aria-label='productCode')
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Product Type:
-                select.form-select(aria-label='Default select example')
+                select.form-select(name=productType aria-label='Default select example')
                   option(selected='') Choose option below
                   option(value='') Building Materials
                   option(value='') Hand Tools
@@ -115,10 +115,10 @@ head
             .row.g-3
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Quantity:
-                input.form-control(type='number' placeholder='' aria-label='First name')
+                input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Unit of Measure:
-                select.form-select(aria-label='Default select example')
+                select.form-select(name='unitOfMeasure' aria-label='Default select example')
                   option(selected='') Choose option below
                   option(value='kg') Kilogram (kg)
                   option(value='g') Gram (g)
@@ -149,7 +149,7 @@ head
                 input.form-control(name='tpCost' type='tel' aria-label='Number')
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Selling Price:
-                input.form-control(name='sellingPrice' type='email' placeholder='youremail@example.com' aria-label='Email')
+                input.form-control(name='sellingPrice' type='number' aria-label='price')
           // submission
           h3.text-center.fw-bold.my-3.text-white Comments
           div
@@ -166,3 +166,19 @@ head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
   // Custom scripts
   script(type='text/javascript').
+  script.
+    window.onload = () => {
+    initializeApp();
+    // Initialize Scanner for Stock In
+    startFullScanner("qr-reader-stock", (scannedCode) => {
+    alert(`✅ Scanned: ${scannedCode}\\nStock In recorded!`);
+    // Optional: Auto-fill product code
+    document.getElementById('productCode').value = scannedCode;
+    });
+    };
+    // Form Submit
+    document.getElementById('stockInForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert("✅ Stock successfully registered!\\nInventory updated.");
+    // You can add API call here later
+    });

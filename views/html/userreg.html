@@ -24,7 +24,7 @@
          <div class="bg-danger bg-opacity-10 p-4 rounded shadow" >
         <h4 class="text-center mb-4 text-white"><u>REGISTER NEW STAFF</u></h4>
 
-        <form id="registerForm" onsubmit="handleRegister(event)">
+        <form action="/views/userreg.pug" method="post">
         
           <div class="row">
             <div class="col-md-6 mb-3">
@@ -32,13 +32,13 @@
               <input name="fullName" type="text" class="form-control" id="fullName" required placeholder="Full name">
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label text-white">Username / Phone</label>
-              <input type="text" class="form-control" id="username" placeholder=" 0782xxxxxx" required>
+              <label class="form-label text-white">Phone Number</label>
+              <input name="phoneNumber" type="text" class="form-control" id="username" placeholder=" 0782xxxxxx" required>
             </div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label text-white">Email (Optional)</label>
+            <label class="form-label text-white">Email:</label>
             <input name="email" type="email" class="form-control" id="email" placeholder="Email">
           </div>
 
@@ -48,7 +48,7 @@
               <input name="password" type="password" class="form-control" id="password" placeholder="Enter password" required>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label text-white">Confirm Password</label>
+              <label class="form-label text-white">NIN</label>
               <input name="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
             </div>
           </div>

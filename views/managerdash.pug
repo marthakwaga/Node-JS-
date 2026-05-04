@@ -2,56 +2,164 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title NGH Attendant Dashboard
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='css/mdb.min.css')
-  link(rel='stylesheet' href='/css/salesdash.css')
+  title NGH - Manager Dashboard
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+  // Font Awesome for icons
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
   style.
-// SIDEBAR
-.sidebar
-  h5 NGH Staff
-  a(href='#') Dashboard
-  a(href='pos.html') POS
-  a(href='#') Stock
-// MAIN
-.main
-  // TOP
-  .d-flex.justify-content-between.mb-4
-    h3 Sales Dashboard
-    span Attendant
-  // KPI
-  .row.g-3
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Today&apos;s Sales
-        h4 UGX 450,000
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Transactions
-        h4 18
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Items Sold
-        h4 75
-  // QUICK ACTION
-  .mt-4
-    a.btn.btn-success.btn-lg.w-100(href='pos.html')
-      | Start New Sale
-  // LOW STOCK
-  .card.mt-4.p-3.shadow-sm
-    h5
-      i.fas.fa-bell.text-danger
-      |  Low Stock Alerts
-    table.table
-      thead
-        tr
-          th Product
-          th Qty
-      tbody
-        tr.text-danger
-          td Nails
-          td 5
-        tr.text-danger
-          td Paint
-          td 3
-script(src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js')
+    .full-bg {
+    background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    }
+    .dark-overlay {
+    background-color: rgba(25, 12, 36, 0.75);
+    min-height: 100vh;
+    }
+    .sidebar {
+    background: rgba(242, 240, 242, 0.336) !important;
+    backdrop-filter: blur(8px);
+    }
+    .logo {
+    width: 150px;
+    height: 150px;
+    background-image: url('/public/images/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    }
+    .nav-link {
+    color: white !important;
+    padding: 12px 16px;
+    }
+    .nav-link:hover, .nav-link.active {
+    background-color: rgba(255,255,255,0.2);
+    color: #ffc107 !important;
+    }
+    .card-stat:hover { transform: translateY(-5px); }
+.full-bg
+  .dark-overlay.d-flex
+    // Your New Sidebar
+    nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px;')
+      .logo.mx-auto.mb-4
+      ul.nav.flex-column
+        li.nav-item
+          a.nav-link.active(href='manager-dashboard.html')
+            i.fas.fa-tachometer-alt
+            |  Dashboard
+        li.nav-item
+          a.nav-link(href='products.html')
+            i.fas.fa-boxes
+            |  Products &amp; Stock
+        li.nav-item
+          a.nav-link(href='stock-registration.html')
+            i.fas.fa-truck-loading
+            |  Stock In
+        li.nav-item
+          a.nav-link(href='orders.html')
+            i.fas.fa-shopping-cart
+            |  Sales
+        li.nav-item
+          a.nav-link(href='deposits.html')
+            i.fas.fa-hand-holding-usd
+            |  Deposit Scheme
+        li.nav-item
+          a.nav-link(href='suppliers.html')
+            i.fas.fa-users
+            |  Suppliers
+        li.nav-item
+          a.nav-link(href='reports.html')
+            i.fas.fa-chart-bar
+            |  Reports
+        li.nav-item
+          a.nav-link(href='#')
+            i.fas.fa-file-invoice-dollar
+            |  Expenses
+        li.nav-item
+          a.nav-link(href='transport.html')
+            i.fas.fa-truck
+            |  Transport
+        li.nav-item
+          a.nav-link(href='offline.html')
+            i.fas.fa-wifi
+            |  Offline Mode
+      button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
+    // Main Content Area
+    .flex-grow-1.p-4.overflow-auto
+      h1.text-white.fw-bold.mb-4 &#x1F454; Manager Dashboard
+      // Metrics
+      .row.g-3.mb-5
+        .col-md-3
+          .card.card-stat.border-success.shadow-sm.bg-white.bg-opacity-90
+            .card-body
+              h5.text-success Total Stock Value
+              h3.fw-bold UGX 52,340,000
+        .col-md-3
+          .card.card-stat.border-warning.shadow-sm.bg-white.bg-opacity-90
+            .card-body
+              h5.text-warning Low Stock Items
+              h3.fw-bold.text-warning 9
+        .col-md-3
+          .card.card-stat.border-info.shadow-sm.bg-white.bg-opacity-90
+            .card-body
+              h5.text-info Today&apos;s Sales
+              h3.fw-bold UGX 4,120,000
+        .col-md-3
+          .card.card-stat.border-danger.shadow-sm.bg-white.bg-opacity-90
+            .card-body
+              h5.text-danger Pending Transport
+              h3.fw-bold 5
+      // Low Stock & Quick Actions
+      .row
+        .col-lg-6.mb-4
+          h5.fw-bold.text-warning &#x26A0;&#xFE0F; Low Stock Alerts
+          .list-group
+            .list-group-item.d-flex.justify-content-between.align-items-center
+              | Roofing Nails (5kg) 
+              span.badge.bg-warning 23 left
+            .list-group-item.d-flex.justify-content-between.align-items-center
+              | Iron Bars 10mm 
+              span.badge.bg-warning 45 left
+            .list-group-item.d-flex.justify-content-between.align-items-center
+              | Wheelbarrows 
+              span.badge.bg-warning 12 left
+        .col-lg-6.mb-4
+          h5.fw-bold.text-white &#x26A1; Quick Actions
+          .row.g-3
+            .col-6
+              a.btn.btn-success.w-100.py-3(href='stock-registration.html') + Register Stock
+            .col-6
+              a.btn.btn-success.w-100.py-3(href='orders.html') Record Sale
+            .col-6
+              a.btn.btn-primary.w-100.py-3(href='suppliers.html') Add Supplier
+            .col-6
+              a.btn.btn-info.w-100.py-3(href='deposits.html') Manage Deposits
+      // Recent Activity
+      h5.fw-bold.text-white.mt-4 Recent Activity
+      .table-responsive
+        table.table.table-hover.bg-white.bg-opacity-90
+          thead
+            tr
+              th Date
+              th Action
+              th Details
+              th Value
+          tbody
+            tr
+              td Today
+              td Sale
+              td 150 bags Cement
+              td UGX 3,850,000
+            tr
+              td Today
+              td Stock In
+              td Nails from Supplier
+              td UGX 1,200,000
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+script.
+  function logout() {
+  if (confirm("Logout from Nyondo Stock?")) {
+  window.location.href = "login.html"; // or your login page
+  }
+  }

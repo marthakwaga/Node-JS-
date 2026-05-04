@@ -6,26 +6,26 @@ const registrationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  phoneNumber: {
+    type: Number,
+     required: true
+  },
  email: {
     type: String,
     trim: true,
      required: true,
      unique: true
   },
-role: {
-    type: String,
-     required: true,
-     enum: ['attendant','manager', 'admin']
-  },
-phoneNumber: {
-    type: Number,
-     required: true
-  },
-NIN: {
+  NIN: {
     type: String,
     trim: true,
     required: true
       },
+userRole: {
+    type: String,
+     required: true,
+     enum: ['attendant','manager', 'admin']
+  },
 });
 registrationSchema.plugin(passportLocalMongoose,{
   usernameField: 'email'

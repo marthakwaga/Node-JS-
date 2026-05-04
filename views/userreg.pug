@@ -15,29 +15,29 @@ head
       .bg-danger.bg-opacity-10.p-4.rounded.shadow
         h4.text-center.mb-4.text-white
           u REGISTER NEW STAFF
-        form#registerForm(onsubmit='handleRegister(event)')
+        form#registerForm(action='/user_reg' method='post')
           .row
             .col-md-6.mb-3
               label.form-label.text-white Full Name
               input#fullName.form-control(name='fullName' type='text' required='' placeholder='Full name')
             .col-md-6.mb-3
               label.form-label.text-white Phone Number
-              input#phoneNumber.form-control(type='text' placeholder=' 0782xxxxxx' required='')
+              input#phoneNumber.form-control(name='phoneNumber' type='number' placeholder=' 0782xxxxxx' required='')
           .mb-3
-            label.form-label.text-white Email (Optional)
-            input#email.form-control(name='email' type='email' placeholder='Email')
+            label.form-label.text-white Email:
+            input#email.form-control(name='email' type='email' placeholder='Email'  autocomplete='off')
           .row
             .col-md-6.mb-3
               label.form-label.text-white Password
               input#password.form-control(name='password' type='password' placeholder='Enter password' required='')
             .col-md-6.mb-3
-              label.form-label.text-white Confirm Password
-              input#confirmPassword.form-control(name='confirmPassword' type='password' placeholder='Confirm password' required='')
+              label.form-label.text-white NIN 
+              input#NIN.form-control(name='NIN' type='text' placeholder='' required='')
           .mb-4
             label.form-label.text-white User Role
-            select#role.form-select(name='userRole' required='')
+            select#userRole.form-select(name='userRole' required='')
               option(value='') Select Role
-              option(value='sales') Sales Attendant
+              option(value='attendant') Sales Attendant
               option(value='manager') Store Manager
               option(value='admin') Accounts / Admin
           .d-grid
@@ -47,7 +47,7 @@ head
         .text-center.mt-4
           p.mb-0.text-white
             | Already have an account? 
-            a.text-warning.fw-bold(href='index.html') Login Here
+            a.text-warning.fw-bold(href='/login') Login Here
       .text-center.mt-5
         small.text-muted Nyondo General Hardware LTD
 // Scripts

@@ -50,7 +50,7 @@ app.use('/', require('./routes/stockRoutes'))
 app.use('/', require('./routes/authRoutes'))
 app.use('/', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
-app.use('/', require('./routes/suppliercreditRoutes'))
+app.use('/', require('./routes/creditRoutes'))
 
 // This is the second last chunk of code
 //Handling non-existent routes

@@ -4,7 +4,7 @@ const Sale = require('../models/Supplier.js');
 
 // Supplier
 router.get('/supplier', (req,res)=>{
-    res.render('suppliercredit')
+    res.render('credit')
 });
 router.post('/supplier', async(req,res)=>{
     console.log(req.body)

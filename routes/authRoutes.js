@@ -6,13 +6,13 @@ const passport = require("passport");
 //Importing a model
 const Registration = require("../models/Registration");
 
-//Get register user page
-router.get("/userreg", (req, res) => {
+//Register user page
+router.get("/user_reg", (req, res) => {
   res.render("userreg");
 });
-router.post("/userreg", async (req, res) => {
+router.post("/user_reg", async (req, res) => {
   try {
-    const { fullName, email, password, role, phoneNumber, NIN } = req.body;
+    const { fullName, email, password, userRole, phoneNumber, NIN } = req.body;
     //Check if user already exists
     let existingUser = await Registration.findOne({
       email: email.toLowerCase(),
@@ -26,7 +26,7 @@ router.post("/userreg", async (req, res) => {
     const newUser = new Registration({
       fullName,
       email: email.toLowerCase(),
-      role,
+      userRole,
       phoneNumber,
       NIN: NIN.toUpperCase(),
     });
