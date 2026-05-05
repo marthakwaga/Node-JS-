@@ -33,10 +33,10 @@ router.post("/user_reg", async (req, res) => {
     console.log(newUser);
     await Registration.register(newUser, req.body.password, (err) => {
       if (err) {
-        return res.redirect("/userreg");
+        return res.redirect("/auth/userreg");
       }
     });
-    res.redirect("/login");
+    res.redirect("/auth/login");
   } catch (error) {
     console.error(error);
     res.render("userreg", { error: error.message });
@@ -44,10 +44,10 @@ router.post("/user_reg", async (req, res) => {
 });
 
 // Get login page
-router.get("/login", (req, res) => {
+router.get("/auth/login", (req, res) => {
   res.render("login");
 });
-router.post("/login", passport.authenticate('local',{failureRedirect:'/login'}), (req, res) => {
+router.post("/auth/login", passport.authenticate('local',{failureRedirect:'/auth/login'}), (req, res) => {
  if(req.user.role ==='admin') {
   res.redirect('/admin-dash')
  } else if(req.user.role ==='attendant'){
@@ -69,10 +69,18 @@ router.get('/logout', (req, res, next) =>{
   })
 });
 
+//Forgot Password Route
+router.get('/auth/forgotPassword', (req, res) => {
+  res.render('forgot-password');
+}); 
+
+
 
 
 module.exports = router;
 
 //Full path in routing
 //Full path applies to browser URL, form action in the pug file and redirect in the routes.
-//
+// /auth/login
+// /auth/logout
+// /auth/user_reg

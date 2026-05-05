@@ -2,18 +2,18 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
 const stockSchema = new mongoose.Schema({
-    date: {
-    type: Date,
-    default: Date.now
-
+  productName: {
+    type: String,
+    required: true,
   },
- productcode: {
+ productCode: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'Registration',
     trim: true,
      required: true,
   },
-producttype: {
+
+productType: {
     type: String,
   },
 quantity: {
@@ -24,6 +24,27 @@ unitofmeasure: {
     type: Number,   
     required: true
       },
+supplierName: {
+    type: String,
+    required: true
+      },
+phoneNumber: {
+    type: Number,   
+    required: true
+      },
+email: {
+    type: String,
+    required: true
+      },
+costPrice: {
+    type: Number,   
+    required: true
+},
+tpCost: {
+    type: Number,   
+    required: true
+      },
+
 sellingprice: {
     type: Number,
     required: true,
@@ -38,6 +59,15 @@ comment: {
     type: String,
     trim: true,
       },
+ dateRecieved: {
+    type: Date,
+    default: Date.now
+
+  },
+ itemimage: {
+    type: String,
+    default: null
+  },
 });
 stockSchema.plugin(passportLocalMongoose,{
   usernameField: 'email'

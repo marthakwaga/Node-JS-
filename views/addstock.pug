@@ -62,7 +62,7 @@ head
           button.btn.btn-warning.w-100.mt-4(onclick='logout()' data-translate='logout') Logout
         // End of sidebar
         // Section for main content
-        form.col.overflow-y-auto(action='/add_stock' method='post')
+        form.col.overflow-y-auto(action='/add_stock' method='post'enctype="multipart/form-data")
           .card.mb-4
             .card-header.bg-warning.text-white
               h5.mb-0
@@ -150,6 +150,8 @@ head
               .col
                 label.form-label.text-white(for='formGroupExampleInput') Selling Price:
                 input.form-control(name='sellingPrice' type='number' aria-label='price')
+                label item image 
+                input(type='file' name='itemimage')
           // submission
           h3.text-center.fw-bold.my-3.text-white Comments
           div

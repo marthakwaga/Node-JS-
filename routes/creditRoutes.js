@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Sale = require('../models/Supplier.js');
+const Sale = require('../models/Credit.js');
 
 // Supplier
 router.get('/supplier', (req,res)=>{

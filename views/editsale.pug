@@ -1,0 +1,51 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Edit Sale - Nyondo Stock
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
+  link(rel='stylesheet' href='/public/css/stocklist.css')
+  style.
+.full-bg
+  .dark-overlay.d-flex
+    nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px;')
+      .logo.mx-auto.mb-4
+      ul.nav.flex-column
+        li.nav-item
+          a.nav-link.text-white(href='manager-dashboard.html')
+            i.fas.fa-tachometer-alt
+            |  Dashboard
+        li.nav-item
+          a.nav-link.active.text-white(href='saleslist.html')
+            i.fas.fa-shopping-cart
+            |  Sales List
+      button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
+    .flex-grow-1.p-5
+      h1.text-white.fw-bold.mb-4 &#x270F;&#xFE0F; Edit Sale
+      .card.bg-white.bg-opacity-95
+        .card-body
+          form#editSaleForm
+            .mb-3
+              label Order ID
+              input.form-control(type='text' value='ORD-8925' readonly='')
+            .mb-3
+              label Customer Name
+              input.form-control(type='text' value='John Mukasa')
+            .mb-3
+              label Total Amount (UGX)
+              input.form-control(type='number' value='4280000')
+            .mb-3
+              label Payment Status
+              select.form-select
+                option(value='paid' selected='') Paid
+                option(value='pending') Pending
+            button.btn.btn-warning.btn-lg.w-100(type='submit') Save Sale Changes
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js')
+script.
+  document.getElementById('editSaleForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  alert("✅ Sale updated successfully!");
+  window.location.href = "saleslist.html";
+  });
+  function logout() { if(confirm("Logout?")) window.location.href = "login.html"; }

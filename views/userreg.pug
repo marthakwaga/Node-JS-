@@ -15,7 +15,7 @@ head
       .bg-danger.bg-opacity-10.p-4.rounded.shadow
         h4.text-center.mb-4.text-white
           u REGISTER NEW STAFF
-        form#registerForm(action='/user_reg' method='post')
+        form#registerForm(action='/auth/user_reg' method='post')
           .row
             .col-md-6.mb-3
               label.form-label.text-white Full Name
@@ -47,7 +47,7 @@ head
         .text-center.mt-4
           p.mb-0.text-white
             | Already have an account? 
-            a.text-warning.fw-bold(href='/login') Login Here
+            a.text-warning.fw-bold(href='auth/login') Login Here
       .text-center.mt-5
         small.text-muted Nyondo General Hardware LTD
 // Scripts

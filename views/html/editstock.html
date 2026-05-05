@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Stock - Nyondo Stock</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/public/css/stocklist.css">
+  <style>
+  </style>
+</head>
+<body>
+  <div class="full-bg">
+    <div class="dark-overlay d-flex">
+      <!-- Sidebar (same as others) -->
+      <nav class="sidebar p-3 text-white flex-shrink-0" style="width: 260px;">
+        <div class="logo mx-auto mb-4"></div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a href="manager-dashboard.html" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li class="nav-item"><a href="stocklist.html" class="nav-link active text-white"><i class="fas fa-list"></i> Stock List</a></li>
+          <!-- other links -->
+        </ul>
+        <button onclick="logout()" class="btn btn-outline-warning w-100 mt-4">Logout</button>
+      </nav>
+
+      <div class="flex-grow-1 p-5">
+        <h1 class="text-white fw-bold mb-4">✏️ Edit Stock</h1>
+        <div class="card bg-white bg-opacity-95">
+          <div class="card-body">
+            <form id="editStockForm">
+              <div class="row g-3">
+                <div class="col-md-6"><label>Product Name</label><input type="text" class="form-control" id="name" value="Cement CEM IIN"></div>
+                <div class="col-md-6"><label>Product Code</label><input type="text" class="form-control" id="code" value="CEM001"></div>
+                <div class="col-md-6"><label>Quantity</label><input type="number" class="form-control" id="qty" value="1240"></div>
+                <div class="col-md-6"><label>Unit</label><input type="text" class="form-control" id="unit" value="Bags"></div>
+                <div class="col-md-6"><label>Cost Price (UGX)</label><input type="number" class="form-control" id="cost" value="25000"></div>
+                <div class="col-md-6"><label>Selling Price (UGX)</label><input type="number" class="form-control" id="sell" value="28000"></div>
+              </div>
+              <button type="submit" class="btn btn-warning btn-lg mt-4 w-100">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('editStockForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("✅ Stock updated successfully!");
+      window.location.href = "stocklist.html";
+    });
+    function logout() { if(confirm("Logout?")) window.location.href = "login.html"; }
+  </script>
+</body>
+</html>

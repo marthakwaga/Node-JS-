@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/admin-dash', (req,res)=>{
+router.get('/admin_dash', (req,res)=>{
     res.render('admindash')
 })
-router.get('/sales-dash', (req,res)=>{
+router.get('/sales_dash', (req,res)=>{
    res.render('salesdash')
 })
-router.get('/manager-dash', (req,res)=>{
+router.get('/manager_dash', (req,res)=>{
    res.render('managerdash')
 })
 

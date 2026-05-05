@@ -1,0 +1,27 @@
+  .full-bg {
+      background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+    }
+    .dark-overlay {
+      background-color: rgba(25, 12, 36, 0.75);
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: rgba(242, 240, 242, 0.127) !important;
+      backdrop-filter: blur(8px);
+    }
+    .logo {
+      width: 150px;
+      height: 150px;
+      background-image: url('/public/images/logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .table tbody tr:hover {
+      background-color: rgba(255,255,255,0.2) !important;
+    }
+    .low-stock { background-color: #fff3cd; }
+    .out-of-stock { background-color: #f8d7da; }

@@ -1,0 +1,164 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Stock List
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
+  link(rel='stylesheet' href='/public/css/stocklist.css')
+  style.
+.full-bg
+  .dark-overlay.d-flex
+    // Sidebar
+    nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px;')
+      .logo.mx-auto.mb-4
+      ul.nav.flex-column
+        li.nav-item
+          a.nav-link.text-white(href='manager-dashboard.html')
+            i.fas.fa-tachometer-alt
+            |  Dashboard
+        li.nav-item
+          a.nav-link.active.text-white(href='stocklist.html')
+            i.fas.fa-list
+            |  Stock List
+        li.nav-item
+          a.nav-link.text-white(href='products.html')
+            i.fas.fa-boxes
+            |  Products &amp; Stock
+        li.nav-item
+          a.nav-link.text-white(href='stock-registration.html')
+            i.fas.fa-truck-loading
+            |  Stock In
+        li.nav-item
+          a.nav-link.text-white(href='orders.html')
+            i.fas.fa-shopping-cart
+            |  Sales
+        li.nav-item
+          a.nav-link.text-white(href='deposits.html')
+            i.fas.fa-hand-holding-usd
+            |  Deposit Scheme
+        li.nav-item
+          a.nav-link.text-white(href='suppliers.html')
+            i.fas.fa-users
+            |  Suppliers
+        li.nav-item
+          a.nav-link.text-white(href='transport.html')
+            i.fas.fa-truck
+            |  Transport
+        li.nav-item
+          a.nav-link.text-white(href='reports.html')
+            i.fas.fa-chart-bar
+            |  Reports
+      button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
+    // Main Content
+    .flex-grow-1.p-4.overflow-auto
+      .d-flex.justify-content-between.align-items-center.mb-4
+        h1.text-white.fw-bold &#x1F4CB; Stock List
+        a.btn.btn-success.btn-lg(href='/stock/add_stock')
+          i.fas.fa-plus
+          |  Add New Stock
+      // Filters & Search
+      .row.mb-4
+        .col-md-6
+          input#searchInput.form-control.form-control-lg(type='text' placeholder='🔍 Search by product name or code...' onkeyup='filterStock()')
+        .col-md-3
+          select#categoryFilter.form-select.form-select-lg(onchange='filterStock()')
+            option(value='') All Categories
+            option(value='Finished Goods') Finished Goods
+            option(value='Raw Materials') Raw Materials
+            option(value='MRO Supplies') MRO Supplies
+        .col-md-3
+          select#stockFilter.form-select.form-select-lg(onchange='filterStock()')
+            option(value='') All Stock Levels
+            option(value='low') Low Stock
+            option(value='out') Out of Stock
+      // Stock Table
+      .table-responsive
+        table#stockTable.table.table-hover.align-middle.text-white
+          thead.table-dark
+            tr
+              th Product Name
+              th Code
+              th Category
+              th Quantity
+              th Unit
+              th Cost Price
+              th Selling Price
+              th Supplier
+              th Status
+              th Actions
+          tbody#stockBody
+            // Populated by JavaScript
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
+script.
+  // Sample Stock Data (Replace with database fetch later)
+  let stockData = [
+  { id: 1, name: "Cement CEM IIN", code: "CEM001", category: "Finished Goods", qty: 1240, unit: "Bags", cost: 25000, sell: 28000, supplier: "Cement Uganda LTD", status: "good" },
+  { id: 2, name: "Iron Bars 12mm", code: "IB012", category: "Finished Goods", qty: 320, unit: "Pieces", cost: 18500, sell: 22000, supplier: "Steel Factory Depot", status: "good" },
+  { id: 3, name: "Roofing Nails 5kg", code: "RN005", category: "MRO Supplies", qty: 23, unit: "Packs", cost: 12000, sell: 15000, supplier: "Nails & Wires Co.", status: "low" },
+  { id: 4, name: "Iron Sheets Blue 28G", code: "IS028", category: "Finished Goods", qty: 0, unit: "Sheets", cost: 85000, sell: 95000, supplier: "Steel Factory Depot", status: "out" },
+  { id: 5, name: "Wheelbarrows", code: "WB001", category: "Finished Goods", qty: 45, unit: "Pieces", cost: 65000, sell: 75000, supplier: "Heavy Tools LTD", status: "good" },
+  { id: 6, name: "Barbed Wire", code: "BW001", category: "Raw Materials", qty: 85, unit: "Rolls", cost: 45000, sell: 52000, supplier: "Wire Uganda", status: "good" }
+  ];
+  function renderStock(data) {
+  const tbody = document.getElementById('stockBody');
+  tbody.innerHTML = '';
+  data.forEach(item => {
+  let statusHTML = '';
+  if (item.status === 'low') {
+  statusHTML = `<span class="badge bg-warning text-dark">Low Stock</span>`;
+  } else if (item.status === 'out') {
+  statusHTML = `<span class="badge bg-danger">Out of Stock</span>`;
+  } else {
+  statusHTML = `<span class="badge bg-success">In Stock</span>`;
+  }
+  const row = document.createElement('tr');
+  row.innerHTML = `
+  <td>${item.name}</td>
+  <td><strong>${item.code}</strong></td>
+  <td>${item.category}</td>
+  <td class="fw-bold">${item.qty.toLocaleString()}</td>
+  <td>${item.unit}</td>
+  <td>UGX ${item.cost.toLocaleString()}</td>
+  <td>UGX ${item.sell.toLocaleString()}</td>
+  <td>${item.supplier}</td>
+  <td>${statusHTML}</td>
+  <td>
+  <button class="btn btn-sm btn-outline-info me-1" onclick="editStock(${item.id})">Edit</button>
+  <button class="btn btn-sm btn-outline-danger" onclick="deleteStock(${item.id})">Delete</button>
+  </td>
+  `;
+  tbody.appendChild(row);
+  });
+  }
+  // Search and Filter Function
+  function filterStock() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const category = document.getElementById('categoryFilter').value;
+  const stockLevel = document.getElementById('stockFilter').value;
+  let filtered = stockData.filter(item => {
+  const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
+  item.code.toLowerCase().includes(searchTerm);
+  const matchesCategory = !category || item.category === category;
+  const matchesStock = !stockLevel ||
+  (stockLevel === 'low' && item.status === 'low') ||
+  (stockLevel === 'out' && item.status === 'out');
+  return matchesSearch && matchesCategory && matchesStock;
+  });
+  renderStock(filtered);
+  }
+  // Dummy functions for actions
+  function editStock(id) {
+  alert(`Editing stock item #${id} (Connect to form later)`);
+  }
+  function deleteStock(id) {
+  if (confirm("Delete this stock item?")) {
+  stockData = stockData.filter(item => item.id !== id);
+  renderStock(stockData);
+  }
+  }
+  function logout() {
+  if (confirm("Logout?")) window.location.href = "login.html";
+  }
+  // Initialize
+  window.onload = () => renderStock(stockData);

@@ -21,7 +21,7 @@ head
         background-repeat: no-repeat;")
         h3.text-center.mb-4.text-white Welcome Back!
         // Login Form
-        form
+        form(action='/auth/login' method='post')
           // Email
           .form-outline.mb-4(data-mdb-input-init='')
             input#form3Example3.form-control.form-control-lg(type='email' name='user_email')
@@ -34,11 +34,11 @@ head
             .form-check
               input#form2Example3.form-check-input(type='checkbox' value='')
               label.form-check-label.text-white(for='form2Example3') Remember me
-            a.text-white(href='/forgot-password') Forgot password?
+            a.text-white(href='/auth/forgotPassword') Forgot password?
           .text-center
             button.btn.btn-outline-warning.btn-lg.px-5(type='submit') Login
           p.text-center.text-white.mt-4.mb-0
             | Don&apos;t have an account? 
-            a.link-warning.fw-bold(href='/user-reg') Register
+            a.link-warning.fw-bold(href='/auth/user_reg') Register
 // Scripts
 script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')

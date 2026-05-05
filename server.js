@@ -22,9 +22,10 @@ app.set('views', path.join(__dirname,'views'))
 
 //4. Middleware
 app.use(express.static(path.join(__dirname,'public')));
-app.use(express.urlencoded({ extended: false }));
+app.use('public/uploads', express.static((__dirname + 'public/uploads')));
+app.use(express.urlencoded({ extended: false })); 
 
-//Express session configurations 
+//Express session configurations  
 app.use(expressSession({
   secret:"secret", 
   resave: false, //we don't want to save this session
@@ -47,8 +48,8 @@ app.use((req,res,next)=>{
 //5. Routes
 app.use('/', require('./routes/indexRoutes'))
 app.use('/', require('./routes/stockRoutes'))
-app.use('/', require('./routes/authRoutes'))
-app.use('/', require('./routes/saleRoutes'))
+app.use('/auth', require('./routes/authRoutes'))
+app.use('/sales', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
 app.use('/', require('./routes/creditRoutes'))
 

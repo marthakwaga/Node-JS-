@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Sale = require('../models/Sale')
 const Stock = require('../models/Stock')
+const {isAttendant, isManager, isAdmin} = require('../middleware/auth') 
 
 //Add sale to Db
-router.get('/addsale', async(req,res)=>{
+router.get('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
     try{
         const items = await Stock.find({quantity:{$gt:0}});
         res.render('add_sale', {items});
@@ -13,7 +14,7 @@ router.get('/addsale', async(req,res)=>{
         console.error('error', error.message);
     }
 });
-router.post('/addsale', async(req,res)=>{
+router.post('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
     // console.log(req.body)
     try{
         const {date, salesPerson, name, phoneNumber, item, quantity,unitprice} = req.body;
@@ -50,4 +51,38 @@ router.get("/inventory", (req, res) => {
   res.render("sales");
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Delete Route
+router.delete('/deletesale/:id', async(req,res)=>{
+    try{
+        await Sale.findByIdAndDelete(req.params.id);
+        res.redirect('/salesList');
+    }catch(error){
 module.exports = router; 

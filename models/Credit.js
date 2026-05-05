@@ -7,30 +7,26 @@ const creditSchema = new mongoose.Schema({
     default: Date.now
 
   },
- salesperson: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Registration',
-    trim: true,
-     required: true,
-  },
-name: {
+  supplierName: {
     type: String,
-  },
-phoneNumber: {
-    type: Number,
-
-  },
-item: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Stock',   
+    trim: true,
     required: true
-      },
-quantity: {
+  },
+ phoneNumber: {
+    type: Number,
+    trim: true,
+    required: true  
+  },
+ creditAmount: {
     type: Number,
     trim: true,
     required: true
       },
-unitprice: {
+ dueDate: {
+    type: Date,
+    required: true
+  },
+ itemsSupplied: {
     type: Number,
     required: true
       },

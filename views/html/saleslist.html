@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyondo Stock - Sales List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/public/css/stocklist.css">
+  <style>
+  </style>
+</head>
+<body>
+
+  <div class="full-bg">
+    <div class="dark-overlay d-flex">
+
+      <!-- Sidebar -->
+      <nav class="sidebar p-3 text-white flex-shrink-0" style="width: 260px;">
+        <div class="logo mx-auto mb-4"></div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a href="manager-dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li class="nav-item"><a href="stocklist.html" class="nav-link"><i class="fas fa-list"></i> Stock List</a></li>
+          <li class="nav-item"><a href="saleslist.html" class="nav-link active"><i class="fas fa-shopping-cart"></i> Sales List</a></li>
+          <li class="nav-item"><a href="products.html" class="nav-link"><i class="fas fa-boxes"></i> Products & Stock</a></li>
+          <li class="nav-item"><a href="stock-registration.html" class="nav-link"><i class="fas fa-truck-loading"></i> Stock In</a></li>
+          <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-plus-circle"></i> New Sale</a></li>
+          <li class="nav-item"><a href="deposits.html" class="nav-link"><i class="fas fa-hand-holding-usd"></i> Deposit Scheme</a></li>
+          <li class="nav-item"><a href="suppliers.html" class="nav-link"><i class="fas fa-users"></i> Suppliers</a></li>
+          <li class="nav-item"><a href="transport.html" class="nav-link"><i class="fas fa-truck"></i> Transport</a></li>
+          <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        </ul>
+        <button onclick="logout()" class="btn btn-outline-warning w-100 mt-4">Logout</button>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="flex-grow-1 p-4 overflow-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="text-white fw-bold">💰 Sales List</h1>
+          <a href="orders.html" class="btn btn-success btn-lg">
+            <i class="fas fa-plus"></i> New Sale
+          </a>
+        </div>
+
+        <!-- Filters -->
+        <div class="row mb-4">
+          <div class="col-md-5">
+            <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Search customer, order ID..." onkeyup="filterSales()">
+          </div>
+          <div class="col-md-3">
+            <select id="statusFilter" class="form-select form-select-lg" onchange="filterSales()">
+              <option value="">All Sales</option>
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">Date From</span>
+              <input type="date" id="dateFrom" class="form-control" onchange="filterSales()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Table -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle text-white" id="salesTable">
+            <thead class="table-dark">
+              <tr>
+                <th>Date</th>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total Amount</th>
+                <th>Payment Status</th>
+                <th>Transport</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="salesBody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script>
+    // Sample Sales Data (Replace with fetch from database later)
+    let salesData = [
+      {
+        id: 1,
+        date: "2026-05-04",
+        orderId: "ORD-8925",
+        customer: "John Mukasa",
+        items: "150 Bags Cement + 20 Iron Bars",
+        amount: 4280000,
+        status: "paid",
+        transport: "Free"
+      },
+      {
+        id: 2,
+        date: "2026-05-04",
+        orderId: "ORD-8924",
+        customer: "Maria Namutebi",
+        items: "50 Iron Sheets",
+        amount: 4750000,
+        status: "pending",
+        transport: "30,000"
+      },
+      {
+        id: 3,
+        date: "2026-05-03",
+        orderId: "ORD-8923",
+        customer: "David Okello",
+        items: "300 Bags Cement",
+        amount: 8400000,
+        status: "paid",
+        transport: "Free"
+      },
+      {
+        id: 4,
+        date: "2026-05-03",
+        orderId: "ORD-8922",
+        customer: "Amina Nakato",
+        items: "8 Wheelbarrows",
+        amount: 600000,
+        status: "paid",
+        transport: "30,000"
+      }
+    ];
+
+    function renderSales(data) {
+      const tbody = document.getElementById('salesBody');
+      tbody.innerHTML = '';
+
+      data.forEach(sale => {
+        const statusClass = sale.status === 'paid' ? 'paid' : 'pending';
+        const statusText = sale.status === 'paid' ? '✅ Paid' : '⏳ Pending';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${sale.date}</td>
+          <td><strong>${sale.orderId}</strong></td>
+          <td>${sale.customer}</td>
+          <td>${sale.items}</td>
+          <td class="fw-bold">UGX ${sale.amount.toLocaleString('en-US')}</td>
+          <td><span class="badge ${statusClass}">${statusText}</span></td>
+          <td>${sale.transport}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-info me-1" onclick="viewReceipt(${sale.id})">
+              <i class="fas fa-receipt"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success" onclick="printInvoice(${sale.id})">
+              <i class="fas fa-print"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function filterSales() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+
+      let filtered = salesData.filter(sale => {
+        const matchesSearch = sale.customer.toLowerCase().includes(searchTerm) ||
+                             sale.orderId.toLowerCase().includes(searchTerm) ||
+                             sale.items.toLowerCase().includes(searchTerm);
+        const matchesStatus = !status || sale.status === status;
+        return matchesSearch && matchesStatus;
+      });
+
+      renderSales(filtered);
+    }
+
+    function viewReceipt(id) {
+      const sale = salesData.find(s => s.id === id);
+      if (sale) {
+        alert(`📄 Receipt for ${sale.orderId}\n\nCustomer: ${sale.customer}\nTotal: UGX ${sale.amount.toLocaleString()}\nStatus: ${sale.status.toUpperCase()}\n\n(Full receipt view coming soon)`);
+      }
+    }
+
+    function printInvoice(id) {
+      alert(`🖨️ Printing Invoice for Order #${id}... (Demo)`);
+    }
+
+    function logout() {
+      if (confirm("Logout from Nyondo Stock?")) {
+        window.location.href = "login.html";
+      }
+    }
+
+    // Initialize page
+    window.onload = () => renderSales(salesData);
+  </script>
+</body>
+</html>
