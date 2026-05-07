@@ -33,10 +33,10 @@ router.post("/user_reg", async (req, res) => {
     console.log(newUser);
     await Registration.register(newUser, req.body.password, (err) => {
       if (err) {
-        return res.redirect("/auth/userreg");
+        return res.redirect("/user_reg");
       }
     });
-    res.redirect("/auth/login");
+    res.redirect("/login");
   } catch (error) {
     console.error(error);
     res.render("userreg", { error: error.message });
@@ -44,16 +44,16 @@ router.post("/user_reg", async (req, res) => {
 });
 
 // Get login page
-router.get("/auth/login", (req, res) => {
+router.get("/login", (req, res) => {
   res.render("login");
 });
-router.post("/auth/login", passport.authenticate('local',{failureRedirect:'/auth/login'}), (req, res) => {
+router.post("/login", passport.authenticate('local',{failureRedirect:'/login'}), (req, res) => {
  if(req.user.role ==='admin') {
-  res.redirect('/admin-dash')
+  res.redirect('/admin_dash')
  } else if(req.user.role ==='attendant'){
-  res.redirect('/sales-dash')
+  res.redirect('/sales_dash')
  } else if(req.user.role ==='manager') {
-  res.redirect('/manager-dash')
+  res.redirect('/manager_dash')
  } else{
   res.redirect('/')
  }
@@ -70,7 +70,7 @@ router.get('/logout', (req, res, next) =>{
 });
 
 //Forgot Password Route
-router.get('/auth/forgotPassword', (req, res) => {
+router.get('/forgotPassword', (req, res) => {
   res.render('forgot-password');
 }); 
 

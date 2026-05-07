@@ -2,38 +2,42 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
 const saleSchema = new mongoose.Schema({
-  date: {
+  saleDate: {
     type: Date,
     default: Date.now
 
   },
- salesperson: {
+ representative: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'Registration',
     trim: true,
      required: true,
   },
-name: {
+productCode: {
     type: String,
   },
 phoneNumber: {
     type: Number,
 
   },
-item: {
+productSelect: {
     type: mongoose.Schema.Types.ObjectId,
     ref:'Stock',   
     required: true
       },
-quantity: {
+qty: {
     type: Number,
     trim: true,
     required: true
       },
-unitprice: {
+unitPrice: {
     type: Number,
     required: true
       },
+totalPrice: {
+    type: Number,
+    required: true
+      },  
 });
 // saleSchema.plugin(passportLocalMongoose,{
 //   usernameField: 'email'

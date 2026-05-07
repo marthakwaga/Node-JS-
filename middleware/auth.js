@@ -28,4 +28,16 @@ const isAttendant = (req, res, next) => {
     res.status(403).send('Access denied: You are not an attendant.');
 };
 
-module.exports = {isAuthenticated, isManager, isAdmin, isAttendant};
+const isManagerOrAdmin = (req, res, next) => {
+    if (req.isAuthenticated() && (req.user.role === 'manager' || req.user.role === 'admin')) {
+      return next();
+    } res.status(403).send('Access denied: You are not authorized to access this resource.');
+}
+  const isAttendantOrAdmin = (req, res, next) => {
+    if (req.isAuthenticated() && (req.user.role === 'attendant' || req.user.role === 'admin')) {
+      return next();
+    }
+    res.status(403).send('Access denied: You are not authorized to access this resource.');
+};
+
+module.exports = {isAuthenticated, isManager, isAdmin, isAttendant, isManagerOrAdmin, isAttendantOrAdmin}

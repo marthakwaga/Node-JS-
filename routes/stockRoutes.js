@@ -5,6 +5,17 @@ const multer = require('multer');
 const stock = require('../models/Stock')
 const {isAttendant, isAdmin, isManager} = require('../middleware/auth');  
 
+//Image configurations
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+})
+let upload = multer({ storage: storage })
+
 //Stock list
 router.get('/stock_list',isManager, (req,res)=>{
     res.render('stocklist')
@@ -65,14 +76,5 @@ router.post('/stock/edit/:id', isManager, async (req, res) => {
     });
 
 
-//Image configurations
-let storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './uploads')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname)
-    }
-})
-let upload = multer({ storage: storage })
+
 module.exports = router;  

@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Sale = require('../models/Sale')
 const Stock = require('../models/Stock')
+
+// Todo: Add authentication middleware to restrict access to sales routes
 const {isAttendant, isManager, isAdmin} = require('../middleware/auth') 
 
 //Add sale to Db
-router.get('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
+router.get('/addsale', async(req,res)=>{
     try{
         const items = await Stock.find({quantity:{$gt:0}});
         res.render('add_sale', {items});
@@ -14,14 +16,14 @@ router.get('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
         console.error('error', error.message);
     }
 });
-router.post('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
+router.post('/addsale', async(req,res)=>{
     // console.log(req.body)
     try{
-        const {date, salesPerson, name, phoneNumber, item, quantity,unitprice} = req.body;
-        const stockItem = await Stock.findById(item)
-        if(!stockItem) return res.status(404).send('Item not found')
-        if(item.quantity < quantity){
-            return res.status(400).send('Not enough stock available')
+        const {saleDate, representative, productCode, phoneNumber, qty, unitPrice, totalPrice} = req.body;
+        const stockItem = await Stock.findOne({productCode});
+        if(!stockItem) return res.status(404).send('Item not found');
+        if(stockItem.quantity < qty){
+            return res.status(400).send('Not enough stock available');
         }
          // Deduct quantity sold from stock quantity and save the new quantity to the stock collection
 
@@ -30,16 +32,19 @@ router.post('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
 
          //Record Sale
          const newSale = new Sale({
-            date,
-            salesPerson:req.user._id,
-            name, 
-            phoneNumber, 
-            item: itemId,
-            quantity,
-            unitprice
+            saleDate,
+            representative: req.user._id,
+            productCode,
+            phoneNumber,
+            qty,
+            unitPrice,
+            totalPrice
          });
          console.log(newSale);
-         await newSale.save();
+         await newSale.save().then((result)=>{
+            console.log(result);}).catch((err)=>{
+                console.error(err);
+            });
          res.redirect('/inventory');
     } catch (error) {
         res.render("add_sale", {error:error.message});
@@ -48,7 +53,7 @@ router.post('/addsale', isAttendant, isManager, isAdmin, async(req,res)=>{
 
 //Get sales from the Db
 router.get("/inventory", (req, res) => {
-  res.render("sales");
+  res.render("saleslist");
 });
 
 
@@ -85,4 +90,8 @@ router.delete('/deletesale/:id', async(req,res)=>{
         await Sale.findByIdAndDelete(req.params.id);
         res.redirect('/salesList');
     }catch(error){
+        console.error(error);
+        res.status(500).send('Unable to delete sale from the DB');
+    }
+});
 module.exports = router; 

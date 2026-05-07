@@ -6,29 +6,9 @@
   <title>Nyondo Stock - Transport</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/public/css/stocklist.css">
   <style>
-    .full-bg {
-      background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');
-      background-size: cover;
-      background-position: center;
-      min-height: 100vh;
-    }
-    .dark-overlay {
-      background-color: rgba(25, 12, 36, 0.75);
-      min-height: 100vh;
-    }
-    .sidebar {
-      background: rgba(242, 240, 242, 0.336) !important;
-      backdrop-filter: blur(8px);
-    }
-    .logo {
-      width: 150px;
-      height: 150px;
-      background-image: url('/public/images/logo.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+    
   </style>
 </head>
 <body>
@@ -40,72 +20,41 @@
       <nav class="sidebar p-3 text-white flex-shrink-0" style="width: 260px;">
         <div class="logo mx-auto mb-4"></div>
         <ul class="nav flex-column">
-          <li class="nav-item"><a href="manager-dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-          <li class="nav-item"><a href="stocklist.html" class="nav-link"><i class="fas fa-list"></i> Stock List</a></li>
-          <li class="nav-item"><a href="saleslist.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Sales List</a></li>
-          <li class="nav-item"><a href="transport.html" class="nav-link active"><i class="fas fa-truck"></i> Transport</a></li>
-          <li class="nav-item"><a href="deposits.html" class="nav-link"><i class="fas fa-hand-holding-usd"></i> Deposit Scheme</a></li>
-          <li class="nav-item"><a href="suppliers.html" class="nav-link"><i class="fas fa-users"></i> Suppliers</a></li>
-          <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reports</a></li>
+          <li class="nav-item"><a href="manager-dashboard.html" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li class="nav-item"><a href="stocklist.html" class="nav-link text-white"><i class="fas fa-list"></i> Stock List</a></li>
+          <li class="nav-item"><a href="saleslist.html" class="nav-link text-white"><i class="fas fa-shopping-cart"></i> Sales List</a></li>
+          <li class="nav-item"><a href="transport.html" class="nav-link active text-white"><i class="fas fa-truck"></i> Transport</a></li>
+          <li class="nav-item"><a href="deposits.html" class="nav-link text-white"><i class="fas fa-hand-holding-usd"></i> Deposit Scheme</a></li>
+          <li class="nav-item"><a href="suppliers.html" class="nav-link text-white"><i class="fas fa-users"></i> Suppliers</a></li>
         </ul>
         <button onclick="logout()" class="btn btn-outline-warning w-100 mt-4">Logout</button>
       </nav>
 
       <!-- Main Content -->
       <div class="flex-grow-1 p-4 overflow-auto">
-        <h1 class="text-white fw-bold mb-4">🚚 Transport Management</h1>
-
-        <div class="row g-4">
-          <!-- Policy Card -->
-          <div class="col-lg-4">
-            <div class="card h-100 bg-white bg-opacity-90">
-              <div class="card-body">
-                <h5 class="text-danger">Transport Policy</h5>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Free for orders ≥ 500,000 UGX (within 10km)</li>
-                  <li class="list-group-item">Extra charge: UGX 30,000 (outside policy)</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Calculator -->
-          <div class="col-lg-8">
-            <div class="card bg-white bg-opacity-90">
-              <div class="card-body">
-                <h5>Transport Charge Calculator</h5>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <label>Order Value (UGX)</label>
-                    <input type="number" id="orderValue" class="form-control" value="650000">
-                  </div>
-                  <div class="col-md-4">
-                    <label>Distance (km)</label>
-                    <input type="number" id="distance" class="form-control" value="8">
-                  </div>
-                  <div class="col-md-4 d-flex align-items-end">
-                    <button onclick="calculateTransport()" class="btn btn-danger w-100">Calculate</button>
-                  </div>
-                </div>
-                <div id="calcResult" class="mt-3 fs-5 fw-bold text-center"></div>
-              </div>
-            </div>
-          </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="text-white fw-bold">🚚 Transport Management</h1>
+          <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addDeliveryModal">
+            <i class="fas fa-plus"></i> Add Delivery from Sale
+          </button>
         </div>
 
-        <!-- Pending Deliveries -->
-        <h5 class="text-white mt-5 mb-3">Pending Deliveries</h5>
+        <div class="alert alert-info">
+          <strong>Transport Policy:</strong> Free for orders ≥ 500,000 UGX within 10km • Otherwise UGX 30,000
+        </div>
+
+        <h5 class="text-white mb-3">📍 Pending Deliveries</h5>
         <div class="table-responsive">
           <table class="table table-hover bg-white bg-opacity-90" id="transportTable">
             <thead class="table-dark">
               <tr>
                 <th>Order ID</th>
                 <th>Customer</th>
-                <th>Value</th>
+                <th>Sale Amount</th>
                 <th>Distance</th>
-                <th>Charge</th>
+                <th>Transport Charge</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="transportBody"></tbody>
@@ -115,52 +64,163 @@
     </div>
   </div>
 
+  <!-- Add Delivery from Sales Modal -->
+  <div class="modal fade" id="addDeliveryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Delivery from Pending Sale</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Select Sale Order</label>
+            <select id="saleOrderSelect" class="form-select form-select-lg" onchange="loadSaleDetails()">
+              <option value="">-- Choose a pending sale --</option>
+            </select>
+          </div>
+
+          <div id="saleDetails" class="row g-3" style="display:none;">
+            <div class="col-md-6">
+              <label>Customer</label>
+              <input type="text" id="selectedCustomer" class="form-control" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Sale Amount</label>
+              <input type="text" id="selectedAmount" class="form-control" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Distance (km)</label>
+              <input type="number" id="distanceInput" class="form-control" value="8" min="1">
+            </div>
+            <div class="col-md-6">
+              <label>Transport Charge</label>
+              <input type="text" id="chargeDisplay" class="form-control fw-bold" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" onclick="confirmDelivery()">Confirm & Add to Transport</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   <script>
-    // Sample data and functions (same as before)
-    let pendingDeliveries = [
-      {id:"ORD-8925", customer:"John Mukasa", value:4280000, distance:7, charge:0},
-      {id:"ORD-8924", customer:"Maria Namutebi", value:4750000, distance:15, charge:30000}
+    // Sample Pending Sales (Shared with saleslist.html)
+    let pendingSales = [
+      { id: "ORD-8926", customer: "Sarah Nambi", amount: 1250000, items: "Cement + Iron Sheets" },
+      { id: "ORD-8927", customer: "Peter Okello", amount: 850000, items: "Iron Bars 12mm" },
+      { id: "ORD-8928", customer: "Grace Atim", amount: 320000, items: "Nails & Wire Mesh" }
     ];
 
-    function renderTransport() {
+    let deliveries = [
+      { id: "ORD-8925", customer: "John Mukasa", amount: 4280000, distance: 7, charge: 0 }
+    ];
+
+    function populateSalesDropdown() {
+      const select = document.getElementById('saleOrderSelect');
+      select.innerHTML = '<option value="">-- Choose a pending sale --</option>';
+      
+      pendingSales.forEach(sale => {
+        const option = document.createElement('option');
+        option.value = sale.id;
+        option.textContent = `${sale.id} - ${sale.customer} (UGX ${sale.amount.toLocaleString()})`;
+        select.appendChild(option);
+      });
+    }
+
+    function loadSaleDetails() {
+      const saleId = document.getElementById('saleOrderSelect').value;
+      const detailsDiv = document.getElementById('saleDetails');
+      
+      if (!saleId) {
+        detailsDiv.style.display = 'none';
+        return;
+      }
+
+      const sale = pendingSales.find(s => s.id === saleId);
+      if (sale) {
+        document.getElementById('selectedCustomer').value = sale.customer;
+        document.getElementById('selectedAmount').value = `UGX ${sale.amount.toLocaleString()}`;
+        document.getElementById('saleDetails').style.display = 'flex';
+        calculateCharge();
+      }
+    }
+
+    function calculateCharge() {
+      const amount = parseFloat(document.getElementById('selectedAmount').value.replace(/[^0-9]/g, '')) || 0;
+      const distance = parseFloat(document.getElementById('distanceInput').value) || 0;
+      const chargeEl = document.getElementById('chargeDisplay');
+
+      const charge = (amount >= 500000 && distance <= 10) ? 0 : 30000;
+      chargeEl.value = charge === 0 ? "FREE" : `UGX ${charge.toLocaleString()}`;
+      chargeEl.style.color = charge === 0 ? "green" : "red";
+    }
+
+    function confirmDelivery() {
+      const saleId = document.getElementById('saleOrderSelect').value;
+      if (!saleId) return alert("Please select a sale order");
+
+      const sale = pendingSales.find(s => s.id === saleId);
+      const distance = parseFloat(document.getElementById('distanceInput').value) || 8;
+      const charge = (sale.amount >= 500000 && distance <= 10) ? 0 : 30000;
+
+      deliveries.unshift({
+        id: sale.id,
+        customer: sale.customer,
+        amount: sale.amount,
+        distance: distance,
+        charge: charge
+      });
+
+      // Remove from pending sales
+      pendingSales = pendingSales.filter(s => s.id !== saleId);
+
+      renderDeliveries();
+      
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addDeliveryModal'));
+      modal.hide();
+
+      alert(`✅ Delivery for ${sale.id} has been added to transport!`);
+    }
+
+    function renderDeliveries() {
       const tbody = document.getElementById('transportBody');
-      tbody.innerHTML = pendingDeliveries.map(d => `
+      tbody.innerHTML = deliveries.map(d => `
         <tr>
           <td><strong>${d.id}</strong></td>
           <td>${d.customer}</td>
-          <td>UGX ${d.value.toLocaleString()}</td>
+          <td>UGX ${d.amount.toLocaleString()}</td>
           <td>${d.distance} km</td>
-          <td>${d.charge === 0 ? '<span class="badge bg-success">FREE</span>' : 'UGX 30,000'}</td>
-          <td><span class="badge bg-warning">Pending</span></td>
-          <td><button class="btn btn-sm btn-success" onclick="markDelivered('${d.id}')">Mark Delivered</button></td>
+          <td>${d.charge === 0 ? '<span class="badge bg-success">FREE</span>' : '<span class="badge bg-warning">UGX 30,000</span>'}</td>
+          <td><span class="badge bg-primary">In Transit</span></td>
+          <td><button class="btn btn-sm btn-success" onclick="markDelivered('${d.id}')">Delivered</button></td>
         </tr>
       `).join('');
     }
 
-    function calculateTransport() {
-      const value = parseFloat(document.getElementById('orderValue').value) || 0;
-      const dist = parseFloat(document.getElementById('distance').value) || 0;
-      const result = document.getElementById('calcResult');
-
-      if (value >= 500000 && dist <= 10) {
-        result.innerHTML = `<span class="text-success">✅ FREE TRANSPORT</span>`;
-      } else {
-        result.innerHTML = `<span class="text-danger">Extra Charge: UGX 30,000</span>`;
-      }
-    }
-
     function markDelivered(id) {
-      alert(`✅ Delivery for ${id} marked as completed!`);
-      pendingDeliveries = pendingDeliveries.filter(d => d.id !== id);
-      renderTransport();
+      if (confirm(`Mark ${id} as delivered?`)) {
+        deliveries = deliveries.filter(d => d.id !== id);
+        renderDeliveries();
+      }
     }
 
     function logout() {
       if (confirm("Logout?")) window.location.href = "login.html";
     }
 
-    window.onload = renderTransport;
+    // Initialize
+    window.onload = () => {
+      populateSalesDropdown();
+      renderDeliveries();
+      
+      // Auto-calculate when distance changes
+      document.getElementById('distanceInput').addEventListener('input', calculateCharge);
+    };
   </script>
 </body>
 </html>

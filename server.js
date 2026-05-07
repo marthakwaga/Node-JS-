@@ -1,9 +1,10 @@
 //1. Dependencies
 const express = require('express');
-const expressSession = require('express-session')
-const path = require('path')
+const expressSession = require('express-session');
+const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const MongoStore = require('connect-mongo').default;
 
 require('dotenv').config();
 const connectDb = require('./config/db')
@@ -29,7 +30,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(expressSession({
   secret:"secret", 
   resave: false, //we don't want to save this session
-  saveUninitialized: false 
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.DATABASE, collectionName: 'sessionPath' }),
+  cookie: { maxAge: 1000 * 60 * 60 * 2 } // Session expires after 2 hours
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,7 +52,7 @@ app.use((req,res,next)=>{
 app.use('/', require('./routes/indexRoutes'))
 app.use('/', require('./routes/stockRoutes'))
 app.use('/auth', require('./routes/authRoutes'))
-app.use('/sales', require('./routes/saleRoutes'))
+app.use('/', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
 app.use('/', require('./routes/creditRoutes'))
 
