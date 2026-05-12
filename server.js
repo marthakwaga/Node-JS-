@@ -1,6 +1,7 @@
 //1. Dependencies
 const express = require('express');
 const expressSession = require('express-session');
+const flash = require('connect-flash');
 const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -37,6 +38,15 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Flash middleware for displaying messages to users
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
 //Passport configurations 
 passport.use(Registration.createStrategy());
 passport.serializeUser(Registration.serializeUser());
@@ -51,7 +61,7 @@ app.use((req,res,next)=>{
 //5. Routes
 app.use('/', require('./routes/indexRoutes'))
 app.use('/', require('./routes/stockRoutes'))
-app.use('/auth', require('./routes/authRoutes'))
+app.use('/', require('./routes/authRoutes'))
 app.use('/', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
 app.use('/', require('./routes/creditRoutes'))

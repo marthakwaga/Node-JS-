@@ -19,7 +19,7 @@ router.get('/addsale', async(req,res)=>{
 router.post('/addsale', async(req,res)=>{
     // console.log(req.body)
     try{
-        const {saleDate, representative, productCode, phoneNumber, qty, unitPrice, totalPrice} = req.body;
+        const {saleDate, representative, customerPhone, qty, unitPrice, totalPrice, transportCharge} = req.body;
         const stockItem = await Stock.findOne({productCode});
         if(!stockItem) return res.status(404).send('Item not found');
         if(stockItem.quantity < qty){
@@ -27,8 +27,8 @@ router.post('/addsale', async(req,res)=>{
         }
          // Deduct quantity sold from stock quantity and save the new quantity to the stock collection
 
-         item.quantity -= quantity
-         await item.save()
+         stockItem.quantity -= qty
+         await stockItem.save()
 
          //Record Sale
          const newSale = new Sale({
@@ -38,14 +38,16 @@ router.post('/addsale', async(req,res)=>{
             phoneNumber,
             qty,
             unitPrice,
-            totalPrice
+            totalPrice,
+            transportCharge: 0 // Assuming transport charge is 0 for now, can be updated later
+
          });
          console.log(newSale);
          await newSale.save().then((result)=>{
             console.log(result);}).catch((err)=>{
                 console.error(err);
             });
-         res.redirect('/inventory');
+         res.redirect(`/receipt/${newSale._id}`);
     } catch (error) {
         res.render("add_sale", {error:error.message});
     }
@@ -63,35 +65,28 @@ router.get("/inventory", (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Delete Route
 router.delete('/deletesale/:id', async(req,res)=>{
     try{
         await Sale.findByIdAndDelete(req.params.id);
         res.redirect('/salesList');
     }catch(error){
-        console.error(error);
+        console.error(error.message);
         res.status(500).send('Unable to delete sale from the DB');
     }
 });
+
+//Receipt Route - view and print a sale receipt
+router.get('/receipt/:id', async(req,res)=>{
+    try{
+        const sale = await Sale.findById(req.params.id)
+        .populate("productCode", "productName")
+        .populate("representative", "name");
+        if(!sale) return res.status(404).send('Receipt not found');
+        res.render('receipt', {sale});
+    }catch(error){
+        console.error(error.message);
+        res.status(500).send('Unable to fetch sale details');
+    }
+}); 
 module.exports = router; 

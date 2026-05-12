@@ -4,41 +4,42 @@ const passportLocalMongoose = require('passport-local-mongoose').default || requ
 const saleSchema = new mongoose.Schema({
   saleDate: {
     type: Date,
+    required: true,
     default: Date.now
+  },
 
-  },
- representative: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Registration',
-    trim: true,
-     required: true,
-  },
-productCode: {
+  representative: {
     type: String,
+    required: true
   },
-phoneNumber: {
-    type: Number,
 
+  customerPhone: {
+    type: Number,
+    required: true
   },
-productSelect: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Stock',   
-    required: true
-      },
-qty: {
-    type: Number,
-    trim: true,
-    required: true
-      },
-unitPrice: {
-    type: Number,
-    required: true
-      },
-totalPrice: {
+
+  items: [
+    {
+      code: String,
+      product: String,
+      qty: Number,
+      unitPrice: Number,
+      total: Number
+    }
+  ],
+
+  totalAmount: {
     type: Number,
     required: true
-      },  
+  },
+  transportCharge: {
+    type: Number,
+    required: true
+  }
+
+}, { timestamps: true }); 
+
+saleSchema.plugin(passportLocalMongoose,{
+  usernameField: 'email'
 });
-// saleSchema.plugin(passportLocalMongoose,{
-//   usernameField: 'email'
 module.exports = mongoose.model('Sale', saleSchema);

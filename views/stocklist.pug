@@ -78,7 +78,6 @@ head
           thead.table-dark
             tr
               th Product Name
-              th Code
               th Category
               th Quantity
               th Unit
@@ -93,12 +92,12 @@ script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundl
 script.
   // Sample Stock Data (Replace with database fetch later)
   let stockData = [
-  { id: 1, name: "Cement CEM IIN", code: "CEM001", category: "Finished Goods", qty: 1240, unit: "Bags", cost: 25000, sell: 28000, supplier: "Cement Uganda LTD", status: "good" },
-  { id: 2, name: "Iron Bars 12mm", code: "IB012", category: "Finished Goods", qty: 320, unit: "Pieces", cost: 18500, sell: 22000, supplier: "Steel Factory Depot", status: "good" },
-  { id: 3, name: "Roofing Nails 5kg", code: "RN005", category: "MRO Supplies", qty: 23, unit: "Packs", cost: 12000, sell: 15000, supplier: "Nails & Wires Co.", status: "low" },
-  { id: 4, name: "Iron Sheets Blue 28G", code: "IS028", category: "Finished Goods", qty: 0, unit: "Sheets", cost: 85000, sell: 95000, supplier: "Steel Factory Depot", status: "out" },
-  { id: 5, name: "Wheelbarrows", code: "WB001", category: "Finished Goods", qty: 45, unit: "Pieces", cost: 65000, sell: 75000, supplier: "Heavy Tools LTD", status: "good" },
-  { id: 6, name: "Barbed Wire", code: "BW001", category: "Raw Materials", qty: 85, unit: "Rolls", cost: 45000, sell: 52000, supplier: "Wire Uganda", status: "good" }
+  { id: 1, name: "Cement CEM IIN", category: "Finished Goods", qty: 1240, unit: "Bags", cost: 25000, sell: 28000, supplier: "Cement Uganda LTD", status: "good" },
+  { id: 2, name: "Iron Bars 12mm", category: "Finished Goods", qty: 320, unit: "Pieces", cost: 18500, sell: 22000, supplier: "Steel Factory Depot", status: "good" },
+  { id: 3, name: "Roofing Nails 5kg", category: "MRO Supplies", qty: 23, unit: "Packs", cost: 12000, sell: 15000, supplier: "Nails & Wires Co.", status: "low" },
+  { id: 4, name: "Iron Sheets Blue 28G", category: "Finished Goods", qty: 0, unit: "Sheets", cost: 85000, sell: 95000, supplier: "Steel Factory Depot", status: "out" },
+  { id: 5, name: "Wheelbarrows", category: "Finished Goods", qty: 45, unit: "Pieces", cost: 65000, sell: 75000, supplier: "Heavy Tools LTD", status: "good" },
+  { id: 6, name: "Barbed Wire", category: "Raw Materials", qty: 85, unit: "Rolls", cost: 45000, sell: 52000, supplier: "Wire Uganda", status: "good" }
   ];
   function renderStock(data) {
   const tbody = document.getElementById('stockBody');
@@ -115,7 +114,6 @@ script.
   const row = document.createElement('tr');
   row.innerHTML = `
   <td>${item.name}</td>
-  <td><strong>${item.code}</strong></td>
   <td>${item.category}</td>
   <td class="fw-bold">${item.qty.toLocaleString()}</td>
   <td>${item.unit}</td>

@@ -21,14 +21,14 @@ head
         background-repeat: no-repeat;")
         h3.text-center.mb-4.text-white Welcome Back!
         // Login Form
-        form(action='/auth/login' method='post')
+        form(action='/login' method='post')
           // Email
           .form-outline.mb-4(data-mdb-input-init='')
-            input#form3Example3.form-control.form-control-lg(type='email' name='user_email')
+            input#form3Example3.form-control.form-control-lg(type='email' name='email')
             label.form-label.text-white(for='form3Example3') Email address
           // Password
           .form-outline.mb-4(data-mdb-input-init='')
-            input#form3Example4.form-control.form-control-lg(type='password'  name='user_password' autocomplete='new-password')
+            input#form3Example4.form-control.form-control-lg(type='password'  name='password' autocomplete='new-password')
             label.form-label.text-white(for='form3Example4') Password
           .d-flex.justify-content-between.align-items-center.mb-4
             .form-check

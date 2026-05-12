@@ -21,7 +21,7 @@ head
   div
     small Mbale &bull; Tel: 0782 123 456
   .text-center.border-bottom.pb-2.mb-3
-    h5 OFFICIAL SALES RECEIPT
+    h4.fw-bold.mb-1  OFFICIAL SALES RECEIPT
     small#receiptDate
   div
     p
@@ -32,26 +32,51 @@ head
       span#customerName Walk-in Customer
     p
       strong Served by:
-      span#salesPerson Martha Kwaga
-  hr
+      span #{sale.attendant.fullname}
+      small Date: #{new Date(sale.saleDate).toLocaleString()}
+
+ hr.border-dark.border-2.opacity-100
+
+      //Using the last six characters of the MongoDb ID as a short receipt number.
+      small Receipt #: #{sale._id.toString().slice(-6).toUpperCase}
   table#receiptItems.table.table-sm
     // Populated by JS
   .border-top.pt-2
-    .d-flex.justify-content-between
+    .d-flex.justify-content-between.mb-2
       strong Subtotal
       span#subTotal UGX 0
-    .d-flex.justify-content-between
+    .d-flex.justify-content-between.mb-2
       strong Transport Fee
       span#transportFee UGX 0
     .d-flex.justify-content-between.fs-5.fw-bold.border-top.mt-2.pt-2
-      strong GRAND TOTAL
-      span#grandTotal UGX 0
+      strong Quantity
+      span #{sale.items.productName} (Qty:#{sale.qty})
+    .d-flex.justify-content-between.fs-5.fw-bold.border-top.mt-2.pt-2
+      strong Transport Charge
+      span #{sale.totalAmount.toLocalString()} UGX
+    if sale.transportCharge > 0
+    .d-flex.justify-content-between.fs-5.fw-bold.
+    border-top.mt-2.pt-2
+      span #{sale.transportCharge.toLocaleString()} UGX 
+
+   hr.border-dark.border-2.opacity-100
+
+   .d-flex.justify-content-between.mb-2
+      strong Total
+      span #{(sale.totalAmount + sale.transportCharge).toLocaleString()} UGX
+
+   hr.border-dark.border-2.opacity-100 
+
   .text-center.mt-4
-    small Thank you for shopping with Nyondo General Hardware!
+
+    p.mb-0.small Thank you for shopping with Nyondo General Hardware!
     br
-    small Goods sold are not returnable &bull; Powered by Nyondo System
-.text-center.no-print.mt-3
-  button.btn.btn-success(onclick='window.print()') Print Again
+    p.mb-0.small.text-muted Goods sold are not returnable &bull; Powered by Nyondo System
+.text-center.d-print-non.mt-4
+  button.btn.btn-primary(onclick='window.print()') 
+  i.fas.fa-print.me-1 
+  |Print Receipt 
+ a.btn.btn-outline-secondary(href='/saleslist') View Sales
 script.
   function generateAndPrintReceipt(saleData) {
   // Fill receipt details

@@ -1,208 +1,223 @@
 doctype html
 head
   meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title New Sale - Nyondo Hardware
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css')
-  link(rel='stylesheet' href='/css/custom.css')
-  link(rel='stylesheet' href='/public/css/nyondo.css')
-.bg-image.d-flex.flex.align-items-center.justify-content-center.min-vh-100.p-6(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  .mask(style='background-color: rgba(25, 12, 36, 0.78); width: 200%; min-height: 150vh;')
-    .d-flex.h-100
-      // Sidebar
-      nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px; background: rgba(242, 240, 242, 0.336);')
-        .logo.mx-auto.mb-4(style="background-image: url('/public/images/logo.png'); width: 150px; height: 150px; background-size: contain; background-repeat: no-repeat;")
-        ul.nav.flex-column
-          li.nav-item
-            a.nav-link.text-white(href='dashboard.html')
-              i.fas.fa-tachometer-alt
-              |  Dashboard
-          li.nav-item
-            a.nav-link.text-white(href='products.html')
-              i.fas.fa-boxes
-              |  Products &amp; Stock
-          li.nav-item
-            a.nav-link.text-white(href='stock-in.html')
-              i.fas.fa-truck-loading
-              |  Stock In
-          li.nav-item
-            a.nav-link.text-white(href='sales.html')
-              i.fas.fa-shopping-cart
-              |  Sales
-          li.nav-item
-            a.nav-link.text-white(href='deposits.html')
-              i.fas.fa-hand-holding-usd
-              |  Deposit Scheme
-          li.nav-item
-            a.nav-link.text-white(href='suppliers.html')
-              i.fas.fa-users
-              |  Suppliers
-          li.nav-item
-            a.nav-link.text-white(href='reports.html')
-              i.fas.fa-chart-bar
-              |  Reports
-          li.nav-item
-            a.nav-link.text-white.active(href='#')
-              i.fas.fa-file-invoice-dollar
-              |  Expenses
-          li.nav-item
-            a.nav-link.text-white(href='offline.html')
-              i.fas.fa-wifi
-              |  Offline Mode
-        button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
-      // Main Content
-      .flex-grow-1.p-4(style='max-width: 850px; margin: 0 auto;')
-        .card.shadow-lg(style='background: rgba(255, 255, 255, 0.144);')
-          .card-header.bg-warning.text-dark.text-center.py-3
-            h4.mb-0
-              i.fas.fa-cash-register.me-2
-              |  New Sale
-          .card-body.p-4
-            // Scanner Section
-            .border.border-success.rounded-3.p-4.mb-4.bg-light
-              h5.text-success.mb-3
-                i.fas.fa-qrcode
-                |  Scan Product (Camera or Physical Scanner)
-              #qr-reader(style='width: 100%; max-width: 380px; margin: 0 auto;')
-              small.text-muted.d-block.text-center.mt-2
-                | Works with phone camera &amp; physical barcode scanners
-            form#saleForm(action='/addsale' method='post')
-              // Your existing form fields
-              .row.mb-4
-                .col-md-4
-                  label.form-label.fw-bold.text-white Sale Date
-                  input#saleDate.form-control(name='saleDate' type='date' value='2026-05-03')
-                .col-md-5
-                  label.form-label.fw-bold.text-white Sales Representative
-                  select#representative.form-select
-                    option(value='') Select Representative
-                    option(value='Martha') Martha Kwaga
-                    option(value='John') John Tendo
-                    option(value='Sarah') Sarah Nansubuga
-                    option(value='Robert') Robert Kizza
-                    option(value='Grace') Grace Nakato
-                .col-md-3
-                  label.form-label.fw-bold.text-white Phone Number
-                  input#phoneNumber.form-control(name='customerPhone' type='tel' placeholder='07xxxxxxxx')
-              // Add Product Manually
-              .border.rounded-3.p-4.mb-4.text-white
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(http-equiv='x-ua-compatible' content='ie=edge')
+  title ADD SALE
+  // MDB icon
+  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
+  // Font Awesome
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+  // Google Fonts Roboto
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
+  // MDB
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='css/mdb.min.css')
+  link(rel='stylesheet' href='/css/nyondo.css')
+#intro-example.p-5.text-center.bg-image.d-flex.flex-column.min-vh-100(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+    .container-fluid.main-body
+      .row
+        nav.sidebar.col-md-3.p-5.text-white(style='width: 260px; background: rgba(124, 95, 124, 0.36);')
+          .logo.mx-auto.mb-4(style="background-image: url('/images/logo.png'); \
+          width: 150px; height: 150px; \
+          background-size: contain; \
+          background-repeat: no-repeat;")
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link.text-white(href='/stocklist')
+                i.fas.fa-boxes
+                span(data-translate='products') Products
+            li.nav-item
+              a.nav-link.text-white(href='/addsale')
+                i.fas.fa-shopping-cart
+                span(data-translate='sales') Sales
+            li.nav-item
+              a.nav-link.text-white(href='/deposit')
+                i.fas.fa-hand-holding-usd
+                span(data-translate='deposits') Deposits
+            li.nav-item
+              a.nav-link.text-white(href='/credit')
+                i.fas.fa-users
+                span(data-translate='suppliers') Suppliers
+            li.nav-item
+              a.nav-link.text-white(href='/reports')
+                i.fas.fa-chart-bar
+                span(data-translate='reports') Reports
+            li.nav-item
+              a.nav-link.text-white(href='/offonline')
+                i.fas.fa-wifi
+                span(data-translate='offline') Offline Mode
+          a.btn.btn-warning.w-100.my-4(href="/")
+            i.fas.fa-sign-out-alt.me-2 | Logout       
+        form.col.overflow-y-auto(action='/addsale' method='post' style='height: 100vh; overflow-y: auto;')
+            .flex-grow-1.p-4(style='max-width: 800px; margin: 0 auto;')
+              .card-header.bg-warning.text-dark.text-center.py-3
+                  h4.mb-0
+                    i.fas.fa-cash-register.me-2
+                      | New Sale
+            .row        
+              .col-md-4
+              label.form-label.fw-bold Sale Date
+              input#saleDate.form-control(name='saleDate' type='date' value='2026-05-07')
+              .col-md-5
+              label.form-label.fw-bold Sales Representative
+              select#representative.form-select
+                option(value='') Select Representative
+                option(value='Martha') Martha Kwaga
+                option(value='John') John Tendo
+                option(value='Sarah') Sarah Nansubuga
+                option(value='Robert') Robert Kizza
+                option(value='Grace') Grace Nakato
+            .row
+              .col-md-3
+              label.form-label.fw-bold Customer Phone
+              input#customerPhone.form-control(type='tel' placeholder='07xxxxxxxx')
+              .border.rounded-3.p-4.mb-4.bg-light
+                h5.mb-3.text-info
+                  i.fas.fa-truck
+                  |  Transport Charge
+            .row.g-3
+              .col-md-6
+                label.form-label Sale Amount (UGX)
+                input#saleAmount.form-control(type='number' placeholder='500000' onkeyup='calculateTransport()')
+              .col-md-6
+                label.form-label Location
+                select#location.form-select(onchange='calculateTransport()')
+                  option(value='within') Within 10km (Mbale City Area)
+                  option(value='outside') Outside 10km
+            .mt-3
+              .alert.alert-info
+                strong Transport Fee: 
+                span#transportFeeDisplay UGX 0
+              .border.rounded-3.p-4.mb-4
                 h5.mb-3 Or Add Product Manually
-                .row.g-3
-                  .col-md-5
-                    select#productSelect.form-select(onchange='autoFillPrice()')
-                      option(value='') Select Product
-                      option(value='Cement 50kg' data-code='CEM001' data-price='25000') Cement
-                      option(value='Roofing Sheet' data-code='ROF002' data-price='45000') Roofing Sheet
-                      option(value='Binding Wire Roll' data-code='BWR003' data-price='12000') Binding Wire Roll
-                      option(value='Emulsion Paint 20L' data-code='PAI004' data-price='85000') Emulsion Paint 20L
-                      option(value='Electrical Wire 1.5mm' data-code='WIR005' data-price='35000') 1.5mm Electrical Wire
-                      option(value='PVC Pipe 4m' data-code='PIP006' data-price='18000') PVC Pipe 4m
-                  .col-md-2
-                    input#productCode.form-control(type='text' placeholder='Code' readonly='')
-                  .col-md-2
-                    input#qty.form-control(name='qty' type='number' value='1' min='1')
-                  .col-md-2
-                    input#unitPrice.form-control(type='number' placeholder='Price')
-                  .col-md-1.d-flex.align-items-end
-                    button.btn.btn-success.w-100(type='button' onclick='addItem()')
-                      i.fas.fa-plus
-              // Items Table
-              h5.mb-3.text-warning Items Added
+            .row.g-3
+              .col-md-5
+                select#productSelect.form-select(onchange='autoFillPrice()')
+                  option(value='') Select Product
+                option(value='Cement 50kg' data-price='25000') Cement 50kg
+                option(value='Roofing Sheet' data-price='45000') Roofing Sheet
+                option(value='Binding Wire Roll' data-price='12000') Binding Wire Roll
+                option(value='Emulsion Paint 20L' data-price='85000') Emulsion Paint 20L
+              .col-md-2
+                input#qty.form-control(type='number' value='1' min='1')
+              .col-md-2
+                input#unitPrice.form-control(type='number' placeholder='Price')
+              .col-md-1.d-flex.align-items-end
+                button.btn.btn-success.w-100(type='button' onclick='addItem()')
+                  i.fas.fa-plus
+                  h5.mb-3.text-warning Items Added
               .table-responsive(style='max-height: 320px; overflow-y: auto;')
-                table#itemsTable.table.table-hover
-                  thead.table-dark.sticky-top
-                    tr
-                      th Code
-                      th Product
-                      th.text-center Qty
-                      th.text-end Unit Price
-                      th.text-end Total
-                      th
-                  tbody#itemsBody
-              .d-flex.justify-content-between.align-items-center.p-4.bg-light.rounded-3.mt-4
-                h4.mb-0.fw-bold Total Price 
+              table#itemsTable.table.table-hover
+                thead.table-dark.sticky-top
+                tr
+                  th Product
+                  th.text-center Qty
+                  th.text-end Unit Price
+                  th.text-end Total
+                  th
+              tbody#itemsBody
+            .d-flex.justify-content-between.align-items-center.p-4.bg-light.rounded-3.mt-4
+                h4.mb-0.fw-bold Total Price
                 h2#totalPrice.mb-0.text-success.fw-bold UGX 0
-              .text-center.mt-4
-                button.btn.btn-warning.btn-lg.px-5(type='submit') Save &amp; Print Receipt
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
-script(src='https://unpkg.com/html5-qrcode')
-script(src='js/app.js')
-script(src='js/scanner.js')
-script.
-  let items = [];
-  // Initialize Scanner when page loads
-  window.onload = () => {
-  initializeApp();
-  startFullScanner("qr-reader", (scannedCode) => {
-  // Auto add scanned item (you can improve this with real lookup)
-  alert(`✅ Scanned: ${scannedCode}\\n\nAdded to cart (Stock will be deducted)`);
-  // Example: Add a dummy item
-  items.push({
-  code: scannedCode,
-  product: "Scanned Product",
-  qty: 1,
-  price: 25000,
-  total: 25000
-  });
-  renderTable();
-  calculateGrandTotal();
-  });
-  };
-  // Your existing functions (autoFillPrice, addItem, renderTable, etc.)
-  function autoFillPrice() {
-  const select = document.getElementById('productSelect');
-  const option = select.options[select.selectedIndex];
-  if (option && option.value) {
-  document.getElementById('productCode').value = option.dataset.code || '';
-  document.getElementById('unitPrice').value = option.dataset.price || '';
-  }
-  }
-  function addItem() {
-  // ... your existing addItem logic ...
-  const product = document.getElementById('productSelect').value;
-  const code = document.getElementById('productCode').value || 'MANUAL';
-  const qty = parseFloat(document.getElementById('qty').value) || 1;
-  const price = parseFloat(document.getElementById('unitPrice').value) || 0;
-  if (!product) return alert("Please select a product");
-  items.push({ code, product, qty, price, total: qty * price });
-  renderTable();
-  calculateGrandTotal();
-  clearInputs();
-  }
-  function renderTable() {
-  const tbody = document.getElementById('itemsBody');
-  tbody.innerHTML = '';
-  items.forEach((item, index) => {
-  tbody.innerHTML += `
-  <tr>
-  <td><strong>${item.code}</strong></td>
-  <td>${item.product}</td>
-  <td class="text-center">${item.qty}</td>
-  <td class="text-end">${item.price.toLocaleString()}</td>
-  <td class="text-end fw-bold">${item.total.toLocaleString()}</td>
-  <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">Remove</button></td>
-  </tr>`;
-  });
-  }
-  function removeItem(index) {
-  items.splice(index, 1);
-  renderTable();
-  calculateGrandTotal();
-  }
-  function calculateGrandTotal() {
-  const total = items.reduce((sum, item) => sum + item.total, 0);
-  document.getElementById('grandTotal').textContent = `UGX ${total.toLocaleString()}`;
-  }
-  function clearInputs() {
-  document.getElementById('productSelect').value = '';
-  document.getElementById('productCode').value = '';
-  document.getElementById('qty').value = '1';
-  document.getElementById('unitPrice').value = '';
-  }
-  //- document.getElementById('saleForm').addEventListener('submit', function(e) {
-  //- e.preventDefault();
-  //- if (items.length === 0) return alert("Please add at least one item");
-  //- alert("✅ Sale saved successfully!\\nStock has been updated.");
-  //- // You can add API call here
-  //- });
+                .text-center.mt-4
+                button.btn.btn-warning.btn-lg.px-5(type='submit') Save Sale & Print Receipt
+
+                  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+                  script(src='https://unpkg.com/html5-qrcode')
+                  script(src='js/app.js')
+                  script(src='js/scanner.js')
+
+                  script.
+                    let items = [];
+                    let transportFee = 0;
+
+                    window.onload = () => {
+                      initializeApp();
+                      startFullScanner("qr-reader", (scannedCode) => {
+                        alert(`✅ Scanned: ${scannedCode}\nAdded to cart`);
+                        items.push({ code: scannedCode, product: "Scanned Item", qty: 1, price: 25000, total: 25000 });
+                        renderTable();
+                        calculateGrandTotal();
+                      });
+                    };
+
+                    function calculateTransport() {
+                      const amount = parseFloat(document.getElementById('saleAmount').value) || 0;
+                      const location = document.getElementById('location').value;
+
+                      if (location === 'outside' || amount < 500000) {
+                        transportFee = 30000;
+                      } else {
+                        transportFee = 0;
+                      }
+                      document.getElementById('transportFeeDisplay').textContent = `UGX ${transportFee.toLocaleString()}`;
+                      calculateGrandTotal();
+                    }
+
+                    function autoFillPrice() {
+                      const select = document.getElementById('productSelect');
+                      const option = select.options[select.selectedIndex];
+                      if (option.value) {
+                        document.getElementById('productCode').value = option.dataset.code || '';
+                        document.getElementById('unitPrice').value = option.dataset.price || '';
+                      }
+                    }
+
+                    function addItem() {
+                      const product = document.getElementById('productSelect').value;
+                      const code = document.getElementById('productCode').value || 'MANUAL';
+                      const qty = parseFloat(document.getElementById('qty').value) || 1;
+                      const price = parseFloat(document.getElementById('unitPrice').value) || 0;
+
+                      if (!product) return alert("Please select a product");
+
+                      items.push({ code, product, qty, price, total: qty * price });
+                      renderTable();
+                      calculateGrandTotal();
+                      clearInputs();
+                    }
+
+                    function renderTable() {
+                      const tbody = document.getElementById('itemsBody');
+                      tbody.innerHTML = '';
+                      items.forEach((item, index) => {
+                        tbody.innerHTML += `
+                          <tr>
+                            <td><strong>${item.code}</strong></td>
+                            <td>${item.product}</td>
+                            <td class="text-center">${item.qty}</td>
+                            <td class="text-end">${item.price.toLocaleString()}</td>
+                            <td class="text-end fw-bold">${item.total.toLocaleString()}</td>
+                            <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">×</button></td>
+                          </tr>`;
+                      });
+                    }
+
+                    function removeItem(index) {
+                      items.splice(index, 1);
+                      renderTable();
+                      calculateGrandTotal();
+                    }
+
+                    function calculateGrandTotal() {
+                      const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+                      const grandTotal = subtotal + transportFee;
+                      document.getElementById('grandTotal').textContent = `UGX ${grandTotal.toLocaleString()}`;
+                    }
+
+                    function clearInputs() {
+                      document.getElementById('productSelect').value = '';
+                      document.getElementById('productCode').value = '';
+                      document.getElementById('qty').value = '1';
+                      document.getElementById('unitPrice').value = '';
+                    }
+
+                    document.getElementById('saleForm').addEventListener('submit', function(e) {
+                      e.preventDefault();
+                      if (items.length === 0) return alert("Please add at least one item");
+
+                      alert("✅ Sale saved successfully!\nReceipt will be printed.");
+                      // You can call receipt generation here
+                    });

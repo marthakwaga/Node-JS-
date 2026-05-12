@@ -1,0 +1,52 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(http-equiv='x-ua-compatible' content='ie=edge')
+  title STOCK
+  // MDB icon
+  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
+  // Font Awesome
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+  // Google Fonts Roboto
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
+  // MDB
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='css/mdb.min.css')
+  link(rel='stylesheet' href='/css/nyondo.css')
+#intro-example.p-5.text-center.bg-image.d-flex.flex-column.min-vh-100(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
+  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
+    .container-fluid.main-body
+      .row
+        nav.sidebar.p-5.text-white(style='width: 260px; background: rgba(124, 95, 124, 0.36);')
+          .logo.mx-auto.mb-4(style="background-image: url('/images/logo.png'); \
+          width: 150px; height: 150px; \
+          background-size: contain; \
+          background-repeat: no-repeat;")
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link.text-white(href='/stocklist')
+                i.fas.fa-boxes
+                span(data-translate='products') Products
+            li.nav-item
+              a.nav-link.text-white(href='/addsale')
+                i.fas.fa-shopping-cart
+                span(data-translate='sales') Sales
+            li.nav-item
+              a.nav-link.text-white(href='/deposit')
+                i.fas.fa-hand-holding-usd
+                span(data-translate='deposits') Deposits
+            li.nav-item
+              a.nav-link.text-white(href='/credit')
+                i.fas.fa-users
+                span(data-translate='suppliers') Suppliers
+            li.nav-item
+              a.nav-link.text-white(href='/reports')
+                i.fas.fa-chart-bar
+                span(data-translate='reports') Reports
+            li.nav-item
+              a.nav-link.text-white(href='/offonline')
+                i.fas.fa-wifi
+                span(data-translate='offline') Offline Mode
+          a.btn.btn-warning.w-100.my-4(href="/")
+                i.fas.fa-sign-out-alt.me-2 | Logout       

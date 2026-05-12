@@ -6,13 +6,6 @@ const stockSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
- productCode: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Registration',
-    trim: true,
-     required: true,
-  },
-
 productType: {
     type: String,
   },
@@ -20,8 +13,8 @@ quantity: {
     type: Number,
 
   },
-unitofmeasure: {
-    type: Number,   
+unitOfMeasure: {
+    type: String,   
     required: true
       },
 supplierName: {
@@ -34,26 +27,14 @@ phoneNumber: {
       },
 email: {
     type: String,
-    required: true
       },
 costPrice: {
     type: Number,   
     required: true
 },
-tpCost: {
-    type: Number,   
-    required: true
-      },
-
-sellingprice: {
+sellingPrice: {
     type: Number,
     required: true,
-    validate:{
-        validator:function(value){
-            return value >this.costprice;
-        },
-        message: 'Selling price must be greater than cost price'
-    }
       },
 comment: {
     type: String,
@@ -62,14 +43,15 @@ comment: {
  dateRecieved: {
     type: Date,
     default: Date.now
-
   },
- itemimage: {
+ itemImage: {
     type: String,
     default: null
   },
+ Total: {
+    type: Number,
+    min: 0
+  },
 });
-stockSchema.plugin(passportLocalMongoose,{
-  usernameField: 'email'
-});
+
 module.exports = mongoose.model('Stock', stockSchema);

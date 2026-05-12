@@ -48,11 +48,12 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 router.post("/login", passport.authenticate('local',{failureRedirect:'/login'}), (req, res) => {
- if(req.user.role ==='admin') {
+  console.log(req.body);
+ if(req.user.userRole ==='admin') {
   res.redirect('/admin_dash')
- } else if(req.user.role ==='attendant'){
+ } else if(req.user.userRole ==='attendant'){
   res.redirect('/sales_dash')
- } else if(req.user.role ==='manager') {
+ } else if(req.user.userRole ==='manager') {
   res.redirect('/manager_dash')
  } else{
   res.redirect('/')
@@ -61,10 +62,11 @@ router.post("/login", passport.authenticate('local',{failureRedirect:'/login'}),
 
 //Logout Route
 router.get('/logout', (req, res, next) =>{
-  req.logout( (err)=>{
+  req.logout(function(err) {
     if(err) {
       return next(err);
     }
+    req.flash('success_msg', 'Logged out successfully');
     res.redirect('/')
   })
 });

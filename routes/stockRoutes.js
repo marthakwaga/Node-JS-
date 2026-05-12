@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-const stock = require('../models/Stock')
+const Stock = require('../models/Stock')
 const {isAttendant, isAdmin, isManager} = require('../middleware/auth');  
 
 //Image configurations
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads')
+      cb(null, 'public/uploads')
     },
     filename: function (req, file, cb) {
       cb(null, file.originalname)
@@ -28,13 +28,12 @@ router.post('/stock_list',(req,res)=>{
 router.get('/add_stock', (req,res)=>{
     res.render('addstock');
 });
-router.post('/add_stock', upload.single('itemimage'), async (req, res) => {
+router.post('/add_stock', upload.single('itemImage'), async (req, res) => {
     try {
-     const {productName, productCode,productType, quantity, unitOfMeasure, supplierName, phoneNumber, email, costPrice,tpCost, sellingPrice, itemimage } = req.body;
+     const {productName,productType, quantity, unitOfMeasure, supplierName, phoneNumber, email, costPrice, sellingPrice, itemImage, comment} = req.body;
      const total = parseInt(quantity)*parseFloat(costPrice);
      let newProduct = new Stock({
         productName,
-        productCode,
         productType,
         quantity,
         unitOfMeasure,
@@ -42,16 +41,17 @@ router.post('/add_stock', upload.single('itemimage'), async (req, res) => {
         phoneNumber,
         email,
         costPrice,
-        tpCost,
         sellingPrice,
         comment,
-        dateRecieved,
-        itemimage: req.file.path
+        total,
+        itemImage: req.file.path
      }) 
+     console.log(newProduct);
      await newProduct.save();
       res.redirect('/add_stock')
     } catch (error) {
         res.render('addstock',{error:error.message})
+        console.log(error);
     }
 });
 
