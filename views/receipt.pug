@@ -1,44 +1,77 @@
 extends layout
 
 block content
+  .container.mt-4( style='max-width: 600px; height: 100vh; overflow-y: auto;')
+    .card.shadow-lg
+      .card-body.p-5
 
-  .container.mt-5
+        // Header with Logo
+        .text-center.mb-4
+          if logoPath
+            img(src=logoPath alt="Nyondo General Hardware" style="height: 80px; width: auto;")
+          else
+            h2.text-warning Nyondo General Hardware
 
-    .card.p-4
+          h4.mt-2.text-dark Suppling Every Step of Your Build!
 
-      h2.text-center Receipt
+        hr
 
-      hr
+        .row.mb-4
+          .col-12.col-md-6
+            strong Sale ID: 
+            span #{sale._id}
+          .col-md-6.text-end
+            strong Date: 
+            span #{new Date(sale.saleDate).toLocaleDateString()}
 
-      p
-        strong Sales Rep:
-        |  #{sale.representative}
+        .row.mb-4
+          .col-12.col-md-6
+            strong Representative: 
+            span #{sale.representative}
+          .col-12.col-md-6
+            strong Customer Phone: 
+            span #{sale.customerPhone}
 
-      p
-        strong Customer:
-        |  #{sale.customerPhone}
+        if sale.distance
+          p 
+            strong Distance: 
+            | #{sale.distance} km
 
-      table.table
+        hr
 
-        thead
-          tr
-            th Product
-            th Qty
-            th Price
-            th Total
-
-        tbody
-          each item in sale.items
+        h5.mb-3 Items Purchased
+        table.table.table-bordered
+          thead.table-dark
             tr
-              td= item.product
-              td= item.qty
-              td= item.price
-              td= item.total
+              th Product
+              th.text-center Qty
+              th.text-end Unit Price
+              th.text-end Total
+          tbody
+            each item in sale.items
+              tr
+                td #{item.product}
+                td.text-center #{item.qty}
+                td.text-end UGX #{item.price.toLocaleString()}
+                td.text-end.fw-bold UGX #{item.total.toLocaleString()}
 
-      h4.text-end
-        | Transport:
-        |  UGX #{sale.transportCharge.toLocaleString()}
+        hr
 
-      h3.text-end.text-success
-        | Grand Total:
-        |  UGX #{sale.grandTotal.toLocaleString()}
+        .row
+      
+          .col-md-6.text-end
+            h5 Grand Total
+            h2.text-success UGX #{sale.grandTotal.toLocaleString()}
+
+            if sale.transportCharge > 0
+              small.text-muted Transport Included: UGX #{sale.transportCharge.toLocaleString()}
+
+        hr
+
+        .text-center.mt-5
+          p Thank you for shopping with us!
+          p.text-muted Nyondo General Hardware - Mbale, Uganda
+
+        .text-center.mt-4
+          button.btn.btn-primary(onclick='window.print()') 🖨️ Print Receipt
+          a.btn.btn-secondary.ms-3(href='/addsale') New Sale

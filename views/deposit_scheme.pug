@@ -1,0 +1,148 @@
+extends layout 
+
+block content
+  .flex-grow-1.p-4.overflow-auto
+    .container-fluid
+
+      h2.text-white.mb-4
+        u SALARY EARNER DEPOSIT SCHEME
+
+      .row
+
+        // Make a Deposit
+        .col-lg-5.mb-4
+          .card.h-100
+
+            .card-header.bg-warning.text-dark
+              h5.mb-0 Make a Deposit
+
+            .card-body
+              form
+
+                .mb-3
+                  label.form-label Full Name
+                  input.form-control(
+                    name='fullName'
+                    type='text'
+                    placeholder='Enter full name'
+                    required
+                  )
+
+                .mb-3
+                  label.form-label Phone Number
+                  input.form-control(
+                    name='phoneNumber'
+                    type='tel'
+                    placeholder='+256 7XX XXX XXX'
+                    required
+                  )
+
+                .mb-3
+                  label.form-label Deposit Amount (UGX)
+                  input.form-control.form-control-lg(
+                    type='number'
+                    placeholder='50,000'
+                    required
+                  )
+
+                .mb-3
+                  label.form-label Deposit Period
+
+                  select.form-select
+                    option(value='3') 3 Months
+                    option(value='6' selected) 6 Months
+                    option(value='12') 12 Months
+
+                button.btn.btn-dark.w-100(
+                  type='submit'
+                ) Deposit Now
+
+        // Recent Deposits
+        .col-lg-7.mb-4
+          .card.h-100
+
+            .card-header.bg-warning
+              h5.mb-0 Recent Deposits
+
+            .card-body.p-0
+              .table-responsive
+
+                table.table.table-hover.mb-1
+
+                  thead.table-light
+                    tr
+                      th Date
+                      th Name
+                      th Amount
+                      th Period
+                      th Status
+
+                  tbody
+                    tr
+                      td 2026-05-02
+                      td Michael Okello
+                      td.text-success.fw-bold 250,000
+                      td 6 Months
+                      td
+                        span.badge.bg-success Active
+
+                    tr
+                      td 2026-05-01
+                      td Grace Nakato
+                      td.text-success.fw-bold 120,000
+                      td 3 Months
+                      td
+                        span.badge.bg-success Active
+
+                    tr
+                      td 2026-04-30
+                      td John Mugisha
+                      td.text-success.fw-bold 80,000
+                      td 12 Months
+                      td
+                        span.badge.bg-success Active
+
+      // Customers who used up their deposit
+      .card.mt-4
+
+        .card-header.bg-warning
+          h5.mb-0 Clients who have redeemed their retainer
+
+        .card-body
+          .table-responsive
+
+            table.table.table-hover
+
+              thead
+                tr
+                  th Name
+                  th Original Deposit
+                  th Amount Used
+                  th Remaining
+                  th Date Used
+                  th Action
+
+              tbody
+                tr
+                  td Sarah Nansubuga
+                  td 200,000 UGX
+                  td.text-danger 150,000 UGX
+                  td
+                    span.text-success.fw-bold 50,000 UGX
+                  td 2026-04-28
+                  td
+                    button.btn.btn-sm.btn-outline-primary Replenish
+
+                tr
+                  td Robert Kizza
+                  td 150,000 UGX
+                  td.text-danger 150,000 UGX
+                  td
+                    span.text-danger.fw-bold 0 UGX
+                  td 2026-04-25
+                  td
+                    button.btn.btn-sm.btn-outline-primary Replenish
+
+  // Scripts
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+

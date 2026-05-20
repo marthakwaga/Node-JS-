@@ -28,7 +28,7 @@ router.post('/addsale', async (req, res) => {
       return res.status(400).send('Missing required fields');
     }
         // Convert items safely
-    const parsedItems = JSON.parse(items);
+    const parsedItems = typeof items === 'string' ? JSON.parse(items) : items;
 
     if(!Array.isArray(parsedItems) || parsedItems.length === 0) {
       return res.status(400).send('Invalid items data');
@@ -51,7 +51,7 @@ router.post('/addsale', async (req, res) => {
       customerPhone,
       distance: Number(distance) || 0,
       transportCharge: Number(transportCharge) || 0,
-      transportRequested: transportRequested === 'true' || transportRequested === true,
+      transportRequested: transportRequested === 'true' || transportRequested === 'false' ? transportRequested === 'true' : false,
       items: parsedItems,
       grandTotal
     });
@@ -97,7 +97,7 @@ router.get('/receipt/:id', async (req, res) => {
       return res.status(404).send('Sale not found');
     }
 
-    res.render('receipt', { sale });
+    res.render('receipt', { sale, logoPath: '/images/logo.png'});
 
   } catch (error) {
     console.error(error);
