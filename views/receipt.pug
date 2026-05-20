@@ -1,116 +1,44 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Nyondo Receipt
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(href='/public/css/stocklist.css' rel='stylesheet')
-  style.
-    body { font-family: 'Courier New', monospace; background: #f8f9fa; }
-    .receipt {
-    max-width: 400px;
-    margin: 20px auto;
-    background: white;
-    padding: 25px;
-    border: 2px dashed #000;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-.receipt
-  .logo
-    img(src='/images/logo.png' alt='Nyondo' style='height: 55px;;')
-  div
-    small Mbale &bull; Tel: 0782 123 456
-  .text-center.border-bottom.pb-2.mb-3
-    h4.fw-bold.mb-1  OFFICIAL SALES RECEIPT
-    small#receiptDate
-  div
-    p
-      strong Receipt #:
-      span#receiptNo
-    p
-      strong Customer:
-      span#customerName Walk-in Customer
-    p
-      strong Served by:
-      span #{sale.attendant.fullname}
-      small Date: #{new Date(sale.saleDate).toLocaleString()}
+extends layout
 
- hr.border-dark.border-2.opacity-100
+block content
 
-      //Using the last six characters of the MongoDb ID as a short receipt number.
-      small Receipt #: #{sale._id.toString().slice(-6).toUpperCase}
-  table#receiptItems.table.table-sm
-    // Populated by JS
-  .border-top.pt-2
-    .d-flex.justify-content-between.mb-2
-      strong Subtotal
-      span#subTotal UGX 0
-    .d-flex.justify-content-between.mb-2
-      strong Transport Fee
-      span#transportFee UGX 0
-    .d-flex.justify-content-between.fs-5.fw-bold.border-top.mt-2.pt-2
-      strong Quantity
-      span #{sale.items.productName} (Qty:#{sale.qty})
-    .d-flex.justify-content-between.fs-5.fw-bold.border-top.mt-2.pt-2
-      strong Transport Charge
-      span #{sale.totalAmount.toLocalString()} UGX
-    if sale.transportCharge > 0
-    .d-flex.justify-content-between.fs-5.fw-bold.
-    border-top.mt-2.pt-2
-      span #{sale.transportCharge.toLocaleString()} UGX 
+  .container.mt-5
 
-   hr.border-dark.border-2.opacity-100
+    .card.p-4
 
-   .d-flex.justify-content-between.mb-2
-      strong Total
-      span #{(sale.totalAmount + sale.transportCharge).toLocaleString()} UGX
+      h2.text-center Receipt
 
-   hr.border-dark.border-2.opacity-100 
+      hr
 
-  .text-center.mt-4
+      p
+        strong Sales Rep:
+        |  #{sale.representative}
 
-    p.mb-0.small Thank you for shopping with Nyondo General Hardware!
-    br
-    p.mb-0.small.text-muted Goods sold are not returnable &bull; Powered by Nyondo System
-.text-center.d-print-non.mt-4
-  button.btn.btn-primary(onclick='window.print()') 
-  i.fas.fa-print.me-1 
-  |Print Receipt 
- a.btn.btn-outline-secondary(href='/saleslist') View Sales
-script.
-  function generateAndPrintReceipt(saleData) {
-  // Fill receipt details
-  document.getElementById('receiptDate').textContent = new Date().toLocaleString('en-UG');
-  document.getElementById('receiptNo').textContent = "NY-" + Date.now().toString().slice(-8);
-  document.getElementById('customerName').textContent = saleData.customer || "Walk-in Customer";
-  document.getElementById('salesPerson').textContent = saleData.salesPerson || "Sales Attendant";
-  const tbody = document.getElementById('receiptItems');
-  tbody.innerHTML = '';
-  let subtotal = 0;
-  saleData.items.forEach(item => {
-  const row = document.createElement('tr');
-  row.innerHTML = `
-  <td>${item.product}</td>
-  <td class="text-end">${item.qty} × ${item.price.toLocaleString()}</td>
-  <td class="text-end">${item.total.toLocaleString()}</td>
-  `;
-  tbody.appendChild(row);
-  subtotal += item.total;
-  });
-  const transport = saleData.transportFee || 0;
-  const grandTotal = subtotal + transport;
-  document.getElementById('subTotal').textContent = `UGX ${subtotal.toLocaleString()}`;
-  document.getElementById('transportFee').textContent = `UGX ${transport.toLocaleString()}`;
-  document.getElementById('grandTotal').textContent = `UGX ${grandTotal.toLocaleString()}`;
-  // Auto print after a short delay
-  setTimeout(() => {
-  window.print();
-  }, 800);
-  }
-  // For testing
-  // generateAndPrintReceipt({
-  //   customer: "John Mukasa",
-  //   salesPerson: "Martha Kwaga",
-  //   items: [{product: "Cement CEM II", qty: 10, price: 38500, total: 385000}],
-  //   transportFee: 30000
-  // });
+      p
+        strong Customer:
+        |  #{sale.customerPhone}
+
+      table.table
+
+        thead
+          tr
+            th Product
+            th Qty
+            th Price
+            th Total
+
+        tbody
+          each item in sale.items
+            tr
+              td= item.product
+              td= item.qty
+              td= item.price
+              td= item.total
+
+      h4.text-end
+        | Transport:
+        |  UGX #{sale.transportCharge.toLocaleString()}
+
+      h3.text-end.text-success
+        | Grand Total:
+        |  UGX #{sale.grandTotal.toLocaleString()}

@@ -1,35 +1,11 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
-const saleItemSchema = new mongoose.Schema({
+const SaleSchema = new mongoose.Schema({
 
-  product: {
-    type: String,
-    required: true
-  },
-
-  qty: {
-    type: Number,
-    required: true
-  },
-
-  unitPrice: {
-    type: Number,
-    required: true
-  },
-
-  total: {
-    type: Number,
-    required: true
-  }
-
-});
-
-const saleSchema = new mongoose.Schema({
-
-  saleDate: {
-    type: Date,
-    required: true
+  saleDate: { 
+    type: Date, 
+    default: Date.now 
   },
 
   representative: {
@@ -37,26 +13,30 @@ const saleSchema = new mongoose.Schema({
     required: true
   },
 
-  customerPhone: {
-    type: String,
+  customerPhone: String,
+
+  distance: Number,
+
+  transportCharge: Number,
+
+  grandTotal: Number,
+
+  transportRequested: { 
+    type: Boolean, 
+    default: false 
   },
 
-  items: [saleItemSchema],
+  items: [
+    {
+      product: String,
+      qty: Number,
+      price: Number,
+      total: Number
+    }
+  ],
 
-  transportFee: {
-    type: Number, 
-    default: 0
-  },
+  createdAt: { type: Date, default: Date.now }
 
-  grandTotal: {
-    type: Number,
-    required: true
-  },
+}, { timestamps: true });
 
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-
-});
-module.exports = mongoose.model('Sale', saleSchema);
+module.exports = mongoose.model('Sale', SaleSchema);

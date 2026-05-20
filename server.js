@@ -12,7 +12,7 @@ const connectDb = require('./config/db')
 
 //Import user model
 const Registration = require('./models/Registration')
-const saleRoutes = require('./models/Sale');
+
 //2. Instantiations
 const app = express();
 const port = 3000;
@@ -25,10 +25,10 @@ app.set('views', path.join(__dirname,'views'))
 
 //4. Middleware
 app.use(express.static(path.join(__dirname,'public')));
-app.use('public/uploads', express.static((__dirname + 'public/uploads')));
+app.use('/public/uploads', express.static((__dirname + 'public/uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
-app.use('/', saleRoutes);
+
 
 //Express session configurations  
 app.use(expressSession({

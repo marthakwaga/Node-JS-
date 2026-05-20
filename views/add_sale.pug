@@ -1,114 +1,57 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-  meta(http-equiv='x-ua-compatible' content='ie=edge')
-  title ADD SALE
-  // MDB icon
-  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
-  // Font Awesome
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
-  // Google Fonts Roboto
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
-  // MDB
-  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='css/mdb.min.css')
-  link(rel='stylesheet' href='/css/nyondo.css')
-#intro-example.p-5.text-center.bg-image.d-flex.flex-column.min-vh-100(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
-    .d-flex.h-100
-      nav.sidebar.p-5.text-white.flex-shrink-0(style='width: 260px; background: rgba(124, 95, 124, 0.36);')
-          .logo.mx-auto.mb-4(style="background-image: url('/images/logo.png'); \
-          width: 150px; height: 150px; \
-          background-size: contain; \
-          background-repeat: no-repeat;")
-          ul.nav.flex-column
-            li.nav-item
-              a.nav-link.text-white(href='/stocklist')
-                i.fas.fa-boxes
-                span(data-translate='products') Products
-            li.nav-item
-              a.nav-link.text-white(href='/addsale')
-                i.fas.fa-shopping-cart
-                span(data-translate='sales') Sales
-            li.nav-item
-              a.nav-link.text-white(href='/deposit')
-                i.fas.fa-hand-holding-usd
-                span(data-translate='deposits') Deposits
-            li.nav-item
-              a.nav-link.text-white(href='/credit')
-                i.fas.fa-users
-                span(data-translate='suppliers') Suppliers
-            li.nav-item
-              a.nav-link.text-white(href='/reports')
-                i.fas.fa-chart-bar
-                span(data-translate='reports') Reports
-            li.nav-item
-              a.nav-link.text-white(href='/offonline')
-                i.fas.fa-wifi
-                span(data-translate='offline') Offline Mode
-          a.btn.btn-warning.w-100.my-4(href="/")
-            i.fas.fa-sign-out-alt.me-2 | Logout       
-      form#saleForm.col.overflow-y-auto(action='/addsale' method='post' style='height: 100vh; overflow-y: auto;')
-          .flex-grow-1.p-4(style='max-width: 800px; margin: 0 auto;')
-            .card-header.bg-warning.text-dark.text-center.py-3
-              h4.mb-0
-                i.fas.fa-cash-register.me-2
-                      | New Sale
-            .row        
-              .col-md-4
-                label.form-label.fw-bold Sale Date
-                input#saleDate.form-control(name='saleDate' type='date' value='2026-05-07')
+extends layout
+
+block content
+  .flex-grow-1.p-4(style='max-width: 850px; margin: 0 auto;')
+    .card.shadow-lg(style='background: rgba(255, 255, 255, 0.144);')
+      .card-header.bg-warning.text-dark.text-center.py-3
+        h4.mb-0
+          i.fas.fa-cash-register.me-2
+          |  New Sale
+      .card-body.p-4(style='max-height: 500px; overflow-y: auto;')
+        form#saleForm(action='/addsale' method='POST')
+          input#itemsInput(type='hidden' name='items')
+          input#transportRequestedInput(type='hidden' name='transportRequested')
+          // Your existing form fields
+          .row.mb-4
+            .col-md-4
+              label.form-label.fw-bold.text-white Sale Date
+              input#saleDate.form-control(name='saleDate' type='date' value=new Date().toISOString().split('T')[0])
+            .col-md-5
+              label.form-label.fw-bold.text-white Sales Representative
+              select#representative.form-select(name='representative')
+                option(value='') Select Representative
+                option(value='Martha') Martha Kwaga
+                option(value='John') John Tendo
+                option(value='Sarah') Sarah Nakiyemba
+                option(value='Robert') Robert Livano
+                option(value='Grace') Grace Ishimwe
+            .col-md-3
+              label.form-label.fw-bold.text-white Customer Phone
+              input#customerPhone.form-control(name='customerPhone' type='tel' placeholder='07xxxxxxxx')
+          // Add Product Manually
+          .border.rounded-3.p-2.mb-4.text-white
+            h5.mb-3  Add Product
+            .row.g-3
               .col-md-5
-                label.form-label.fw-bold Sales Representative
-                select#representative.form-select(name='representative')
-                  option(value='') Select Representative
-                  option(value='Martha') Martha Kwaga
-                  option(value='John') John Tendo
-                  option(value='Sarah') Sarah Nansubuga
-                  option(value='Robert') Robert Kizza
-                  option(value='Grace') Grace Nakato
-              .col-md-3
-                label.form-label.fw-bold Customer Phone
-                input#customerPhone.form-control(type='tel' name='cutomerPhone' placeholder='07xxxxxxxx')
-              .row.g-3
-                .border.rounded-3.mb-4.bg-light
-                  h5.mb-3.text-info
-                    i.fas.fa-truck
-                    |  Transport Charge
-            .row
-              .col-md-6
-                label.form-label Sale Amount (UGX)
-                input#saleAmount.form-control(type='number' name='saleAmount' placeholder='500000' onkeyup='calculateTransport()')
-              .col-md-6
-                label.form-label.fw-bold Location
-                select#location.form-select(onchange='calculateTransport()' name='location')
-                  option(value='within') Within 10km (Mbale City Area)
-                  option(value='outside') Outside 10km
-            .mt-3
-              .alert.alert-info
-                strong Transport Fee: 
-                span#transportFee(name='transportFee') UGX 0
-            .row.g-2.align-items-end
-              .border.rounded-3.p-4.mb-4
-                h5.mb-3 Add Product    
-                select#productSelect.form-select(onchange='autoFillPrice()' name='productSelect')
+                select#productSelect.form-select(name='product' onchange='autoFillPrice()')
                   option(value='') Select Product
-                  option(value='Cement 50kg' data-price='25000') Cement 50kg
-                  option(value='Roofing Sheet' data-price='45000') Roofing Sheet
-                  option(value='Binding Wire Roll' data-price='12000') Binding Wire Roll
-                  option(value='Emulsion Paint 20L' data-price='85000') Emulsion Paint 20L
+                  option(value='Cement 50kg' data-price='25000') Cement
+                  option(value='Roofing Sheet' data-code='ROF002' data-price='45000') Roofing Sheet
+                  option(value='Binding Wire Roll' data-code='BWR003' data-price='12000') Binding Wire Roll
+                  option(value='Emulsion Paint 20L'  data-price='85000') Emulsion Paint 20L
+                  option(value='Electrical Wire 1.5mm'  data-price='35000') 1.5mm Electrical Wire
+                  option(value='PVC Pipe 4m'  data-price='18000') PVC Pipe 4m
               .col-md-2
-                input#qty.form-control(type='number' name='qty' value='1' min='1')
-              .col-md-3
-                input#unitPrice.form-control(type='number' name='unitPrice' placeholder='Price')
+                input#qty.form-control(type='number' value='1' min='1' name='qty')
               .col-md-2
+                input#unitPrice.form-control(type='number' placeholder='Price' name='unitPrice')
+              .col-md-1.d-flex.align-items-end
                 button.btn.btn-success.w-100(type='button' onclick='addItem()')
                   i.fas.fa-plus
-              .col-md-6
-                h5.mb-1.text-warning Items Added
+            // Items Table
+            h5.mb-3.text-warning Items Added
               .table-responsive(style='max-height: 320px; overflow-y: auto;')
-                table#itemsTable.table.table-hover
+              table#itemsTable.table.table-hover
                   thead.table-dark.sticky-top
                     tr
                       th Product
@@ -116,224 +59,170 @@ head
                       th.text-end Unit Price
                       th.text-end Total
                       th
-                    tbody#itemsBody
-              .d-flex.justify-content-between.align-items-center.p-4.bg-light.rounded-3.mt-1
-                h4.mb-0.fw-bold Grand Total
-                h2#grandTotal.mb-0.text-success.fw-bold UGX 0
-              .text-center.mt-4
-                button.btn.btn-warning.btn-lg.px-5(type='submit') Save Sale & Print Receipt
-
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
-script(src='https://unpkg.com/html5-qrcode')
-script(src='js/app.js')
-script(src='js/scanner.js')
-script.
-
-  let items = [];
-  let transportFee = 0;
-
-  // Auto fill price when product is selected
-  function autoFillPrice() {
-
-    const select = document.getElementById('productSelect');
-    const option = select.options[select.selectedIndex];
-
-    if (option && option.value) {
-
-      document.getElementById('unitPrice').value =
-        option.dataset.price || '';
-    }
-  }
-
-  // Add item to cart
-  function addItem() {
-
-    const product =
-      document.getElementById('productSelect').value;
-
-    const qty =
-      parseFloat(document.getElementById('qty').value) || 1;
-
-    const unitPrice =
-      parseFloat(document.getElementById('unitPrice').value) || 0;
-
-    if (!product) {
-      return alert("Please select a product");
+                  tbody#itemsBody
+            .row.mb-4
+              .col-md-6
+                label.form-label.fw-bold.text-white Distance (KM)
+                input#distance.form-control(
+                  type='number'
+                  min='0'
+                  placeholder='Enter distance'
+                  oninput='calculateTransport()'
+                  name='distance'
+                )
+              .col-md-4
+                label.form-label.fw-bold.text-white Transport Charge
+                input#transportCharge.form-control(
+                  type='number'
+                  readonly
+                  value='0'
+                  name='transportCharge'
+                )
+            .d-flex.justify-content-between.align-items-center.p-4.bg-white.rounded-3.mt-4.text-success
+              h4.mb-0.fw-bold Grand Total
+              h2#grandTotal.mb-0.text-success.fw-bold UGX 0
+            .text-center.mt-4
+              button.btn.btn-warning.btn-lg.px-5(type='submit') Save &amp; Print Receipt
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+  script(src='js/app.js')
+  script.
+            let items = [];
+    
+    function autoFillPrice() {
+        const select = document.getElementById('productSelect');
+        const option = select.options[select.selectedIndex];
+        if (option && option.value) {
+            document.getElementById('unitPrice').value = option.dataset.price || '';
+        }
     }
 
-    items.push({
+    function addItem() {
+        const product = document.getElementById('productSelect').value;
+        const qty = parseFloat(document.getElementById('qty').value) || 1;
+        const price = parseFloat(document.getElementById('unitPrice').value) || 0;
 
-      product,
-      qty,
-      unitPrice,
-      total: qty * unitPrice
+        if (!product) return alert("Please select a product");
 
-    });
+        items.push({ 
+            product, 
+            qty, 
+            price, 
+            total: qty * price 
+        });
 
-    renderTable();
-    calculateGrandTotal();
-    clearInputs();
-  }
-
-  // Render items table
-  function renderTable() {
-
-    const tbody = document.getElementById('itemsBody');
-
-    tbody.innerHTML = '';
-
-    items.forEach((item, index) => {
-
-      tbody.innerHTML += `
-
-        <tr>
-          <td>${item.product}</td>
-
-          <td class="text-center">
-            ${item.qty}
-          </td>
-
-          <td class="text-end">
-            ${item.unitPrice.toLocaleString()}
-          </td>
-
-          <td class="text-end fw-bold">
-            ${item.total.toLocaleString()}
-          </td>
-
-          <td>
-            <button
-              onclick="removeItem(${index})"
-              class="btn btn-sm btn-danger"
-            >
-              Remove
-            </button>
-          </td>
-        </tr>
-      `;
-    });
-  }
-
-  // Remove item
-  function removeItem(index) {
-
-    items.splice(index, 1);
-
-    renderTable();
-
-    calculateGrandTotal();
-  }
-
-  // Calculate total
-  function calculateGrandTotal() {
-
-    const subtotal =
-      items.reduce((sum, item) => sum + item.total, 0);
-
-    const totalPrice  = subtotal + transportFee;
-
-    document.getElementById('grandTotal').textContent =
-      `UGX ${grandTotal.toLocaleString()}`;
-  }
-
-  // Clear form inputs
-  function clearInputs() {
-
-    document.getElementById('productSelect').value = '';
-
-    document.getElementById('qty').value = '1';
-
-    document.getElementById('unitPrice').value = '';
-  }
-
-  // Submit Sale
-  document.getElementById('saleForm')
-  .addEventListener('submit', function(e) {
-
-    e.preventDefault();
-
-    if (items.length === 0) {
-
-      return alert("Please add at least one item");
+        renderTable();
+        calculateTransport();
+        clearInputs();
     }
 
-    const grandTotal =
-      items.reduce((sum, item) => sum + item.total, 0)
-      + transportFee;
+    function renderTable() {
+        const tbody = document.getElementById('itemsBody');
+        tbody.innerHTML = '';
+        items.forEach((item, index) => {
+            tbody.innerHTML += `
+            <tr>
+                <td>${item.product}</td>
+                <td class="text-center">${item.qty}</td>
+                <td class="text-end">${item.price.toLocaleString()}</td>
+                <td class="text-end fw-bold">${item.total.toLocaleString()}</td>
+                <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">Remove</button></td>
+            </tr>`;
+        });
+    }
 
-    fetch('/addsale', {
+    function removeItem(index) {
+        items.splice(index, 1);
+        renderTable();
+        calculateTransport();
+    }
 
-      method: 'POST',
+    // ===================== MAIN FUNCTION =====================
+    function calculateTransport() {
+        const distanceEl = document.getElementById('distance');
+        const transportField = document.getElementById('transportCharge');
+        const requestedEl = document.getElementById('transportRequested');
 
-      headers: {
-        'Content-Type': 'application/json'
-      },
+        if (!distanceEl || !transportField) return;
 
-      body: JSON.stringify({
+        const distance = Number(distanceEl.value) || 0;
+        const transportRequested = requestedEl ? requestedEl.checked : false;
+        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
 
-        saleDate:
-          document.getElementById('saleDate').value,
+        let transport = 0;
 
-        representative:
-          document.getElementById('representative').value,
+        if (distance <= 10) {
+            if (itemsTotal >= 500000) {
+                transport = 0;
+            } else {
+                transport = transportRequested ? 20000 : 0;
+            }
+        } 
+        else if (distance <= 20) transport = 30000;
+        else if (distance <= 30) transport = 50000;
+        else if (distance <= 50) transport = 80000;
+        else transport = 120000;
 
-        customerPhone:
-          document.getElementById('customerPhone').value,
+        transportField.value = transport;
 
-        items: items,
+        // Update hidden field
+        const hiddenRequested = document.getElementById('transportRequestedInput');
+        if (hiddenRequested) hiddenRequested.value = transportRequested;
 
-        transportFee: transportFee,
+        updateGrandTotal();
+        showTransportInfo(distance, itemsTotal, transport, transportRequested);
+    }
 
-        grandTotal: grandTotal
-      })
-    })
+    function updateGrandTotal() {
+        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
+        const transport = Number(document.getElementById('transportCharge').value) || 0;
+        
+        const grandTotal = itemsTotal + transport;
 
-    .then(response => response.json())
+        const grandEl = document.getElementById('grandTotal');
+        if (grandEl) {
+            grandEl.innerText = `UGX ${grandTotal.toLocaleString()}`;
+        }
+    }
 
-    .then(data => {
+    function showTransportInfo(distance, itemsTotal, transport, requested) {
+        const infoEl = document.getElementById('transportInfo');
+        if (!infoEl) return;
 
-      alert('✅ Sale saved successfully');
+        if (distance <= 10) {
+            if (itemsTotal >= 500000) {
+                infoEl.textContent = "🎉 Free Transport (Order ≥ 500,000)";
+            } else {
+                infoEl.textContent = requested 
+                    ? "UGX 20,000 Transport (Customer Requested)" 
+                    : "No Transport Fee";
+            }
+        } else {
+            infoEl.textContent = `Distance Tier: ${distance} km`;
+        }
+    }
 
-      console.log(data);
+    function clearInputs() {
+        document.getElementById('productSelect').value = '';
+        document.getElementById('qty').value = 1;
+        document.getElementById('unitPrice').value = '';
+    }
 
-      // Optional receipt popup
-      let receipt = `
-  ====== NYONDO HARDWARE ======
+    // Submit Handler
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initial calculation
+        calculateTransport();
 
-  Representative:
-  ${document.getElementById('representative').value}
+        const saleForm = document.getElementById('saleForm');
+        if (saleForm) {
+            saleForm.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-  --------------------------------
-  `;
+                if (items.length === 0) {
+                    return alert("Please add at least one item");
+                }
 
-      items.forEach(item => {
-
-        receipt += `
-  ${item.product}
-  ${item.qty} x ${item.price}
-  = ${item.total}
-  `;
-      });
-
-      receipt += `
-
-  Transport Fee:
-  ${transportFee}
-
-  TOTAL:
-  ${grandTotal}
-
-  ============================
-  `;
-
-      console.log(receipt);
-
-    })
-
-    .catch(error => {
-
-      console.log(error);
-
-      alert('❌ Server Error');
+                document.getElementById('itemsInput').value = JSON.stringify(items);
+                this.submit();
+            });
+        }
     });
-  });
