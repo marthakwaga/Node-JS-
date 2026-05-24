@@ -1,0 +1,196 @@
+extends layout
+
+block content
+  .flex-grow-1.p-4(style='max-width: 850px; margin: 0 auto;')
+    .d-flex.justify-content-between.align-items-center.mb-4
+      h2.text-white
+        i.fas.fa-boxes.me-2
+        | Products & Stock
+
+      a.btn.btn-warning.btn-lg(href='/add_stock')
+        | Add New Product
+        
+    .row.mb-4
+      .col-md-6
+        input#searchInput.form-control.form-control-lg(placeholder='Search by product name...' onkeyup='filterProducts()')
+      .col-md-3
+        select#categoryFilter.form-select.form-select-lg(onchange='filterProducts()')
+          option(value='') All Categories
+          option(value='Building Materials') Building Materials
+          option(value='Steel') Steel Products
+          option(value='Tools') Tools & Equipment
+          option(value='Cement') Cement & Concrete
+      .col-md-3
+        select#stockFilter.form-select.form-select-lg(onchange='filterProducts()')
+          option(value='') All Stock Levels
+          option(value='low') Low Stock (≤ 15)
+          option(value='out') Out of Stock
+
+    // Products Table
+    .card
+      .card-body
+        .table-responsive
+          table.table.table-hover.align-middle
+            thead.table-dark
+              tr
+                th Product Name
+                th Category
+                th Buying Price
+                th Selling Price
+                th Stock Qty
+                th Status
+                th Actions
+            tbody#productsBody
+
+  // ==================== EDIT PRODUCT MODAL ====================
+  #editProductModal.modal.fade(tabindex='-1')
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h5.modal-title Edit Product
+          button.btn-close(type='button' data-bs-dismiss='modal')
+        form#editForm(action='' method='POST')
+          input#editProductId(type='hidden' name='id')
+          .modal-body
+            .row
+              .col-md-6.mb-3
+                label.form-label Product Name
+                input#editName.form-control(name='name' type='text' required)
+              .col-md-6.mb-3
+                label.form-label Category
+                input#editCategory.form-control(name='category' type='text' required)
+            .row
+              .col-md-4.mb-3
+                label.form-label Buying Price (UGX)
+                input#editBuyingPrice.form-control(name='buyingPrice' type='number' required)
+              .col-md-4.mb-3
+                label.form-label Selling Price (UGX)
+                input#editSellingPrice.form-control(name='sellingPrice' type='number' required)
+              .col-md-4.mb-3
+                label.form-label Stock Quantity
+                input#editStockQuantity.form-control(name='stockQuantity' type='number' required)
+          .modal-footer
+            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
+            button.btn.btn-warning(type='submit') Update Product
+
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+
+  script.
+    let productsData = [];
+
+    async function loadProducts() {
+      try {
+        const res = await fetch('/products/api');
+        productsData = await res.json();
+        renderProducts(productsData);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('productsBody').innerHTML = `<tr><td colspan="7" class="text-center text-danger">Failed to load products</td></tr>`;
+      }
+    }
+
+    function renderProducts(data) {
+      const tbody = document.getElementById('productsBody');
+      tbody.innerHTML = '';
+
+      data.forEach(p => {
+        const stock = parseInt(p.stockQuantity) || 0;
+        const status = stock === 0 ? 'bg-danger' : (stock <= 15 ? 'bg-warning text-dark' : 'bg-success');
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${p.name}</strong></td>
+          <td>${p.category || '-'}</td>
+          <td>${Number(p.buyingPrice).toLocaleString()}</td>
+          <td class="fw-bold text-success">${Number(p.sellingPrice).toLocaleString()}</td>
+          <td class="fw-bold">${stock}</td>
+          <td><span class="badge ${status}">${stock === 0 ? 'Out of Stock' : stock <= 15 ? 'Low Stock' : 'In Stock'}</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary" onclick="editProduct('${p._id}')">Edit</button>
+            <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteProduct('${p._id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // ==================== EDIT FUNCTION ====================
+    async function editProduct(id) {
+      try {
+        const res = await fetch(`/products/${id}`);
+        const product = await res.json();
+
+        document.getElementById('editProductId').value = product._id;
+        document.getElementById('editName').value = product.name;
+        document.getElementById('editCategory').value = product.category || '';
+        document.getElementById('editBuyingPrice').value = product.buyingPrice;
+        document.getElementById('editSellingPrice').value = product.sellingPrice;
+        document.getElementById('editStockQuantity').value = product.stockQuantity;
+
+        new bootstrap.Modal(document.getElementById('editProductModal')).show();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load product for editing");
+      }
+    }
+
+    async function updateProduct() {
+      const id = document.getElementById('editId').value;
+      const data = {
+        name: document.getElementById('editName').value,
+        category: document.getElementById('editCategory').value,
+        buyingPrice: Number(document.getElementById('editBuyingPrice').value),
+        sellingPrice: Number(document.getElementById('editSellingPrice').value),
+        stockQuantity: Number(document.getElementById('editStock').value)
+      };
+
+      try {
+        await fetch(`/products/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
+        loadProducts(); // Refresh table
+      } catch (err) {
+        alert("Failed to update product");
+      }
+    }
+
+    function deleteProduct(id) {
+      if (confirm("Delete this product?")) {
+        fetch(`/products/${id}`, { method: 'DELETE' })
+          .then(() => loadProducts());
+      }
+    }
+    // Filter Function
+    function filterProducts() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const stockLevel = document.getElementById('stockFilter').value;
+
+      const filtered = productsData.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(search);
+        const matchesCategory = !category || product.category === category;
+        const stock = parseInt(product.stockQuantity) || 0;
+
+        let matchesStock = true;
+        if (stockLevel === 'low') matchesStock = stock > 0 && stock <= 15;
+        if (stockLevel === 'out') matchesStock = stock === 0;
+
+        return matchesSearch && matchesCategory && matchesStock;
+      });
+
+      renderProducts(filtered);
+    }
+
+    function deleteProduct(id) {
+      if (confirm("Are you sure you want to delete this product?")) {
+        fetch(`/products/${id}`, { method: 'DELETE' })
+          .then(() => loadProducts());
+      }
+    }
+
+    // Initialize
+  window.onload = loadProducts;

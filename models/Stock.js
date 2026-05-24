@@ -35,7 +35,7 @@ costPrice: {
 sellingPrice: {
     type: Number,
     required: true,
-      },
+    },
 comment: {
     type: String,
     trim: true,
@@ -52,6 +52,7 @@ comment: {
     type: Number,
     min: 0
   },
+
 });
 
 module.exports = mongoose.model('Stock', stockSchema);

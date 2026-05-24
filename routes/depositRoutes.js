@@ -2,39 +2,88 @@ const express = require('express');
 const router = express.Router();
 
 const Deposit = require('../models/Deposit');
-const e = require('connect-flash');
+// const e = require('connect-flash');
 
 // Load Deposit Page
-router.get('/deposit', (req, res) => {
-  res.render('deposit_scheme');   // your current pug file
-});
+router.get('/deposit', async (req, res) => {
+  try {
 
+    const deposits = await Deposit.find()
+      .sort({ createdAt: -1 });
+
+    res.render('deposit_scheme', {
+      deposits
+    });
+
+  } catch (error) {
+
+    console.log(error);
+    res.status(500).send('Server Error');
+
+  }
+});
 // Make a New Deposit
 router.post('/deposit', async (req, res) => {
   try {
-    const { fullName, phoneNumber, depositAmount, periodMonths, representative, notes, status, amountRedeemed, remainingAmount, startDate, endDate } = req.body;
+    console.log("🔍 Full req.body received:", JSON.stringify(req.body, null, 2)); // ← Very important for debugging
+
+    const { 
+      fullName, 
+      phoneNumber, 
+      depositAmount, 
+      periodMonths, 
+      representative, 
+      notes, 
+      status, 
+      startDate, 
+      endDate 
+    } = req.body;
+
+    // Safe conversion functions
+    const safeNumber = (val, defaultValue = 0) => {
+      const num = Number(val);
+      return isNaN(num) || num < 0 ? defaultValue : num;
+    };
+
+    const safeDate = (dateStr) => {
+      if (!dateStr) return null;
+      const date = new Date(dateStr);
+      return isNaN(date.getTime()) ? null : date;
+    };
 
     const newDeposit = new Deposit({
-      fullName,
-      phoneNumber,
-      depositAmount: Number(depositAmount),
-      periodMonths: Number(periodMonths),
-      representative: representative || 'N/A',
-      notes: notes || `Deposit of ${depositAmount} for ${periodMonths} months received.`,
+      fullName: (fullName || '').trim(),
+      phoneNumber: (phoneNumber || '').trim(),
+      
+      depositAmount: safeNumber(depositAmount),
+      periodMonths: safeNumber(periodMonths, 1),        // default 1 month
+      
+      representative: (representative || '').trim() || 'N/A',
+      notes: (notes || '').trim() || `Deposit received`,
       status: status || 'Active',
-      amountRedeemed: Number(amountRedeemed),
-      remainingAmount: Number(remainingAmount),
-      startDate: startDate ? new Date(startDate) : new Date(),
-      endDate: endDate ? new Date(endDate) : new Date(new Date().setMonth(new Date().getMonth() + Number(periodMonths)))
+
+      amountRedeemed: 0,
+      remainingAmount: safeNumber(depositAmount),       // fallback to depositAmount
+
+      startDate: safeDate(startDate) || new Date(),
+      endDate: safeDate(endDate)
     });
+
+    // Auto-calculate endDate if missing
+    if (!newDeposit.endDate && newDeposit.periodMonths > 0) {
+      const end = new Date(newDeposit.startDate);
+      end.setMonth(end.getMonth() + newDeposit.periodMonths);
+      newDeposit.endDate = end;
+    }
 
     await newDeposit.save();
 
+    console.log("✅ Deposit saved successfully:", newDeposit._id);
     res.redirect('/deposit?success=true');
 
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error saving deposit');
+    console.error('❌ Deposit save error:', error);
+    res.status(500).send('Error saving deposit.');
   }
 });
 

@@ -1,0 +1,6 @@
+.row.g-3
+              .col-md-5
+                select#productSelect.form-select(name='product' onchange='autoFillPrice()')
+                  option(value='' disabled selected) Select Product
+                  each product in items
+                    option(value='product._id')

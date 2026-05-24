@@ -1,37 +1,83 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default || require('passport-local-mongoose');
 
-const creditSchema = new mongoose.Schema({
-  date: {
-    type: Date,
-    default: Date.now
-
+const itemSchema = new mongoose.Schema({
+  description: {
+    type: String,
+    required: true
   },
+  quantity: {
+    type: Number,
+    default: 1
+  },
+  unitPrice: {
+    type: Number,
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  }
+});
+
+const CreditSchema = new mongoose.Schema({
   supplierName: {
     type: String,
-    trim: true,
-    required: true
-  },
- phoneNumber: {
+    required: true,
+    trim: true
+  }, 
+  creditAmount: {
     type: Number,
-    trim: true,
-    required: true  
+    required: true,
+    min: 0
   },
- creditAmount: {
+  amountPaid: {
     type: Number,
-    trim: true,
-    required: true
-      },
- dueDate: {
+    default: 0
+  },
+  balance: {
+    type: Number,
+    default: 0
+  },
+  dueDate: {
     type: Date,
     required: true
   },
- itemsSupplied: {
-    type: Number,
-    required: true
-      },
+  // Better structure for items
+  itemsSupplied: {
+    type: [itemSchema],
+    default: []
+  },
+  status: {
+    type: String,
+    enum: ['Pending', 'Partially Paid', 'Cleared', 'Overdue'],
+    default: 'Pending'
+  },
+  notes: String,
+  recordedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
+}, {
+  timestamps: true
 });
-creditSchema.plugin(passportLocalMongoose,{
-  usernameField: 'email'
+
+// Pre-save middleware to calculate balance and status
+CreditSchema.pre('save', function() {
+  // Calculate balance
+  this.balance = this.creditAmount - this.amountPaid;
+
+  // Auto-update status
+  if (this.balance <= 0) {
+    this.status = 'Cleared';
+  } else if (this.balance < this.creditAmount) {
+    this.status = 'Partially Paid';
+  } else if (this.dueDate < new Date() && this.balance > 0) {
+    this.status = 'Overdue';
+  } else {
+    this.status = 'Pending';
+  }
+
 });
-module.exports = mongoose.model('Credit', creditSchema);
+
+module.exports = mongoose.model('Credit', CreditSchema);

@@ -57,22 +57,7 @@ head
           .row.g-3
             .col
               label.form-label.text-white(for='product name') Product Name:
-              select.form-select(name='productName' aria-label='Default select example')
-                option(selected='') Choose option below
-                option(value='cement') Cement
-                option(value='nails') Nails
-                option(value='varnish') Varnish
-                option(value='paint') Paint
-                option(value='angle bars') Angle bars
-                option(value='hinge') Hinge
-                option(value='IBZ') Iron bars
-                option(value='thinners') Thinners
-                option(value='sealant') Sealant
-                option(value='roofing sheets') Roofing sheets
-                option(value='tarpaulins') Tarpaulins
-                option(value='wire mesh') Wire mesh
-                option(value='paint brush') Paint brush
-                option(value='Y16') Y16
+              input.form-control(name='quantity' type='text' placeholder='Enter Product Name')
             .col
               label.form-label.text-white(for='formGroupExampleInput') Product Type:
               select.form-select(name='productType' aria-label='Default select example')
@@ -106,28 +91,28 @@ head
           .row.g-3
             .col
               label.form-label.text-white(for='formGroupExampleInput') Supplier Name:
-              input.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
+              input#supplierName.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
             .col
               label.form-label.text-white(for='formGroupExampleInput') Phone Number:
-              input.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
+              input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
           .row.g-3
             .col
               label.form-label.text-white(for='formGroupExampleInput') Email:
-              input.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')        
+              input#email.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')        
             .col
               label.form-label.text-white(for='formGroupExampleInput') Cost Price:
-              input.form-control(name='costPrice' type='number' aria-label='costPrice')
+              input#costPrice.form-control(name='costPrice' type='number' aria-label='costPrice')
           .row.g-3
             .col
               label.form-label.text-white(for='formGroupExampleInput') Selling Price:
-              input.form-control(name='sellingPrice' type='number' aria-label='price')
+              input#sellingPrice.form-control(name='sellingPrice' type='number')
             .col
               label.form-label.text-white(for='formGroupExampleInput') Comment:
-              input.form-control(name='comment' type='text')
+              input#comment.form-control(name='comment' type='text')
           .row.g-3
             .col
               label.form-label.text-white(for='formGroupExampleInput') Item Image:
-              input.form-control(name='itemImage' type='file')
+              input#itemImage.form-control(name='itemImage' type='file')
               br
               button.btn.btn-warning.btn-lg.w-20(type='submit') Add Stock
 script(type='text/javascript' src='js/mdb.umd.min.js')

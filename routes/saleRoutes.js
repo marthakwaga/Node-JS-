@@ -6,10 +6,16 @@ const Stock = require('../models/Stock');
 
 
 // LOAD PAGE
-router.get('/addsale', (req, res) => {
-  res.render('add_sale');
+router.get('/addsale', async (req, res) => {
+  try {
+    const items = await Stock.find({quantity: { $gt: 0 }}).select('productName sellingPrice');
+    res.render('add_sale', { items });
+  } catch (error) {
+    res.status(500).send('Error loading sale form');
+    console.error('error', error.message);
+  }
 });
-
+ 
 // SAVE SALE
 router.post('/addsale', async (req, res) => {
   try {
@@ -23,6 +29,10 @@ router.post('/addsale', async (req, res) => {
       items,
       transportRequested
     } = req.body;
+    const item = await Stock.findById(items[0].product);
+    if (!item) {
+      return res.status(400).send('Invalid product in items');
+    }
 
     if (!saleDate || !representative || !items) {
       return res.status(400).send('Missing required fields');
@@ -55,8 +65,9 @@ router.post('/addsale', async (req, res) => {
       items: parsedItems,
       grandTotal
     });
-
+    console.log('Saving Sale:', newSale);
     await newSale.save();
+    res.redirect('/saleslist');
 
     // Deduct stock
     for (const item of parsedItems) {
@@ -74,7 +85,6 @@ router.post('/addsale', async (req, res) => {
         console.warn(`Stock for product ${item.product} not found`);
       }
     }
-
     res.redirect(`/receipt/${newSale._id}?success=true`);
 
   } catch (error) {
@@ -85,6 +95,19 @@ router.post('/addsale', async (req, res) => {
       </h2>
       <p><a href="/addsale">← Go Back</a></p>
     `);
+  }
+});
+
+// routes/sales.js
+// API to get all sales
+router.get('/api', async (req, res) => {
+  try {
+    const sales = await Sale.find()
+      .sort({ date: -1 })
+      .lean();                    // Better performance
+    res.json(sales);
+  } catch (err) {
+    res.status(500).json([]);
   }
 });
 

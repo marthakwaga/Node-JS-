@@ -7,11 +7,12 @@ block content
         h4.mb-0
           i.fas.fa-cash-register.me-2
           |  New Sale
-      .card-body.p-4(style='max-height: 500px; overflow-y: auto;')
+
+      .card-body.p-4(style='max-height: 550px; overflow-y: auto;')
         form#saleForm(action='/addsale' method='POST')
           input#itemsInput(type='hidden' name='items')
           input#transportRequestedInput(type='hidden' name='transportRequested')
-          // Your existing form fields
+
           .row.mb-4
             .col-md-4
               label.form-label.fw-bold.text-white Sale Date
@@ -20,209 +21,203 @@ block content
               label.form-label.fw-bold.text-white Sales Representative
               select#representative.form-select(name='representative')
                 option(value='') Select Representative
-                option(value='Martha') Martha Kwaga
-                option(value='John') John Tendo
-                option(value='Sarah') Sarah Nakiyemba
-                option(value='Robert') Robert Livano
-                option(value='Grace') Grace Ishimwe
+                option(value='Martha') Martha Was
+                option(value='John') Carol Was
+                option(value='Sarah') Mike Was
             .col-md-3
               label.form-label.fw-bold.text-white Customer Phone
               input#customerPhone.form-control(name='customerPhone' type='tel' placeholder='07xxxxxxxx')
-          // Add Product Manually
-          .border.rounded-3.p-2.mb-4.text-white
-            h5.mb-3  Add Product
+
+          // Product Selection Section
+          .border.rounded-3.p-3.mb-4.text-white
+            h5.mb-3 Add Product from Stock
             .row.g-3
               .col-md-5
-                select#productSelect.form-select(name='product' onchange='autoFillPrice()')
-                  option(value='') Select Product
-                  option(value='Cement 50kg' data-price='25000') Cement
-                  option(value='Roofing Sheet' data-code='ROF002' data-price='45000') Roofing Sheet
-                  option(value='Binding Wire Roll' data-code='BWR003' data-price='12000') Binding Wire Roll
-                  option(value='Emulsion Paint 20L'  data-price='85000') Emulsion Paint 20L
-                  option(value='Electrical Wire 1.5mm'  data-price='35000') 1.5mm Electrical Wire
-                  option(value='PVC Pipe 4m'  data-price='18000') PVC Pipe 4m
+                label.form-label.fw-bold.text-white Product
+                select#productSelect.form-select(onchange='autoFillPrice()')
+                  option(value='' disabled selected) Loading products...
+
               .col-md-2
-                input#qty.form-control(type='number' value='1' min='1' name='qty')
+                label.form-label.fw-bold.text-white Quantity
+                input#qty.form-control(type='number' value='1' min='1')
+
               .col-md-2
-                input#unitPrice.form-control(type='number' placeholder='Price' name='unitPrice')
-              .col-md-1.d-flex.align-items-end
+                label.form-label.fw-bold.text-white Unit Price
+                input#unitPrice.form-control(type='number' placeholder='Auto-filled' readonly)
+
+              .col-md-3.d-flex.align-items-end
                 button.btn.btn-success.w-100(type='button' onclick='addItem()')
-                  i.fas.fa-plus
+                  i.fas.fa-plus.me-1
+                  | Add Item
+
+            // Stock Warning Area
+            #stockWarning.alert(style='display: none;')
+
             // Items Table
-            h5.mb-3.text-warning Items Added
-              .table-responsive(style='max-height: 320px; overflow-y: auto;')
+            h5.mb-3.mt-4.text-warning Items Added
+            .table-responsive(style='max-height: 280px; overflow-y: auto;')
               table#itemsTable.table.table-hover
-                  thead.table-dark.sticky-top
-                    tr
-                      th Product
-                      th.text-center Qty
-                      th.text-end Unit Price
-                      th.text-end Total
-                      th
-                  tbody#itemsBody
+                thead.table-dark.sticky-top
+                  tr
+                    th Product
+                    th.text-center Qty
+                    th.text-end Unit Price
+                    th.text-end Total
+                    th
+                tbody#itemsBody
+
+            // Transport & Total
             .row.mb-4
               .col-md-6
                 label.form-label.fw-bold.text-white Distance (KM)
-                input#distance.form-control(
-                  type='number'
-                  min='0'
-                  placeholder='Enter distance'
-                  oninput='calculateTransport()'
-                  name='distance'
-                )
+                input#distance.form-control(type='number' min='0' placeholder='Enter distance' oninput='calculateTransport()' name='distance')
               .col-md-4
                 label.form-label.fw-bold.text-white Transport Charge
-                input#transportCharge.form-control(
-                  type='number'
-                  readonly
-                  value='0'
-                  name='transportCharge'
-                )
+                input#transportCharge.form-control(type='number' readonly value='0' name='transportCharge')
+
             .d-flex.justify-content-between.align-items-center.p-4.bg-white.rounded-3.mt-4.text-success
               h4.mb-0.fw-bold Grand Total
               h2#grandTotal.mb-0.text-success.fw-bold UGX 0
+
             .text-center.mt-4
-              button.btn.btn-warning.btn-lg.px-5(type='submit') Save &amp; Print Receipt
+              button.btn.btn-warning.btn-lg.px-5(type='submit') Save & Print Receipt
   script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
   script(src='js/app.js')
   script.
-            let items = [];
-    
-    function autoFillPrice() {
-        const select = document.getElementById('productSelect');
-        const option = select.options[select.selectedIndex];
-        if (option && option.value) {
-            document.getElementById('unitPrice').value = option.dataset.price || '';
-        }
-    }
+    // Global variables
+    let products = [];
+    let items = [];
 
-    function addItem() {
-        const product = document.getElementById('productSelect').value;
-        const qty = parseFloat(document.getElementById('qty').value) || 1;
-        const price = parseFloat(document.getElementById('unitPrice').value) || 0;
+    // Load Products from Database
+    async function loadProducts() {
+      const select = document.getElementById('productSelect');
+      select.innerHTML = '<option value="" disabled selected>Loading products from database...</option>';
 
-        if (!product) return alert("Please select a product");
-
-        items.push({ 
-            product, 
-            qty, 
-            price, 
-            total: qty * price 
-        });
-
-        renderTable();
-        calculateTransport();
-        clearInputs();
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('itemsBody');
-        tbody.innerHTML = '';
-        items.forEach((item, index) => {
-            tbody.innerHTML += `
-            <tr>
-                <td>${item.product}</td>
-                <td class="text-center">${item.qty}</td>
-                <td class="text-end">${item.price.toLocaleString()}</td>
-                <td class="text-end fw-bold">${item.total.toLocaleString()}</td>
-                <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">Remove</button></td>
-            </tr>`;
-        });
-    }
-
-    function removeItem(index) {
-        items.splice(index, 1);
-        renderTable();
-        calculateTransport();
-    }
-
-    // ===================== MAIN FUNCTION =====================
-    function calculateTransport() {
-        const distanceEl = document.getElementById('distance');
-        const transportField = document.getElementById('transportCharge');
-        const requestedEl = document.getElementById('transportRequested');
-
-        if (!distanceEl || !transportField) return;
-
-        const distance = Number(distanceEl.value) || 0;
-        const transportRequested = requestedEl ? requestedEl.checked : false;
-        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
-
-        let transport = 0;
-
-        if (distance <= 10) {
-            if (itemsTotal >= 500000) {
-                transport = 0;
-            } else {
-                transport = transportRequested ? 20000 : 0;
-            }
-        } 
-        else if (distance <= 20) transport = 30000;
-        else if (distance <= 30) transport = 50000;
-        else if (distance <= 50) transport = 80000;
-        else transport = 120000;
-
-        transportField.value = transport;
-
-        // Update hidden field
-        const hiddenRequested = document.getElementById('transportRequestedInput');
-        if (hiddenRequested) hiddenRequested.value = transportRequested;
-
-        updateGrandTotal();
-        showTransportInfo(distance, itemsTotal, transport, transportRequested);
-    }
-
-    function updateGrandTotal() {
-        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
-        const transport = Number(document.getElementById('transportCharge').value) || 0;
+      try {
+        const response = await fetch('/products/api');
         
-        const grandTotal = itemsTotal + transport;
+        if (!response.ok) throw new Error('Failed to fetch products');
 
-        const grandEl = document.getElementById('grandTotal');
-        if (grandEl) {
-            grandEl.innerText = `UGX ${grandTotal.toLocaleString()}`;
+        products = await response.json();
+
+        select.innerHTML = '<option value="" disabled selected>-- Select Product from Stock --</option>';
+
+        if (products.length === 0) {
+          select.innerHTML = '<option value="" disabled>No products found in database</option>';
+          return;
         }
+
+        products.forEach(product => {
+          const stock = parseInt(product.stockQuantity) || 0;
+          let label = `${product.name} (${stock} in stock)`;
+
+          if (stock <= 5) label += ' ⚠️ CRITICAL';
+          else if (stock <= 15) label += ' ⚠️ Low';
+
+          const option = document.createElement('option');
+          option.value = product.name;
+          option.dataset.price = product.sellingPrice || product.price || 0;
+          option.dataset.stock = stock;
+          option.textContent = label;
+
+          if (stock <= 5) option.style.color = '#dc3545';
+          else if (stock <= 15) option.style.color = '#ffc107';
+
+          select.appendChild(option);
+        });
+
+      } catch (err) {
+        console.error(err);
+        select.innerHTML = '<option value="" disabled>❌ Failed to load products from DB</option>';
+        alert("Could not connect to database. Check console for details.");
+      }
     }
-
-    function showTransportInfo(distance, itemsTotal, transport, requested) {
-        const infoEl = document.getElementById('transportInfo');
-        if (!infoEl) return;
-
-        if (distance <= 10) {
-            if (itemsTotal >= 500000) {
-                infoEl.textContent = "🎉 Free Transport (Order ≥ 500,000)";
-            } else {
-                infoEl.textContent = requested 
-                    ? "UGX 20,000 Transport (Customer Requested)" 
-                    : "No Transport Fee";
-            }
-        } else {
-            infoEl.textContent = `Distance Tier: ${distance} km`;
-        }
+    function autoFillPrice() {
+    const select = document.getElementById('productSelect');
+    const option = select.options[select.selectedIndex];
+    
+    if (option && option.dataset.price) {
+      document.getElementById('unitPrice').value = option.dataset.price;
+      showStockWarning(option.value, parseInt(option.dataset.stock) || 0);
     }
-
+    }
+    function showStockWarning(productName, stock) {
+    const warning = document.getElementById('stockWarning');
+    if (stock <= 15) {
+      warning.style.display = 'block';
+      warning.className = stock <= 5 ? 'alert alert-danger mt-2' : 'alert alert-warning mt-2';
+      warning.innerHTML = stock <= 5 
+        ? `🚨 CRITICAL: Only ${stock} units left of <strong>${productName}</strong>` 
+        : `⚠️ Low Stock: Only ${stock} units left of <strong>${productName}</strong>`;
+    } else {
+      warning.style.display = 'none';
+    }
+    }
+    function addItem() {
+    const select = document.getElementById('productSelect');
+    const productName = select.value;
+    const qty = parseFloat(document.getElementById('qty').value) || 1;
+    const price = parseFloat(document.getElementById('unitPrice').value) || 0;
+    const availableStock = parseInt(select.options[select.selectedIndex]?.dataset.stock) || 0;
+    if (!productName) {
+    return alert("Please select a product");
+    }
+    // Low Stock Validation
+    if (qty > availableStock) {
+    if (!confirm(`⚠️ Only ${availableStock} units available!\\n\nDo you still want to sell ${qty} units?`)) {
+    return;
+    }
+    } else if (availableStock <= 15 && qty > availableStock * 0.7) {
+    if (!confirm(`Low stock warning: Only ${availableStock} left.\\nSelling ${qty} units will leave very little stock.\n\nProceed?`)) {
+    return;
+    }
+    }
+    items.push({
+    product: productName,
+    qty,
+    price,
+    total: qty * price
+    });
+    renderTable();
+    calculateTransport();
+    clearInputs();
+    document.getElementById('stockWarning').style.display = 'none'; // Clear warning after adding
+    }
+    function renderTable() {
+    const tbody = document.getElementById('itemsBody');
+    tbody.innerHTML = '';
+    items.forEach((item, index) => {
+    tbody.innerHTML += `
+    <tr>
+    <td>${item.product}</td>
+    <td class="text-center">${item.qty}</td>
+    <td class="text-end">${Number(item.price).toLocaleString()}</td>
+    <td class="text-end fw-bold">${Number(item.total).toLocaleString()}</td>
+    <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">Remove</button></td>
+    </tr>`;
+    });
+    }
+    function removeItem(index) {
+    items.splice(index, 1);
+    renderTable();
+    calculateTransport();
+    }
     function clearInputs() {
-        document.getElementById('productSelect').value = '';
-        document.getElementById('qty').value = 1;
-        document.getElementById('unitPrice').value = '';
+    document.getElementById('productSelect').value = '';
+    document.getElementById('qty').value = 1;
+    document.getElementById('unitPrice').value = '';
     }
-
-    // Submit Handler
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-        // Initial calculation
-        calculateTransport();
-
-        const saleForm = document.getElementById('saleForm');
-        if (saleForm) {
-            saleForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                if (items.length === 0) {
-                    return alert("Please add at least one item");
-                }
-
-                document.getElementById('itemsInput').value = JSON.stringify(items);
-                this.submit();
-            });
-        }
+    loadProducts();
+    calculateTransport();
+    const saleForm = document.getElementById('saleForm');
+    if (saleForm) {
+    saleForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (items.length === 0) return alert("Please add at least one item");
+    document.getElementById('itemsInput').value = JSON.stringify(items);
+    this.submit();
+    });
+    }
     });

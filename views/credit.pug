@@ -55,61 +55,155 @@ head
               span(data-translate='offline') Offline Mode
         button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()' data-translate='logout') Logout
       // Main Content - Centered
-      form.col.overflow-y-auto(action='/supplier' method='post')
+      form.col.overflow-y-auto(action='/supplier' method='get')
+      // Main Content Area
       .flex-grow-1.d-flex.align-items-center.justify-content-center.p-4.overflow-auto
-        .w-100(style='max-width: 900px;')
-          h2.text-white.mb-4(data-translate='suppliers') Supplier Credit Management
+        .w-100(style='max-width: 1150px;')
+
+          h2.text-white.mb-4 Supplier Credit Management
+
+          // Summary Cards
+          .row.mb-4
+            .col-md-4
+              .card.text-white(style='background: rgba(255,193,7,0.9);')
+                .card-body
+                  h5 Total Owed
+                  h3 18,450,000 UGX
+            // ... other cards
+
+          // Main Credit Table
           .card
             .card-body
-              h5 Current Supplier Credit
-              table.table.table-hover
+              h5.mb-3 Current Supplier Credits
+              table.table.table-hover.align-middle
                 thead.table-dark
                   tr
                     th Supplier Name
                     th Amount Owed (UGX)
                     th Due Date
                     th Status
+                    th Items Supplied
                     th Action
                 tbody
-                  tr
-                    td Factory Depot Uganda Ltd
-                    td.text-danger.fw-bold 12,450,000
-                    td 2026-05-15
-                    td
-                      span.badge.bg-warning Pending
-                    td
-                      button.btn.btn-sm.btn-outline-primary Record Payment
-                  tr
-                    td Steel Masters Ltd
-                    td.text-success 0
-                    td -
-                    td
-                      span.badge.bg-success Cleared
-                    td
+                  // Your rows here...
+
+          // Installment / Payment History Section
+          .card.mt-4
+            .card-header
+              h5 Installment Payments & History
+            .card-body
+              // Installment table here...
+
+          // Button to open modal
           .text-center.mt-4
             button.btn.btn-warning.btn-lg(data-bs-toggle='modal' data-bs-target='#addSupplierModal')
-              | + Add New Credit
+              i.fas.fa-plus.me-2
+              | Add New Credit
 // Add Supplier Modal
 #addSupplierModal.modal.fade(tabindex='-1')
-  .modal-dialog
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        h5.modal-title Add New Credit
+        h5.modal-title Add New Supplier Credit
         button.btn-close(type='button' data-bs-dismiss='modal')
-      .modal-body
-        label.form-label Supplier Name
-        input.form-control.mb-3(name='supplierName' type='text' placeholder='Supplier Name')
-        label.form-label Credit Amount
-        input.form-control(name='creditAmount' type='number' placeholder='Credit Amount')
-        br
-        label.form-label Due Date
-        input.form-control.mb-3(name='dueDate' type='date' placeholder='Due Date')
-        label.form-label Items Supplied
-        input.form-control.mb-3(name='itemsSupplied' type='text' placeholder='Items Supplied')
-      .modal-footer
-        button.btn.btn-dark(data-bs-dismiss='modal') Cancel
-        button.btn.btn-warning(type='submit') Save Supplier
+
+      form#creditForm(action='/supplier' method='post')
+        .modal-body
+          .row
+            .col-md-6.mb-3
+              label.form-label Supplier Name
+              input.form-control(name='supplierName' type='text' required)
+
+            .col-md-6.mb-3
+              label.form-label Due Date
+              input.form-control(name='dueDate' type='date' required)
+
+          .mb-4
+            label.form-label Items Supplied
+
+            table#itemsTable.table.table-bordered.table-sm
+              thead.table-light
+                tr
+                  th Item Description
+                  th Qty
+                  th Unit Price
+                  th Amount
+                  th 
+              tbody
+
+            // Add new item row
+            .row.g-2.mb-3
+              .col-5
+                input#itemDesc.form-control.form-control-sm(placeholder='Item description' )
+              .col-2
+                input#itemQty.form-control.form-control-sm(type='number' value='1' min='1')
+              .col-3
+                input#itemPrice.form-control.form-control-sm(type='number' placeholder='Unit price')
+              .col-2
+                button.btn.btn-success.btn-sm#btnAddItem(type='button') Add Item
+
+            // Total Row
+            .d-flex.justify-content-between.align-items-center.bg-light.p-3.rounded
+              h5.mb-0 Total Credit Amount:
+              h4.mb-0.text-warning#totalDisplay 0 UGX
+
+          // Hidden fields sent to backend
+          input#creditAmount(name='creditAmount' type='hidden')
+          input#itemsData(name='itemsSupplied' type='hidden')
+
+        .modal-footer
+          button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cancel
+          button.btn.btn-warning(type='submit') Save Supplier Credit
 // Scripts
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
-script(src='js/app.js')
-script(src='js/translations.js')
+script.
+  // Array to hold items
+  let items = [];
+  document.getElementById('btnAddItem').addEventListener('click', addItem);
+  function addItem() {
+  const desc = document.getElementById('itemDesc').value.trim();
+  const qty = parseFloat(document.getElementById('itemQty').value) || 0;
+  const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+  if (!desc || price <= 0) {
+  alert("Please enter valid item description and unit price");
+  return;
+  }
+  const amount = qty * price;
+  items.push({ description: desc, quantity: qty, unitPrice: price, amount: amount });
+  renderTable();
+  clearInputs();
+  }
+  function renderTable() {
+  const tbody = document.querySelector('#itemsTable tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  items.forEach((item, index) => {
+  total += item.amount;
+  const row = `
+  <tr>
+  <td>${item.description}</td>
+  <td>${item.quantity}</td>
+  <td>${item.unitPrice.toLocaleString()}</td>
+  <td>${item.amount.toLocaleString()}</td>
+  <td><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">×</button></td>
+  </tr>`;
+  tbody.innerHTML += row;
+  });
+  // Update total display and hidden field
+  document.getElementById('totalDisplay').textContent = total.toLocaleString() + ' UGX';
+  document.getElementById('creditAmount').value = total;
+  document.getElementById('itemsData').value = JSON.stringify(items);
+  }
+  function removeItem(index) {
+  items.splice(index, 1);
+  renderTable();
+  }
+  function clearInputs() {
+  document.getElementById('itemDesc').value = '';
+  document.getElementById('itemQty').value = '1';
+  document.getElementById('itemPrice').value = '';
+  }
+  // Allow pressing Enter to add item
+  document.getElementById('itemPrice').addEventListener('keypress', () => {
+  if (e.key === 'Enter') addItem();
+  });

@@ -69,6 +69,7 @@ app.use('/', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
 app.use('/', require('./routes/creditRoutes'))
 app.use('/', require('./routes/depositRoutes'))
+app.use('/products', require('./routes/productRoutes'))
 
 // This is the second last chunk of code
 //Handling non-existent routes

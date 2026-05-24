@@ -2,207 +2,190 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title New Sale - Nyondo Hardware
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css')
-  link(rel='stylesheet' href='/css/custom.css')
-  link(rel='stylesheet' href='/public/css/nyondo.css')
-.bg-image.d-flex.flex.align-items-center.justify-content-center.min-vh-100.p-6(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  .mask(style='background-color: rgba(25, 12, 36, 0.78); width: 200%; min-height: 150vh;')
-    .d-flex.h-100
-      // Sidebar
-      nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px; background: rgba(242, 240, 242, 0.336);')
-        .logo.mx-auto.mb-4(style="background-image: url('/public/images/logo.png'); width: 150px; height: 150px; background-size: contain; background-repeat: no-repeat;")
-        ul.nav.flex-column
-          li.nav-item
-            a.nav-link.text-white(href='dashboard.html')
-              i.fas.fa-tachometer-alt
-              |  Dashboard
-          li.nav-item
-            a.nav-link.text-white(href='products.html')
-              i.fas.fa-boxes
-              |  Products &amp; Stock
-          li.nav-item
-            a.nav-link.text-white(href='stock-in.html')
-              i.fas.fa-truck-loading
-              |  Stock In
-          li.nav-item
-            a.nav-link.text-white(href='sales.html')
-              i.fas.fa-shopping-cart
-              |  Sales
-          li.nav-item
-            a.nav-link.text-white(href='deposits.html')
-              i.fas.fa-hand-holding-usd
-              |  Deposit Scheme
-          li.nav-item
-            a.nav-link.text-white(href='suppliers.html')
-              i.fas.fa-users
-              |  Suppliers
-          li.nav-item
-            a.nav-link.text-white(href='reports.html')
-              i.fas.fa-chart-bar
-              |  Reports
-          li.nav-item
-            a.nav-link.text-white.active(href='#')
-              i.fas.fa-file-invoice-dollar
-              |  Expenses
-          li.nav-item
-            a.nav-link.text-white(href='offline.html')
-              i.fas.fa-wifi
-              |  Offline Mode
-        button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
-      // Main Content
-      .flex-grow-1.p-4(style='max-width: 850px; margin: 0 auto;')
-        .card.shadow-lg(style='background: rgba(255, 255, 255, 0.144);')
-          .card-header.bg-warning.text-dark.text-center.py-3
-            h4.mb-0
-              i.fas.fa-cash-register.me-2
-              |  New Sale
-          .card-body.p-4
-            // Scanner Section
-            .border.border-success.rounded-3.p-4.mb-4.bg-light
-              h5.text-success.mb-3
-                i.fas.fa-qrcode
-                |  Scan Product (Camera or Physical Scanner)
-              #qr-reader(style='width: 100%; max-width: 380px; margin: 0 auto;')
-              small.text-muted.d-block.text-center.mt-2
-                | Works with phone camera &amp; physical barcode scanners
-            form#saleForm
-              // Your existing form fields
-              .row.mb-4
-                .col-md-4
-                  label.form-label.fw-bold.text-white Sale Date
-                  input#saleDate.form-control(name='saleDate' type='date' value='2026-05-03')
-                .col-md-5
-                  label.form-label.fw-bold.text-white Sales Representative
-                  select#representative.form-select
-                    option(value='') Select Representative
-                    option(value='Martha') Martha Kwaga
-                    option(value='John') John Tendo
-                    option(value='Sarah') Sarah Nansubuga
-                    option(value='Robert') Robert Kizza
-                    option(value='Grace') Grace Nakato
-                .col-md-3
-                  label.form-label.fw-bold.text-white Customer Phone
-                  input#customerPhone.form-control(name='customerPhone' type='tel' placeholder='07xxxxxxxx')
-              // Add Product Manually
-            .border.rounded-3.p-4.mb-4.text-white
-                h5.mb-3 Or Add Product Manually
-                .row.g-3
-                  .col-md-5
-                    select#productSelect.form-select(onchange='autoFillPrice()')
-                      option(value='') Select Product
-                      option(value='Cement 50kg' data-code='CEM001' data-price='25000') Cement
-                      option(value='Roofing Sheet' data-code='ROF002' data-price='45000') Roofing Sheet
-                      option(value='Binding Wire Roll' data-code='BWR003' data-price='12000') Binding Wire Roll
-                      option(value='Emulsion Paint 20L' data-code='PAI004' data-price='85000') Emulsion Paint 20L
-                      option(value='Electrical Wire 1.5mm' data-code='WIR005' data-price='35000') 1.5mm Electrical Wire
-                      option(value='PVC Pipe 4m' data-code='PIP006' data-price='18000') PVC Pipe 4m
-                  .col-md-2
-                    input#productCode.form-control(type='text' placeholder='Code' readonly='')
-                  .col-md-2
-                    input#qty.form-control(type='number' value='1' min='1')
-                  .col-md-2
-                    input#unitPrice.form-control(type='number' placeholder='Price')
-                  .col-md-1.d-flex.align-items-end
-                    button.btn.btn-success.w-100(type='button' onclick='addItem()')
-                      i.fas.fa-plus
-              // Items Table
-              h5.mb-3.text-warning Items Added
-              .table-responsive(style='max-height: 320px; overflow-y: auto;')
-                table#itemsTable.table.table-hover
-                  thead.table-dark.sticky-top
-                    tr
-                      th Code
-                      th Product
-                      th.text-center Qty
-                      th.text-end Unit Price
-                      th.text-end Total
-                      th
-                  tbody#itemsBody
-              .d-flex.justify-content-between.align-items-center.p-4.bg-light.rounded-3.mt-4
-                h4.mb-0.fw-bold Grand Total
-                h2#grandTotal.mb-0.text-success.fw-bold UGX 0
-              .text-center.mt-4
-                button.btn.btn-warning.btn-lg.px-5(type='submit') Save &amp; Print Receipt
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
-script(src='https://unpkg.com/html5-qrcode')
-script(src='js/app.js')
-script(src='js/scanner.js')
+  title Nyondo Stock - Sales List
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB' crossorigin='anonymous')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css')
+  link(rel='stylesheet' href='/public/css/stocklist.css')
+  style.
+.full-bg
+  .dark-overlay.d-flex
+    // Sidebar
+    nav.sidebar.p-3.text-white.flex-shrink-0(style='width: 260px;')
+      .logo.mx-auto.mb-4
+      ul.nav.flex-column
+        li.nav-item
+          a.nav-link(href='manager-dashboard.html')
+            i.fas.fa-tachometer-alt
+            |  Dashboard
+        li.nav-item
+          a.nav-link(href='stocklist.html')
+            i.fas.fa-list
+            |  Stock List
+        li.nav-item
+          a.nav-link.active(href='saleslist.html')
+            i.fas.fa-shopping-cart
+            |  Sales List
+        li.nav-item
+          a.nav-link(href='products.html')
+            i.fas.fa-boxes
+            |  Products &amp; Stock
+        li.nav-item
+          a.nav-link(href='stock-registration.html')
+            i.fas.fa-truck-loading
+            |  Stock In
+        li.nav-item
+          a.nav-link(href='orders.html')
+            i.fas.fa-plus-circle
+            |  New Sale
+        li.nav-item
+          a.nav-link(href='deposits.html')
+            i.fas.fa-hand-holding-usd
+            |  Deposit Scheme
+        li.nav-item
+          a.nav-link(href='suppliers.html')
+            i.fas.fa-users
+            |  Suppliers
+        li.nav-item
+          a.nav-link(href='transport.html')
+            i.fas.fa-truck
+            |  Transport
+        li.nav-item
+          a.nav-link(href='reports.html')
+            i.fas.fa-chart-bar
+            |  Reports
+      button.btn.btn-outline-warning.w-100.mt-4(onclick='logout()') Logout
+    // Main Content
+    .flex-grow-1.p-4.overflow-auto
+      .d-flex.justify-content-between.align-items-center.mb-4
+        h1.text-white.fw-bold &#x1F4B0; Sales List
+        a.btn.btn-success.btn-lg(href='orders.html')
+          i.fas.fa-plus
+          |  New Sale
+      // Filters
+      .row.mb-4
+        .col-md-5
+          input#searchInput.form-control.form-control-lg(type='text' placeholder='🔍 Search customer, order ID...' onkeyup='filterSales()')
+        .col-md-3
+          select#statusFilter.form-select.form-select-lg(onchange='filterSales()')
+            option(value='') All Sales
+            option(value='paid') Paid
+            option(value='pending') Pending
+        .col-md-4
+          .input-group
+            span.input-group-text Date From
+            input#dateFrom.form-control(type='date' onchange='filterSales()')
+      // Sales Table
+      .table-responsive
+        table#salesTable.table.table-hover.align-middle.text-white
+          thead.table-dark
+            tr
+              th Date
+              th Order ID
+              th Customer
+              th Items
+              th Total Amount
+              th Payment Status
+              th Transport
+              th Actions
+          tbody#salesBody
+            // Populated by JavaScript
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' integrity='sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI' crossorigin='anonymous')
 script.
-  let items = [];
-  // Initialize Scanner when page loads
-  window.onload = () => {
-  initializeApp();
-  startFullScanner("qr-reader", (scannedCode) => {
-  // Auto add scanned item (you can improve this with real lookup)
-  alert(`✅ Scanned: ${scannedCode}\\n\nAdded to cart (Stock will be deducted)`);
-  // Example: Add a dummy item
-  items.push({
-  code: scannedCode,
-  product: "Scanned Product",
-  qty: 1,
-  price: 25000,
-  total: 25000
-  });
-  renderTable();
-  calculateGrandTotal();
-  });
-  };
-  // Your existing functions (autoFillPrice, addItem, renderTable, etc.)
-  function autoFillPrice() {
-  const select = document.getElementById('productSelect');
-  const option = select.options[select.selectedIndex];
-  if (option && option.value) {
-  document.getElementById('productCode').value = option.dataset.code || '';
-  document.getElementById('unitPrice').value = option.dataset.price || '';
+  // Sample Sales Data (Replace with fetch from database later)
+  let salesData = [
+  {
+  id: 1,
+  date: "2026-05-04",
+  orderId: "ORD-8925",
+  customer: "John Mukasa",
+  items: "150 Bags Cement + 20 Iron Bars",
+  amount: 4280000,
+  status: "paid",
+  transport: "Free"
+  },
+  {
+  id: 2,
+  date: "2026-05-04",
+  orderId: "ORD-8924",
+  customer: "Maria Namutebi",
+  items: "50 Iron Sheets",
+  amount: 4750000,
+  status: "pending",
+  transport: "30,000"
+  },
+  {
+  id: 3,
+  date: "2026-05-03",
+  orderId: "ORD-8923",
+  customer: "David Okello",
+  items: "300 Bags Cement",
+  amount: 8400000,
+  status: "paid",
+  transport: "Free"
+  },
+  {
+  id: 4,
+  date: "2026-05-03",
+  orderId: "ORD-8922",
+  customer: "Amina Nakato",
+  items: "8 Wheelbarrows",
+  amount: 600000,
+  status: "paid",
+  transport: "30,000"
   }
-  }
-  function addItem() {
-  // ... your existing addItem logic ...
-  const product = document.getElementById('productSelect').value;
-  const code = document.getElementById('productCode').value || 'MANUAL';
-  const qty = parseFloat(document.getElementById('qty').value) || 1;
-  const price = parseFloat(document.getElementById('unitPrice').value) || 0;
-  if (!product) return alert("Please select a product");
-  items.push({ code, product, qty, price, total: qty * price });
-  renderTable();
-  calculateGrandTotal();
-  clearInputs();
-  }
-  function renderTable() {
-  const tbody = document.getElementById('itemsBody');
+  ];
+  function renderSales(data) {
+  const tbody = document.getElementById('salesBody');
   tbody.innerHTML = '';
-  items.forEach((item, index) => {
-  tbody.innerHTML += `
-  <tr>
-  <td><strong>${item.code}</strong></td>
-  <td>${item.product}</td>
-  <td class="text-center">${item.qty}</td>
-  <td class="text-end">${item.price.toLocaleString()}</td>
-  <td class="text-end fw-bold">${item.total.toLocaleString()}</td>
-  <td><button onclick="removeItem(${index})" class="btn btn-sm btn-danger">Remove</button></td>
-  </tr>`;
+  data.forEach(sale => {
+  const statusClass = sale.status === 'paid' ? 'paid' : 'pending';
+  const statusText = sale.status === 'paid' ? '✅ Paid' : '⏳ Pending';
+  const row = document.createElement('tr');
+  row.innerHTML = `
+  <td>${sale.date}</td>
+  <td><strong>${sale.orderId}</strong></td>
+  <td>${sale.customer}</td>
+  <td>${sale.items}</td>
+  <td class="fw-bold">UGX ${sale.amount.toLocaleString('en-US')}</td>
+  <td><span class="badge ${statusClass}">${statusText}</span></td>
+  <td>${sale.transport}</td>
+  <td>
+  <button class="btn btn-sm btn-outline-info me-1" onclick="viewReceipt(${sale.id})">
+  <i class="fas fa-receipt"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-success" onclick="printInvoice(${sale.id})">
+  <i class="fas fa-print"></i>
+  </button>
+  </td>
+  `;
+  tbody.appendChild(row);
   });
   }
-  function removeItem(index) {
-  items.splice(index, 1);
-  renderTable();
-  calculateGrandTotal();
-  }
-  function calculateGrandTotal() {
-  const total = items.reduce((sum, item) => sum + item.total, 0);
-  document.getElementById('grandTotal').textContent = `UGX ${total.toLocaleString()}`;
-  }
-  function clearInputs() {
-  document.getElementById('productSelect').value = '';
-  document.getElementById('productCode').value = '';
-  document.getElementById('qty').value = '1';
-  document.getElementById('unitPrice').value = '';
-  }
-  document.getElementById('saleForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (items.length === 0) return alert("Please add at least one item");
-  alert("✅ Sale saved successfully!\\nStock has been updated.");
-  // You can add API call here
+  function filterSales() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  let filtered = salesData.filter(sale => {
+  const matchesSearch = sale.customer.toLowerCase().includes(searchTerm) ||
+  sale.orderId.toLowerCase().includes(searchTerm) ||
+  sale.items.toLowerCase().includes(searchTerm);
+  const matchesStatus = !status || sale.status === status;
+  return matchesSearch && matchesStatus;
   });
+  renderSales(filtered);
+  }
+  function viewReceipt(id) {
+  const sale = salesData.find(s => s.id === id);
+  if (sale) {
+  alert(`📄 Receipt for ${sale.orderId}\\n\nCustomer: ${sale.customer}\nTotal: UGX ${sale.amount.toLocaleString()}\nStatus: ${sale.status.toUpperCase()}\n\n(Full receipt view coming soon)`);
+  }
+  }
+  function printInvoice(id) {
+  alert(`🖨️ Printing Invoice for Order #${id}... (Demo)`);
+  }
+  function logout() {
+  if (confirm("Logout from Nyondo Stock?")) {
+  window.location.href = "login.html";
+  }
+  }
+  // Initialize page
+  window.onload = () => renderSales(salesData);

@@ -2,60 +2,6 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title NGH Attendant Dashboard
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='css/mdb.min.css')
-  link(rel='stylesheet' href='/css/salesdash.css')
-  style.
-// SIDEBAR
-.sidebar
-  h5 NGH Staff
-  a(href='#') Dashboard
-  a(href='pos.html') POS
-  a(href='#') Stock
-// MAIN
-.main
-  // TOP
-  .d-flex.justify-content-between.mb-4
-    h3 Sales Dashboard
-    span Attendant
-  // KPI
-  .row.g-3
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Today&apos;s Sales
-        h4 UGX 450,000
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Transactions
-        h4 18
-    .col-md-4
-      .card.p-3.shadow-sm
-        h6 Items Sold
-        h4 75
-  // QUICK ACTION
-  .mt-4
-    a.btn.btn-success.btn-lg.w-100(href='pos.html')
-      | Start New Sale
-  // LOW STOCK
-  .card.mt-4.p-3.shadow-sm
-    h5
-      i.fas.fa-bell.text-danger
-      |  Low Stock Alerts
-    table.table
-      thead
-        tr
-          th Product
-          th Qty
-      tbody
-        tr.text-danger
-          td Nails
-          td 5
-        tr.text-danger
-        doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Sales Attendant Dashboard - Nyondo Hardware
   link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
   link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet')
@@ -66,7 +12,7 @@ head
   .mask.mask-custom.flex-grow-1.d-flex(style='background-color: rgba(25, 12, 36, 0.75);')
     // Sidebar
     nav.sidebar.p-3.text-white.flex-shrink-0.overflow-auto(style='width: 260px; background: rgba(152, 124, 152, 0.349); color: #333; box-shadow: 2px 0 10px rgba(0,0,0,0.15);')
-      .logo.mx-auto.mb-4.text-center(style="background-image: url('/public/images/logo.png'); \
+      .logo.mx-auto.mb-4.text-center(style="background-image: url('/images/logo.png'); \
       width: 140px; height: 140px; \
       background-size: contain; background-repeat: no-repeat;")
       ul.nav.flex-column
@@ -95,64 +41,61 @@ head
             i.fas.fa-wifi
             |  Offline Mode
       .mt-auto.pt-4
-        .text-center.mb-3
-          small.text-muted
-            b Logged in as:
-          br
-          strong Martha Kwaga
+        
+            
         button.btn.btn-outline-warning.w-100(onclick='logout()') Logout
     // Main Content
     .flex-grow-1.p-4.overflow-auto
       .container-fluid
         .d-flex.justify-content-between.align-items-center.mb-4.text-warning
-          h2 Welcome back, Martha!
+          h2 Welcome back, Carol!
           .text-end
-            #currentDate.fw-bold
+            #currentDate.fw-bold.text-white
         // Quick Stats
         .row.g-4.mb-5
           .col-xl-3.col-md-6
             .card.border-0.shadow.h-100
               .card-body
-                h5.text-muted Today&apos;s Sales
+                h5.text-muted.fw-bold Today&apos;s Sales
                 h3.text-success.fw-bold UGX 1,245,000
                 small.text-success 8 Transactions
           .col-xl-3.col-md-6
             .card.border-0.shadow.h-100
               .card-body
-                h5.text-muted Items Sold
+                h5.text-muted.fw-bold Items Sold
                 h3.fw-bold 47
           .col-xl-3.col-md-6
             .card.border-0.shadow.h-100
               .card-body
-                h5.text-muted Average Sale
+                h5.text-muted.fw-bold Average Sale
                 h3.fw-bold UGX 155,625
           .col-xl-3.col-md-6
             .card.border-0.shadow.h-100
               .card-body
-                h5.text-muted Cash Collected
+                h5.text-muted.fw-bold Cash Collected
                 h3.text-primary.fw-bold UGX 980,000
         // Quick Actions
         .row.mb-5
           .col-md-6.col-lg-3.mb-3
             a.btn.btn-success.btn-lg.w-100.py-4.shadow(href='add-sale.html')
               i.fas.fa-plus.fa-2x.mb-2.d-block
-              h5.mb-0 New Sale
+              h5.mb-0.fw-bold New Sale
           .col-md-6.col-lg-3.mb-3
             button.btn.btn-primary.btn-lg.w-100.py-4.shadow
               i.fas.fa-search.fa-2x.mb-2.d-block
-              h5.mb-0 Search Product
+              h5.mb-0.fw-bold Search Product
           .col-md-6.col-lg-3.mb-3
             button.btn.btn-warning.btn-lg.w-100.py-4.shadow
               i.fas.fa-hand-holding-usd.fa-2x.mb-2.d-block
-              h5.mb-0 Record Deposit
+              h5.mb-0.fw-bold Check Stock
           .col-md-6.col-lg-3.mb-3
             button.btn.btn-info.btn-lg.w-100.py-4.shadow.text-white
               i.fas.fa-history.fa-2x.mb-2.d-block
-              h5.mb-0 Today&apos;s Report
+              h5.mb-0.fw-bold Today&apos;s Report
         // Recent Sales
         .card.shadow
           .card-header.bg-white
-            h5 Recent Sales (Today)
+            h5.fw-bold Recent Sales (Today)
           .card-body.p-0
             .table-responsive
               table.table.table-hover.mb-0
@@ -171,3 +114,12 @@ head
   td Paint
           td 3
 script(src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js')
+script.
+  const today = new Date();
+
+  document.getElementById('currentDate').innerText =
+    today.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });

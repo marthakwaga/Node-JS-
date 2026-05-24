@@ -36,10 +36,13 @@ const DepositSchema = new mongoose.Schema({
   },
   amountRedeemed: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0
   },
   remainingAmount: {
-    type: Number
+    type: Number,
+    default: function() { return this.depositAmount; },
+    min: 0
   },
   representative: {
     type: String,        // Who received the deposit
@@ -50,14 +53,14 @@ const DepositSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Pre-save middleware to calculate endDate and remainingAmount
-DepositSchema.pre('save', function(next) {
+DepositSchema.pre('save', function() {
   if (this.isNew) {
     const endDate = new Date(this.startDate);
     endDate.setMonth(endDate.getMonth() + this.periodMonths);
     this.endDate = endDate;
     this.remainingAmount = this.depositAmount;
   }
-  next();
+
 });
 
 module.exports = mongoose.model('Deposit', DepositSchema);
