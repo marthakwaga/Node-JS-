@@ -14,10 +14,10 @@ block content
           input#transportRequestedInput(type='hidden' name='transportRequested')
 
           .row.mb-4
-            .col-md-4
+            .col-md-3
               label.form-label.fw-bold.text-white Sale Date
               input#saleDate.form-control(name='saleDate' type='date' value=new Date().toISOString().split('T')[0])
-            .col-md-5
+            .col-md-3
               label.form-label.fw-bold.text-white Sales Representative
               select#representative.form-select(name='representative')
                 option(value='') Select Representative
@@ -27,6 +27,13 @@ block content
             .col-md-3
               label.form-label.fw-bold.text-white Customer Phone
               input#customerPhone.form-control(name='customerPhone' type='tel' placeholder='07xxxxxxxx')
+            .col-md-3
+              label.form-label.fw-bold.text-white  Customer Name
+              input.form-control(
+                type='text'
+                name='customerName'
+                placeholder='Customer name'
+              )
 
           // Product Selection Section
           .border.rounded-3.p-3.mb-4.text-white
@@ -34,9 +41,18 @@ block content
             .row.g-3
               .col-md-5
                 label.form-label.fw-bold.text-white Product
-                select#productSelect.form-select(onchange='autoFillPrice()')
-                  option(value='' disabled selected) Loading products...
-
+                select#productSelect.form-select(name='product' onchange='autoFillPrice()')
+                  option(value='') Select Product
+                  
+                  if products && products.length > 0
+                    each product in products
+                      option(
+                        value=product.productName
+                        data-price=product.sellingPrice
+                        data-quantity=product.quantity
+                      ) #{product.productName} - UGX #{product.sellingPrice.toLocaleString()} (Stock: #{product.quantity} #{product.unitOfMeasure})
+                  else
+                    option(value='') No products available in stock
               .col-md-2
                 label.form-label.fw-bold.text-white Quantity
                 input#qty.form-control(type='number' value='1' min='1')
@@ -74,71 +90,127 @@ block content
               .col-md-4
                 label.form-label.fw-bold.text-white Transport Charge
                 input#transportCharge.form-control(type='number' readonly value='0' name='transportCharge')
-
             .d-flex.justify-content-between.align-items-center.p-4.bg-white.rounded-3.mt-4.text-success
               h4.mb-0.fw-bold Grand Total
               h2#grandTotal.mb-0.text-success.fw-bold UGX 0
-
             .text-center.mt-4
               button.btn.btn-warning.btn-lg.px-5(type='submit') Save & Print Receipt
   script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
-  script(src='js/app.js')
+  
   script.
     // Global variables
     let products = [];
     let items = [];
 
-    // Load Products from Database
-    async function loadProducts() {
-      const select = document.getElementById('productSelect');
-      select.innerHTML = '<option value="" disabled selected>Loading products from database...</option>';
-
-      try {
-        const response = await fetch('/products/api');
+    // == TRANSPORT CALCULATION 
+    function calculateTransport() {
+        const distance = Number(document.getElementById('distance').value) || 0;
+        const transportField = document.getElementById('transportCharge');
+        const requestedCheckbox = document.getElementById('transportRequested');
         
-        if (!response.ok) throw new Error('Failed to fetch products');
+        const transportRequested = requestedCheckbox ? requestedCheckbox.checked : false;
+        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
 
-        products = await response.json();
+        let transport = 0;
 
-        select.innerHTML = '<option value="" disabled selected>-- Select Product from Stock --</option>';
-
-        if (products.length === 0) {
-          select.innerHTML = '<option value="" disabled>No products found in database</option>';
-          return;
+        // Main Logic
+        if (distance <= 10) {
+            if (itemsTotal >= 500000) {
+                transport = 0;                          // Free for big orders
+            } else {
+                transport = transportRequested ? 20000 : 0;   // 20k only if requested
+            }
+        } 
+        else if (distance <= 20) {
+            transport = 30000;
+        } 
+        else if (distance <= 30) {
+            transport = 50000;
+        } 
+        else if (distance <= 50) {
+            transport = 80000;
+        } 
+        else {
+            transport = 120000;
         }
 
-        products.forEach(product => {
-          const stock = parseInt(product.stockQuantity) || 0;
-          let label = `${product.name} (${stock} in stock)`;
+        // Set transport charge
+        transportField.value = transport;
 
-          if (stock <= 5) label += ' ⚠️ CRITICAL';
-          else if (stock <= 15) label += ' ⚠️ Low';
+        // Update hidden field for form submission
+        const hiddenInput = document.getElementById('transportRequestedInput');
+        if (hiddenInput) {
+            hiddenInput.value = transportRequested;
+        }
 
-          const option = document.createElement('option');
-          option.value = product.name;
-          option.dataset.price = product.sellingPrice || product.price || 0;
-          option.dataset.stock = stock;
-          option.textContent = label;
+        // Update grand total and info
+        updateGrandTotal();
+        showTransportInfo(distance, itemsTotal, transport, transportRequested);
+    }
 
-          if (stock <= 5) option.style.color = '#dc3545';
-          else if (stock <= 15) option.style.color = '#ffc107';
+    // Update Grand Total
+    function updateGrandTotal() {
+        const itemsTotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
+        const transport = Number(document.getElementById('transportCharge').value) || 0;
+        
+        const grandTotal = itemsTotal + transport;
 
-          select.appendChild(option);
-        });
+        const grandEl = document.getElementById('grandTotal');
+        if (grandEl) {
+            grandEl.innerText = `UGX ${grandTotal.toLocaleString()}`;
+        }
+    }
 
-      } catch (err) {
-        console.error(err);
-        select.innerHTML = '<option value="" disabled>❌ Failed to load products from DB</option>';
-        alert("Could not connect to database. Check console for details.");
-      }
+    // Show Transport Information
+    function showTransportInfo(distance, itemsTotal, transport, requested) {
+        const infoEl = document.getElementById('transportInfo');
+        if (!infoEl) return;
+
+        if (distance <= 10) {
+            if (itemsTotal >= 500000) {
+                infoEl.textContent = "🎉 Free Transport (Order ≥ 500,000)";
+            } else {
+                infoEl.textContent = requested 
+                    ? "UGX 20,000 - Customer Requested Transport" 
+                    : "No Transport Fee (Customer did not request)";
+            }
+        } else {
+            infoEl.textContent = `Tiered Charge: ${distance} km`;
+        }
+    }
+
+    // Load Products via API
+    async function loadProducts() {
+    try {
+    const response = await fetch('/api/products');
+    if (!response.ok) throw new Error('Failed to fetch products');
+
+    const products = await response.json();
+    
+    const select = document.getElementById('productSelect');
+    select.innerHTML = '<option value="">Select Product</option>';
+
+    products.forEach(product => {
+      const option = document.createElement('option');
+      option.value = product.productName;
+      option.dataset.price = product.sellingPrice;
+      option.dataset.quantity = product.quantity;
+      option.textContent = `${product.productName} — UGX ${Number(product.sellingPrice).toLocaleString()} (Stock: ${product.quantity} ${product.unitOfMeasure})`;
+      select.appendChild(option);
+    });
+
+    } catch (error) {
+    console.error('Error loading products:', error);
+    const select = document.getElementById('productSelect');
+    select.innerHTML = '<option value="">Error loading products from database</option>';
+    }
     }
     function autoFillPrice() {
     const select = document.getElementById('productSelect');
     const option = select.options[select.selectedIndex];
     
-    if (option && option.dataset.price) {
-      document.getElementById('unitPrice').value = option.dataset.price;
-      showStockWarning(option.value, parseInt(option.dataset.stock) || 0);
+    if (option && option.value) {
+      document.getElementById('unitPrice').value = option.dataset.price || '';
     }
     }
     function showStockWarning(productName, stock) {
@@ -158,7 +230,7 @@ block content
     const productName = select.value;
     const qty = parseFloat(document.getElementById('qty').value) || 1;
     const price = parseFloat(document.getElementById('unitPrice').value) || 0;
-    const availableStock = parseInt(select.options[select.selectedIndex]?.dataset.stock) || 0;
+    const availableStock = parseInt(select.options[select.selectedIndex]?.dataset.quantity) || 0;
     if (!productName) {
     return alert("Please select a product");
     }

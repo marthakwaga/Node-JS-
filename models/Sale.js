@@ -7,7 +7,7 @@ const saleSchema = new mongoose.Schema({
   customerPhone: String,
   date: { type: Date, default: Date.now },
   items: [{
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
     name: String,
     quantity: Number,
     unitPrice: Number,

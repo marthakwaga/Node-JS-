@@ -3,19 +3,25 @@ const router = express.Router();
 
 const Sale = require('../models/Sale');
 const Stock = require('../models/Stock');
+const Product = require('../models/Product');
 
-
-// LOAD PAGE
+// LOAD PAGE - Add Sale
 router.get('/addsale', async (req, res) => {
   try {
-    const items = await Stock.find({quantity: { $gt: 0 }}).select('productName sellingPrice');
-    res.render('add_sale', { items });
+    const stockItems = await Stock.find({ 
+      quantity: { $gt: 0 }        // Only show items with stock
+    }).sort({ productName: 1 });
+
+    res.render('add_sale', { 
+      products: stockItems 
+    });
+
   } catch (error) {
-    res.status(500).send('Error loading sale form');
-    console.error('error', error.message);
+    console.error('Error fetching stock:', error);
+    res.render('add_sale', { products: [] });
   }
 });
- 
+
 // SAVE SALE
 router.post('/addsale', async (req, res) => {
   try {
@@ -29,7 +35,9 @@ router.post('/addsale', async (req, res) => {
       items,
       transportRequested
     } = req.body;
-    const item = await Stock.findById(items[0].product);
+     const parsedItems = typeof items === 'string' ? JSON.parse(items) : items;
+     const item = await Stock.findOne({ 
+      productName: parsedItems[0].product });
     if (!item) {
       return res.status(400).send('Invalid product in items');
     }
@@ -38,8 +46,6 @@ router.post('/addsale', async (req, res) => {
       return res.status(400).send('Missing required fields');
     }
         // Convert items safely
-    const parsedItems = typeof items === 'string' ? JSON.parse(items) : items;
-
     if(!Array.isArray(parsedItems) || parsedItems.length === 0) {
       return res.status(400).send('Invalid items data');
     }
@@ -55,19 +61,33 @@ router.post('/addsale', async (req, res) => {
       itemsTotal + Number(transportCharge || 0);
 
     // Save sale
-    const newSale = new Sale({
-      saleDate,
-      representative,
-      customerPhone,
-      distance: Number(distance) || 0,
-      transportCharge: Number(transportCharge) || 0,
-      transportRequested: transportRequested === 'true' || transportRequested === 'false' ? transportRequested === 'true' : false,
-      items: parsedItems,
-      grandTotal
-    });
-    console.log('Saving Sale:', newSale);
-    await newSale.save();
-    res.redirect('/saleslist');
+    const formattedItems = parsedItems.map(item => ({
+  name: item.product,
+  quantity: Number(item.qty),
+  unitPrice: Number(item.price),
+  amount: Number(item.total)
+}));
+
+const newSale = new Sale({
+
+  orderId: 'ORD-' + Date.now(),
+
+  customerName:
+    req.body.customerName || 'Walk-in Customer',
+
+  customerPhone,
+
+  items: formattedItems,
+
+  totalAmount: itemsTotal,
+
+  transportCost:
+    Number(transportCharge) || 0,
+
+  amountPaid: grandTotal,
+
+  paymentStatus: 'paid'
+});
 
     // Deduct stock
     for (const item of parsedItems) {
@@ -85,6 +105,8 @@ router.post('/addsale', async (req, res) => {
         console.warn(`Stock for product ${item.product} not found`);
       }
     }
+    await newSale.save();
+    console.log('Saved sale ID:', newSale._id);
     res.redirect(`/receipt/${newSale._id}?success=true`);
 
   } catch (error) {
@@ -98,7 +120,6 @@ router.post('/addsale', async (req, res) => {
   }
 });
 
-// routes/sales.js
 // API to get all sales
 router.get('/api', async (req, res) => {
   try {

@@ -1,21 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const Stock = require('../models/Stock');
 
 // GET All Products (for table)
-// PRODUCTS PAGE
-router.get('/', (req, res) => {
-  res.render('products');
-});
+
 router.get('/api/products', async (req, res) => {
   try {
-    const products = await Product.find().sort({ name: 1 });
+    const products = await Stock.find().sort({ productName: 1 });
     res.json(products);
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     res.status(500).json([]);
   }
-}); 
+});
 
 // POST - Add New Product
 router.post('/', async (req, res) => {

@@ -32,14 +32,18 @@ block content
         .table-responsive
           table.table.table-hover.align-middle
             thead.table-dark
+            each product in products
               tr
-                th Product Name
-                th Category
-                th Buying Price
-                th Selling Price
-                th Stock Qty
-                th Status
-                th Actions
+                td #{product.productName}
+                td #{product.productType || 'N/A'}
+                td UGX #{product.sellingPrice ? product.sellingPrice.toLocaleString() : '0'}
+                td.text-center #{product.quantity} #{product.unitOfMeasure}
+                td #{product.supplierName}
+                td 
+                  if product.quantity > 0
+                    span.badge.bg-success In Stock
+                  else
+                    span.badge.bg-danger Out of Stock
             tbody#productsBody
 
   // ==================== EDIT PRODUCT MODAL ====================
