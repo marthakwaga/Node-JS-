@@ -50,10 +50,10 @@ block content
           tbody
             each item in sale.items
               tr
-                td #{item.product}
-                td.text-center #{item.qty}
-                td.text-end UGX #{item.price.toLocaleString()}
-                td.text-end.fw-bold UGX #{item.total.toLocaleString()}
+                td #{item.name}
+                td.text-center #{item.quantity}
+                td.text-end UGX #{Number(item.unitPrice || 0).toLocaleString()}
+                td.text-end.fw-bold UGX #{Number(item.amount || 0).toLocaleString()}
 
         hr
 
@@ -61,10 +61,10 @@ block content
       
           .col-md-6.text-end
             h5 Grand Total
-            h2.text-success UGX #{sale.grandTotal.toLocaleString()}
+            h2.text-success UGX #{Number(sale.amountPaid || 0).toLocaleString()}
 
-            if sale.transportCharge > 0
-              small.text-muted Transport Included: UGX #{sale.transportCharge.toLocaleString()}
+            if sale.transportCost > 0
+              small.text-muted Transport Included: UGX #{Number(sale.transportCost || 0).toLocaleString()}
 
         hr
 

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  .flex-grow-1.p-4(style='max-width: 850px; margin: 0 auto;')
+  .flex-grow-1.p-4(style='max-width: 1000px; margin: 0 auto; height: 100vh; overflow-y: auto;')
     .d-flex.justify-content-between.align-items-center.mb-4
       h2.text-white
         i.fas.fa-boxes.me-2
@@ -12,7 +12,7 @@ block content
         
     .row.mb-4
       .col-md-6
-        input#searchInput.form-control.form-control-lg(placeholder='Search by product name...' onkeyup='filterProducts()')
+        input#searchInput.form-control.form-control-lg(placeholder='Search by product name...' onkeyup='filterProducts()' style='color:white; background:rgba(255,255,255,0.1);')
       .col-md-3
         select#categoryFilter.form-select.form-select-lg(onchange='filterProducts()')
           option(value='') All Categories
@@ -32,19 +32,43 @@ block content
         .table-responsive
           table.table.table-hover.align-middle
             thead.table-dark
-            each product in products
               tr
-                td #{product.productName}
-                td #{product.productType || 'N/A'}
-                td UGX #{product.sellingPrice ? product.sellingPrice.toLocaleString() : '0'}
-                td.text-center #{product.quantity} #{product.unitOfMeasure}
-                td #{product.supplierName}
-                td 
-                  if product.quantity > 0
-                    span.badge.bg-success In Stock
-                  else
-                    span.badge.bg-danger Out of Stock
+                th Image
+                th Product
+                th Type
+                th Cost Price
+                th Selling Price
+                th Stock
+                th Supplier
+                th Status
             tbody#productsBody
+              each product in products
+                tr
+                  td
+                    img(
+                      src=`/${product.itemImage.replace(/\\/g, '/')}`
+                      alt='Product Image'
+                      style='width:70px; height:70px; object-fit:cover; border-radius:8px;'
+                    )
+                  td #{product.productName}
+                  td #{product.productType || '-'}
+                  td UGX #{Number(product.costPrice || 0).toLocaleString()}
+                  td UGX #{Number(product.sellingPrice || 0).toLocaleString()}
+                  td #{product.quantity} #{product.unitOfMeasure}
+
+                  td #{product.supplierName}
+
+                  td
+                    if product.quantity > 15
+                      span.badge.bg-success In Stock
+
+                    else if product.quantity > 0
+                      span.badge.bg-warning.text-dark Low Stock
+
+                    else
+                      span.badge.bg-danger Out of Stock
+       
+          
 
   // ==================== EDIT PRODUCT MODAL ====================
   #editProductModal.modal.fade(tabindex='-1')
@@ -53,7 +77,7 @@ block content
         .modal-header
           h5.modal-title Edit Product
           button.btn-close(type='button' data-bs-dismiss='modal')
-        form#editForm(action='' method='POST')
+        form#editForm(action='/products' method='POST')
           input#editProductId(type='hidden' name='id')
           .modal-body
             .row
@@ -98,20 +122,36 @@ block content
       tbody.innerHTML = '';
 
       data.forEach(p => {
-        const stock = parseInt(p.stockQuantity) || 0;
+        const stock = parseInt(p.quantity) || 0;
         const status = stock === 0 ? 'bg-danger' : (stock <= 15 ? 'bg-warning text-dark' : 'bg-success');
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><strong>${p.name}</strong></td>
-          <td>${p.category || '-'}</td>
-          <td>${Number(p.buyingPrice).toLocaleString()}</td>
-          <td class="fw-bold text-success">${Number(p.sellingPrice).toLocaleString()}</td>
-          <td class="fw-bold">${stock}</td>
-          <td><span class="badge ${status}">${stock === 0 ? 'Out of Stock' : stock <= 15 ? 'Low Stock' : 'In Stock'}</span></td>
           <td>
-            <button class="btn btn-sm btn-outline-primary" onclick="editProduct('${p._id}')">Edit</button>
-            <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteProduct('${p._id}')">Delete</button>
+            <img
+              src="/${(p.itemImage || '').replace(/\\/g, '/')}"
+              style="width:70px; height:70px; object-fit:cover; border-radius:8px;"
+            >
+             </td>
+           <td><strong>${p.productName || '-'}</strong></td>
+          <td>UGX ${Number(p.costPrice || 0).toLocaleString()}</td>
+          <td class="fw-bold text-success">
+            UGX ${Number(p.sellingPrice || 0).toLocaleString()}
+          </td>
+          <td class="fw-bold">
+            ${stock} ${p.unitOfMeasure || ''}
+          </td>
+          <td>${p.supplierName || '-'}</td>
+          <td>
+            <span class="badge ${status}">
+              ${
+                stock === 0
+                  ? 'Out of Stock'
+                  : stock <= 15
+                  ? 'Low Stock'
+                  : 'In Stock'
+              }
+            </span>
           </td>
         `;
         tbody.appendChild(row);
@@ -162,32 +202,33 @@ block content
       }
     }
 
-    function deleteProduct(id) {
-      if (confirm("Delete this product?")) {
-        fetch(`/products/${id}`, { method: 'DELETE' })
-          .then(() => loadProducts());
-      }
-    }
     // Filter Function
     function filterProducts() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('categoryFilter').value;
-      const stockLevel = document.getElementById('stockFilter').value;
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const category = document.getElementById('categoryFilter').value;
+    const stockLevel = document.getElementById('stockFilter').value;
 
-      const filtered = productsData.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(search);
-        const matchesCategory = !category || product.category === category;
-        const stock = parseInt(product.stockQuantity) || 0;
+    const filtered = productsData.filter(product => {
 
-        let matchesStock = true;
-        if (stockLevel === 'low') matchesStock = stock > 0 && stock <= 15;
-        if (stockLevel === 'out') matchesStock = stock === 0;
+      const matchesSearch = (product.productName || '').toLowerCase().includes(search);
 
-        return matchesSearch && matchesCategory && matchesStock;
+      const matchesCategory = !category || product.productType === category;
+
+      const stock = parseInt(product.quantity) || 0;
+
+      let matchesStock = true;
+
+      if (stockLevel === 'low')
+        matchesStock = stock > 0 && stock <= 15;
+
+      if (stockLevel === 'out')
+        matchesStock = stock === 0;
+
+      return matchesSearch && matchesCategory && matchesStock;
       });
-
-      renderProducts(filtered);
+    renderProducts(filtered);
     }
+
 
     function deleteProduct(id) {
       if (confirm("Are you sure you want to delete this product?")) {

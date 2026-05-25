@@ -25,7 +25,7 @@ app.set('views', path.join(__dirname,'views'))
 
 //4. Middleware
 app.use(express.static(path.join(__dirname,'public')));
-app.use('/public/uploads', express.static((__dirname + 'public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
@@ -69,7 +69,7 @@ app.use('/', require('./routes/saleRoutes'))
 app.use('/', require('./routes/dashboardRoutes'))
 app.use('/', require('./routes/creditRoutes'))
 app.use('/', require('./routes/depositRoutes'))
-app.use('/', require('./routes/productRoutes'))
+app.use('/products', require('./routes/productRoutes'))
 
 // This is the second last chunk of code
 //Handling non-existent routes
