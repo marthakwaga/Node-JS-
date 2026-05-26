@@ -182,7 +182,7 @@ block content
     // Load Products via API
     async function loadProducts() {
     try {
-    const response = await fetch('/api/products');
+    const response = await fetch('/products/api');
     if (!response.ok) throw new Error('Failed to fetch products');
 
     const products = await response.json();
