@@ -1,121 +1,72 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-  meta(http-equiv='x-ua-compatible' content='ie=edge')
-  title STOCK
-  // MDB icon
-  link(rel='icon' href='img/mdb-favicon.ico' type='image/x-icon')
-  // Font Awesome
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
-  // Google Fonts Roboto
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
-  // MDB
-  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='css/mdb.min.css')
-  link(rel='stylesheet' href='/css/nyondo.css')
-#intro-example.p-5.text-center.bg-image.d-flex.flex-column.min-vh-100(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.7);')
-    .container-fluid.main-body
-      .row
-        nav.sidebar.p-5.text-white(style='width: 260px; background: rgba(124, 95, 124, 0.36);')
-          .logo.mx-auto.mb-4(style="background-image: url('/images/logo.png'); \
-          width: 150px; height: 150px; \
-          background-size: contain; \
-          background-repeat: no-repeat;")
-          ul.nav.flex-column
-            li.nav-item
-              a.nav-link.text-white(href='/stocklist')
-                i.fas.fa-boxes
-                span(data-translate='products') Products
-            li.nav-item
-              a.nav-link.text-white(href='/addsale')
-                i.fas.fa-shopping-cart
-                span(data-translate='sales') Sales
-            li.nav-item
-              a.nav-link.text-white(href='/deposit')
-                i.fas.fa-hand-holding-usd
-                span(data-translate='deposits') Deposits
-            li.nav-item
-              a.nav-link.text-white(href='/credit')
-                i.fas.fa-users
-                span(data-translate='suppliers') Suppliers
-            li.nav-item
-              a.nav-link.text-white(href='/reports')
-                i.fas.fa-chart-bar
-                span(data-translate='reports') Reports
-            li.nav-item
-              a.nav-link.text-white(href='/offonline')
-                i.fas.fa-wifi
-                span(data-translate='offline') Offline Mode
-          a.btn.btn-warning.w-100.my-4(href="/")
-                i.fas.fa-sign-out-alt.me-2 | Logout       
-        form.col.overflow-y-auto(action='/add_stock' method='post' enctype="multipart/form-data")
-          .row.mb-4         
-          h3.text-center.fw-bold.text-white
-            u STOCK REGISTRATION
-          .row.g-3
-            .col
-              label.form-label.text-white(for='product name') Product Name:
-              input.form-control(name='quantity' type='text' placeholder='Enter Product Name')
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Product Type:
-              select.form-select(name='productType' aria-label='Default select example')
-                option(selected='') Choose option below
-                option(value='') Building Materials
-                option(value='') Hand Tools
-                option(value='') Power Tools
-                option(value='') Plumbing Supplies
-                option(value='') Electrical Supplies
-                option(value='') Paint &amp; Finishing Materials
-                option(value='') Doors, Windows &amp; Fittings
-                option(value='') Carpentry
-                option(value='') Fastners &amp; Fixings
-                option(value='') Safety Equipment        
-          .row.g-3
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Quantity:
-              input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Unit of Measure:
-              select.form-select(type='text' name='unitOfMeasure' aria-label='Default select example')
-                option(selected='') Choose option below
-                option(value='kg') Kilogram (kg)
-                option(value='g') Gram (g)
-                option(value='pc') Piece(s)
-                option(value='bg') Bag(s)
-                option(value='crt') Carton
-                option(value='t') Box
-                option(value='ltr') Litre (L)
-                option(value='ml') Millilitre (ml)       
-          .row.g-3
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Supplier Name:
-              input#supplierName.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Phone Number:
-              input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
-          .row.g-3
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Email:
-              input#email.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')        
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Cost Price:
-              input#costPrice.form-control(name='costPrice' type='number' aria-label='costPrice')
-          .row.g-3
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Selling Price:
-              input#sellingPrice.form-control(name='sellingPrice' type='number')
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Comment:
-              input#comment.form-control(name='comment' type='text')
-          .row.g-3
-            .col
-              label.form-label.text-white(for='formGroupExampleInput') Item Image:
-              input#itemImage.form-control(name='itemImage' type='file')
-              br
-              button.btn.btn-warning.btn-lg.w-20(type='submit') Add Stock
-script(type='text/javascript' src='js/mdb.umd.min.js')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-// Custom scripts
-script(type='text/javascript').
+extends layout 
+
+block content
+  form.col.overflow-y-auto(action='/add_stock' method='post' enctype="multipart/form-data")
+    .row.mb-4         
+    h3.text-center.fw-bold.text-white
+      u STOCK REGISTRATION
+    .row.g-3
+      .col
+        label.form-label.text-white(for='product name') Product Name:
+        input.form-control(name='quantity' type='text' placeholder='Enter Product Name')
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Product Type:
+        select.form-select(name='productType' aria-label='Default select example')
+          option(selected='') Choose option below
+          option(value='') Building Materials
+          option(value='') Hand Tools
+          option(value='') Power Tools
+          option(value='') Plumbing Supplies
+          option(value='') Electrical Supplies
+          option(value='') Paint &amp; Finishing Materials
+          option(value='') Doors, Windows &amp; Fittings
+          option(value='') Carpentry
+          option(value='') Fastners &amp; Fixings
+          option(value='') Safety Equipment        
+    .row.g-3
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Quantity:
+        input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Unit of Measure:
+        select.form-select(type='text' name='unitOfMeasure' aria-label='Default select example')
+          option(selected='') Choose option below
+          option(value='kg') Kilogram (kg)
+          option(value='g') Gram (g)
+          option(value='pc') Piece(s)
+          option(value='bg') Bag(s)
+          option(value='crt') Carton
+          option(value='t') Box
+          option(value='ltr') Litre (L)
+          option(value='ml') Millilitre (ml)       
+    .row.g-3
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Supplier Name:
+        input#supplierName.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Phone Number:
+        input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
+    .row.g-3
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Email:
+        input#email.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')        
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Cost Price:
+        input#costPrice.form-control(name='costPrice' type='number' aria-label='costPrice')
+    .row.g-3
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Selling Price:
+        input#sellingPrice.form-control(name='sellingPrice' type='number')
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Comment:
+        input#comment.form-control(name='comment' type='text')
+    .row.g-3
+      .col
+        label.form-label.text-white(for='formGroupExampleInput') Item Image:
+        input#itemImage.form-control(name='itemImage' type='file')
+        br
+        button.btn.btn-warning.btn-lg.w-20(type='submit') Add Stock
+  script(type='text/javascript' src='js/mdb.umd.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+  // Custom scripts
+  script(type='text/javascript').

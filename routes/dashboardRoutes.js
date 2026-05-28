@@ -33,7 +33,7 @@ router.get('/admin_dash', async(req,res)=>{
          }]
       );
       stats.inventoryValue = inventoryAgg.length > 0 ? inventoryAgg[0].totalStockValue: 0;
-       res.render('admindash', { stats })
+       res.render('admindash', { stats, user: req.user });
    } catch (error) {
       console.log(error);
       res.status(500).send('Unable to fetch dashboard data.');
