@@ -18,7 +18,11 @@ html(lang='en')
         width: 140px; height: 140px; \
         background-size: contain; background-repeat: no-repeat;")
         ul.nav.flex-column
-          if user 
+          if user.userRole === 'admin'
+            li.nav-item
+              a.nav-link.text-white(href='/admin_dash')
+                i.fas.fa-tachometer-alt
+                |  Dashboard 
             li.nav-item
               a.nav-link.text-white(href='/addsale')
                 i.fas.fa-shopping-cart
@@ -27,76 +31,63 @@ html(lang='en')
               a.nav-link.text-white(href='/products')
                 i.fas.fa-boxes
                 |  Products
-            if user.userRole === 'admin'
-              li.nav-item
-                a.nav-link.text-white(href='/add_stock')
-                  i.fas.fa-truck-loading
-                  |  Stock In
-              li.nav-item
-                a.nav-link.text-white(href='/deposit')
-                  i.fas.fa-hand-holding-usd
-                  |  Deposit Scheme
-              li.nav-item
-                a.nav-link.text-white(href='/supplier')
-                  i.fas.fa-users
-                  |  Suppliers
-              li.nav-item
-                a.nav-link.text-white(href='/reports')
-                  i.fas.fa-chart-bar
-                  |  Reports
-            if user.userRole ==='attendant'
-              li.nav-item
-                a.nav-link.text-white.active(href='/sales_dash')
-                  i.fas.fa-tachometer-alt
-                  |  My Dashboard
-              li.nav-item
-                a.nav-link.text-white(href='add-sale.html')
-                  i.fas.fa-plus-circle
-                  |  New Sale
-              li.nav-item
-                a.nav-link.text-white(href='sales.html')
-                  i.fas.fa-shopping-cart
-                  |  Today&apos;s Sales
-              li.nav-item
-                a.nav-link.text-white(href='products.html')
-                  i.fas.fa-boxes
-                  |  Products
-              li.nav-item
-                a.nav-link.text-white(href='deposits.html')
-                  i.fas.fa-hand-holding-usd
-                  |  Deposits
-            if user.userRole ==='manager'
-              li.nav-item
-                a.nav-link.active(href='manager-dashboard.html')
-                  i.fas.fa-tachometer-alt
-                  |  Dashboard
-              li.nav-item
-                a.nav-link(href='/products')
-                  i.fas.fa-boxes
-                  |  Products 
-              li.nav-item
-                a.nav-link(href='/add_stock')
-                  i.fas.fa-truck-loading
-                  |  Stock In
-              li.nav-item
-                a.nav-link(href='/addsale')
-                  i.fas.fa-shopping-cart
-                  |  Sales
-              li.nav-item
-                a.nav-link(href='/deposit')
-                  i.fas.fa-hand-holding-usd
-                  |  Deposit Scheme
-              li.nav-item
-                a.nav-link(href='/supplier')
-                  i.fas.fa-users
-                  |  Suppliers
-              li.nav-item
-                a.nav-link(href='/reports')
-                  i.fas.fa-chart-bar
-                  |  Reports
-  
-            .mt-auto.pt-4
-              a.btn.btn-outline-warning.w-100(href='/logout')
-                i.fas.fa-sign-out-alt
-                |  Logout
+            li.nav-item
+              a.nav-link.text-white(href='/add_stock')
+                i.fas.fa-truck-loading
+                |  Stock In
+            li.nav-item
+              a.nav-link.text-white(href='/deposit')
+                i.fas.fa-hand-holding-usd
+                |  Deposit Scheme
+            li.nav-item
+              a.nav-link.text-white(href='/supplier')
+                i.fas.fa-users
+                |  Suppliers
+            li.nav-item
+              a.nav-link.text-white(href='/reports')
+                i.fas.fa-chart-bar
+                |  Reports
+          if user.userRole ==='attendant'
+            li.nav-item
+              a.nav-link.text-white(href='/sales_dash')
+                i.fas.fa-tachometer-alt
+                |  Dashboard 
+            li.nav-item
+              a.nav-link.text-white(href='/addsale')
+                i.fas.fa-shopping-cart
+                |  Sales
+            li.nav-item
+              a.nav-link.text-white(href='/products')
+                i.fas.fa-boxes
+                |  Products
+          if user.userRole ==='manager'
+            li.nav-item
+              a.nav-link.text-white(href='/manager_dash')
+                i.fas.fa-tachometer-alt
+                |  Dashboard 
+            li.nav-item
+              a.nav-link.text-white(href='/addsale')
+                i.fas.fa-shopping-cart
+                |  Sales
+            li.nav-item
+              a.nav-link.text-white(href='/products')
+                i.fas.fa-boxes
+                |  Products
+            li.nav-item
+              a.nav-link.text-white(href='/add_stock')
+                i.fas.fa-truck-loading
+                |  Stock In
+            li.nav-item
+              a.nav-link.text-white(href='/deposit')
+                i.fas.fa-hand-holding-usd
+                |  Deposit Scheme
+            li.nav-item
+              a.nav-link.text-white(href='/reports')
+                i.fas.fa-chart-bar
+                |  Reports
+
+          .mt-auto.pt-4
+            a.btn.btn-outline-warning.w-100(href='/logout')
+              i.fas.fa-sign-out-alt
+              |  Logout
       block content

@@ -45,7 +45,7 @@ const DepositSchema = new mongoose.Schema({
     min: 0
   },
   representative: {
-    type: String,        // Who received the deposit
+    type: String,        
   },
   notes: {
     type: String

@@ -9,30 +9,31 @@ block content
         .col-xl-3.col-md-6
           .card.h-100.border-0.shadow
             .card-body
-              h5.text-muted Total Sales Revenue
-              h3.text-success.fw-bold #{stats.salesRevenue.toLocaleString()}UGX
+              h5.text-muted.fw-bold Total Sales Revenue
+              h3.text-success.fw-bold #{stats.salesRevenue.toLocaleString()}/=
         .col-xl-3.col-md-6
           .card.h-100.border-0.shadow
             .card-body
-              h5.text-muted Total Stock Value
-              h3.fw-bold #{stats.inventoryValue.toLocaleString()}UGX
+              h5.text-muted.fw-bold Total Stock Value
+              h3.fw-bold #{stats.inventoryValue.toLocaleString()}/=
         .col-xl-3.col-md-6
           .card.h-100.border-0.shadow
             .card-body
-              h5.text-muted Active Deposits
-              h3.fw-bold UGX 14.8M
-              small 52 Members
+              h5.text-muted.fw-bold Active Deposits
+              h3.fw-bold #{Number(stats.activeDepositAmount || 0).toLocaleString()}/=
+              small #{stats.activeMembers} Members
         .col-xl-3.col-md-6
           .card.h-100.border-0.shadow
             .card-body
-              h5.text-muted Pending Credit
-              h3.text-warning.fw-bold UGX 9.2M
+              h5.text-muted.fw-bold Pending Credit
+              h3.text-warning.fw-bold #{Number(stats.pendingCreditAmount || 0).toLocaleString()}
+              small #{stats.pendingCreditSuppliers} Suppliers
       // Recent Sales & Low Stock
       .row
         .col-lg-7
           .card.shadow
             .card-header.bg-white
-              h5 Recent Sales
+              h5.fw-bold Recent Sales
             .card-body
               table.table.table-hover
                 thead
@@ -42,29 +43,24 @@ block content
                     th Amount
                     th Items
                 tbody
-                  tr
-                    td Today
-                    td John Bosco
-                    td.text-success 1,250,000
-                    td 8
-                  tr
-                    td Today
-                    td Sarah Nansubuga
-                    td.text-success 850,000
-                    td 5
+                  if recentSales.length > 0
+                    each sale in recentSales
+                      tr
+                        td= sale.createdAt.toDateString()
+                        td=sale.customerName
+                        td.text-success= sale.totalAmount.toLocaleString()
+                        td= sale.items.length 
+                  else 
+                    tr 
+                      td(colspan='4') No sales found
         .col-lg-5
           .card.shadow
             .card-header.bg-warning.text-dark
-              h5 Low Stock Alert
+              h5.fw-bold Low Stock Alert
             .card-body
               ul.list-group
-                li.list-group-item.d-flex.justify-content-between
-                  | Cement 50kg 
-                  span.badge.bg-danger 12 left
-                li.list-group-item.d-flex.justify-content-between
-                  | Binding Wire 
-                  span.badge.bg-warning 8 left
-                li.list-group-item.d-flex.justify-content-between
-                  | PVC Pipe 4m 
-                  span.badge.bg-warning 15 left
+                each item in lowStockItems
+                  li.list-group-item.d-flex.justify-content-between
+                    | #{item.ProductName} 
+                    span.badge.bg-danger #{item.quantity} left
   script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
