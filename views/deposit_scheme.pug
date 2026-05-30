@@ -91,7 +91,7 @@ block content
                             td= new Date(deposit.startDate).toLocaleDateString()
                             td= deposit.fullName
                             td.text-success.fw-bold= deposit.depositAmount.toLocaleString()
-                            td= deposit.periodMonths + 'Months'
+                            td= deposit.periodMonths + ' Months'
                             td
                               span.badge(
                                 class=
@@ -140,7 +140,7 @@ block content
                             button.btn.btn-sm.btn-outline-primary(type='submit') Replenish
                         td 
                           button.btn.btn-sm.btn-warning(data-mdb-toggle='modal' data-mdb-target=`#redeemModal-${deposit._id}`) | Redeem
-                    each deposit in recentDeposits
+                    each deposit in redeemedDeposits
                       .modal.fade(
                         id=`redeemModal-${deposit._id}`
                         tabindex='-1'
@@ -207,9 +207,45 @@ block content
                       td(colspan='6') No redeemed deposits
   script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
   script.
-    document.getElementById('depositForm').addEventListener('submit', function() {
-      const depositAmount = parseFloat(document.querySelector('[name="depositAmount"]').value) || 0;
+    //- document.getElementById('depositForm').addEventListener('submit', function() {
+    //-   const depositAmount = parseFloat(document.querySelector('[name="depositAmount"]').value) || 0;
+    //-   // Update hidden remainingAmount field
+    //-   let remainingField = document.querySelector('[name="remainingAmount"]');
+    //-   if (remainingField) remainingField.value = depositAmount;
+    //- });
+    document.getElementById("depositForm").addEventListener("submit", function(e) {
+      const phone = document.getElementById("phoneNumber").value.trim();
+      const depositAmount = parseFloat(document.querySelector("[name=\"depositAmount\"]").value) || 0;
+      let valid = true;
+
+      // Clear previous errors
+      document.querySelectorAll(".validation-error").forEach(function(el) { el.remove(); });
+      document.querySelectorAll(".is-invalid").forEach(function(el) { el.classList.remove("is-invalid"); });
+
+      // Phone validation — 10 digits, starts with 07
+      if (!/^07\d{8}$/.test(phone)) {
+        valid = false;
+        showError("phoneNumber", "Phone number must be 10 digits and start with 07");
+      }
+
       // Update hidden remainingAmount field
-      let remainingField = document.querySelector('[name="remainingAmount"]');
+      const remainingField = document.querySelector("[name=\"remainingAmount\"]");
       if (remainingField) remainingField.value = depositAmount;
+
+      if (!valid) e.preventDefault();
     });
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      const error = document.createElement("div");
+      error.className = "validation-error text-danger small mt-1";
+      error.textContent = message;
+      field.classList.add("is-invalid");
+      field.parentNode.appendChild(error);
+      field.addEventListener("input", function() {
+        field.classList.remove("is-invalid");
+        const err = field.parentNode.querySelector(".validation-error");
+        if (err) err.remove();
+      }, { once: true });
+    }

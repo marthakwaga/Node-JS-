@@ -1,35 +1,36 @@
 extends layout 
 
 block content
-  form.col.overflow-y-auto(action='/add_stock' method='post' enctype="multipart/form-data")
+  form#addStockForm.col.overflow-y-auto(action='/add_stock' method='post' enctype="multipart/form-data")
     .row.mb-4         
     h3.text-center.fw-bold.text-white
       u STOCK REGISTRATION
     .row.g-3
       .col
-        label.form-label.text-white(for='product name') Product Name:
-        input.form-control(name='quantity' type='text' placeholder='Enter Product Name')
+        label.form-label.text-white Product Name:
+        input#productName.form-control(name='productName' type='text' placeholder='Enter Product Name')
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Product Type:
-        select.form-select(name='productType' aria-label='Default select example')
+        label.form-label.text-white Product Type:
+        select.form-select(name='productType')
           option(selected='') Choose option below
-          option(value='') Building Materials
-          option(value='') Hand Tools
-          option(value='') Power Tools
-          option(value='') Plumbing Supplies
-          option(value='') Electrical Supplies
-          option(value='') Paint &amp; Finishing Materials
-          option(value='') Doors, Windows &amp; Fittings
-          option(value='') Carpentry
-          option(value='') Fastners &amp; Fixings
-          option(value='') Safety Equipment        
+          option(value='Building Materials') Building Materials
+          option(value='Hand Tools') Hand Tools
+          option(value='Power Tools') Power Tools
+          option(value='Plumbing Supplies') Plumbing Supplies
+          option(value='Electrical Supplies') Electrical Supplies
+          option(value='Paint & Finishing Materials') Paint & Finishing Materials
+          option(value='Doors, Windows & Fittings') Doors, Windows & Fittings
+          option(value='Carpentry') Carpentry
+          option(value='Fasteners & Fixings') Fasteners & Fixings
+          option(value='Safety Equipment') Safety Equipment
+
     .row.g-3
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Quantity:
-        input.form-control(name='quantity' type='number' placeholder='' aria-label='First name')
+        label.form-label.text-white Quantity:
+        input#quantity.form-control(name='quantity' type='number' placeholder='0')
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Unit of Measure:
-        select.form-select(type='text' name='unitOfMeasure' aria-label='Default select example')
+        label.form-label.text-white Unit of Measure:
+        select.form-select(name='unitOfMeasure')
           option(selected='') Choose option below
           option(value='kg') Kilogram (kg)
           option(value='g') Gram (g)
@@ -38,35 +39,69 @@ block content
           option(value='crt') Carton
           option(value='t') Box
           option(value='ltr') Litre (L)
-          option(value='ml') Millilitre (ml)       
+          option(value='ml') Millilitre (ml)
+
     .row.g-3
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Supplier Name:
-        input#supplierName.form-control(name='supplierName' type='text' placeholder='Enter name here' aria-label='supplierName')
+        label.form-label.text-white Supplier Name:
+        input#supplierName.form-control(name='supplierName' type='text' placeholder='Enter name here')
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Phone Number:
-        input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='+2567xxxxxxxx' aria-label='Number')
+        label.form-label.text-white Phone Number:
+        input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='07XXXXXXXX')
+
     .row.g-3
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Email:
-        input#email.form-control(name='email' type='email' placeholder='youremail@example.com' aria-label='Email')        
+        label.form-label.text-white Email:
+        input#email.form-control(name='email' type='email' placeholder='youremail@example.com')
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Cost Price:
-        input#costPrice.form-control(name='costPrice' type='number' aria-label='costPrice')
+        label.form-label.text-white Cost Price:
+        input#costPrice.form-control(name='costPrice' type='number')
+
     .row.g-3
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Selling Price:
+        label.form-label.text-white Selling Price:
         input#sellingPrice.form-control(name='sellingPrice' type='number')
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Comment:
+        label.form-label.text-white Comment:
         input#comment.form-control(name='comment' type='text')
+
     .row.g-3
       .col
-        label.form-label.text-white(for='formGroupExampleInput') Item Image:
+        label.form-label.text-white Item Image:
         input#itemImage.form-control(name='itemImage' type='file')
         br
-        button.btn.btn-warning.btn-lg.w-20(type='submit') Add Stock
-  script(type='text/javascript' src='js/mdb.umd.min.js')
+        button.btn.btn-warning.btn-lg(type='submit') Add Stock
+
   script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
-  // Custom scripts
-  script(type='text/javascript').
+  script.
+    document.getElementById("addStockForm").addEventListener("submit", function(e) {
+      const phone = document.getElementById("phoneNumber").value.trim();
+      let valid = true;
+
+      // Clear previous errors
+      document.querySelectorAll(".validation-error").forEach(function(el) { el.remove(); });
+      document.querySelectorAll(".is-invalid").forEach(function(el) { el.classList.remove("is-invalid"); });
+
+      // Phone validation — 10 digits, starts with 07
+      if (!/^07\d{8}$/.test(phone)) {
+        valid = false;
+        showError("phoneNumber", "Phone number must be 10 digits and start with 07");
+      }
+
+      if (!valid) e.preventDefault();
+    });
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      const error = document.createElement("div");
+      error.className = "validation-error text-danger small mt-1";
+      error.textContent = message;
+      field.classList.add("is-invalid");
+      field.parentNode.appendChild(error);
+      field.addEventListener("input", function() {
+        field.classList.remove("is-invalid");
+        const err = field.parentNode.querySelector(".validation-error");
+        if (err) err.remove();
+      }, { once: true });
+    }

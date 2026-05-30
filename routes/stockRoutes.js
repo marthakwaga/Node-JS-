@@ -28,7 +28,14 @@ router.post('/stock_list',(req,res)=>{
 router.get('/add_stock', (req,res)=>{
     res.render('addstock');
 });
-router.post('/add_stock', upload.single('itemImage'), async (req, res) => {
+
+//Add stock to the Db
+ const requireAdminOrManager = (req, res, next) => {
+    if (!req.user) return res.status(401).send('Not logged in');
+    if (req.user.userRole === 'admin' || req.user.userRole === 'manager') return next();
+    return res.status(403).send('Access denied. Managers and Admins only.');
+    };
+router.post('/add_stock', requireAdminOrManager,upload.single('itemImage'), async (req, res) => {
     try {
      const {productName,productType, quantity, unitOfMeasure, supplierName, phoneNumber, email, costPrice, sellingPrice, itemImage, comment} = req.body;
      const total = parseInt(quantity)*parseFloat(costPrice);
@@ -44,7 +51,8 @@ router.post('/add_stock', upload.single('itemImage'), async (req, res) => {
         sellingPrice,
         comment,
         total,
-        itemImage: req.file.path
+        product,
+        itemImage: req.file ? req.file.path : null
      }) 
      console.log(newProduct);
      await newProduct.save();

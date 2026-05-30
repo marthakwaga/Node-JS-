@@ -52,3 +52,46 @@ head
         small.text-muted Nyondo General Hardware LTD
 // Scripts
 script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+
+script.
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    const phone = document.getElementById("phoneNumber").value.trim();
+    const nin = document.getElementById("NIN").value.trim();
+    let valid = true;
+
+    // Clear previous errors
+    document.querySelectorAll(".validation-error").forEach(el => el.remove());
+
+    // Phone validation
+    if (!/^07\d{8}$/.test(phone)) {
+      valid = false;
+      showError("phoneNumber", "Phone number must be 10 digits and start with 07");
+    }
+
+    // NIN validation
+    if (!/^C[FM][A-Z0-9]{12}$/.test(nin)) {
+      valid = false;
+      showError("NIN", "NIN must be 14 characters, start with CF or CM, and be uppercase");
+    }
+
+    if (!valid) e.preventDefault();
+  });
+
+  // Auto uppercase NIN as user types
+  document.getElementById("NIN").addEventListener("input", function() {
+    this.value = this.value.toUpperCase();
+  });
+
+  function showError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const error = document.createElement("div");
+    error.className = "validation-error text-danger small mt-1";
+    error.textContent = message;
+    field.classList.add("is-invalid");
+    field.parentNode.appendChild(error);
+    field.addEventListener("input", function() {
+      field.classList.remove("is-invalid");
+      const err = field.parentNode.querySelector(".validation-error");
+      if (err) err.remove();
+    }, { once: true });
+  }
