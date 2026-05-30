@@ -47,6 +47,10 @@ html(lang='en')
               a.nav-link.text-white(href='/reports')
                 i.fas.fa-chart-bar
                 |  Reports
+            li.nav-item
+              a.nav-link.text-white.active(href='/expenses')
+                i.fas.fa-file-invoice-dollar
+                |  Expenses
           if user.userRole ==='attendant'
             li.nav-item
               a.nav-link.text-white(href='/sales_dash')
@@ -85,6 +89,10 @@ html(lang='en')
               a.nav-link.text-white(href='/reports')
                 i.fas.fa-chart-bar
                 |  Reports
+            li.nav-item
+              a.nav-link.text-white.active(href='/expenses')
+                i.fas.fa-file-invoice-dollar
+                |  Expenses
 
           .mt-auto.pt-4
             a.btn.btn-outline-warning.w-100(href='/logout')

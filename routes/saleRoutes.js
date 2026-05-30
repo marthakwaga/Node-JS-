@@ -61,12 +61,16 @@ router.post('/addsale', async (req, res) => {
       itemsTotal + Number(transportCharge || 0);
 
     // Save sale
-    const formattedItems = parsedItems.map(item => ({
-  name: item.product,
-  quantity: Number(item.qty),
-  unitPrice: Number(item.price),
-  amount: Number(item.total)
-}));
+    const formattedItems = await Promise.all(parsedItems.map(async (item) => {
+      const stockItem = await Stock.findOne({ productName: item.product });
+      return {
+        name: item.product,
+        quantity: Number(item.qty),
+        unitPrice: Number(item.price),
+        costPrice: stockItem ? Number(stockItem.costPrice) : 0,
+        amount: Number(item.total)
+      };
+    }));
 
 const newSale = new Sale({
 

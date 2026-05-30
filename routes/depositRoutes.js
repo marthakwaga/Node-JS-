@@ -9,19 +9,24 @@ router.get('/deposit', async (req, res) => {
   try {
 
     const deposits = await Deposit.find()
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 }).lean();
+    const recentDeposits = deposits.filter(d => d.status === 'Active' || d.status === 'Expired');
+    const redeemedDeposits = deposits.filter(d => d.amountRedeemed > 0);
 
+    console.log(Array.isArray(deposits), deposits.length, recentDeposits.length, redeemedDeposits.length); // Debugging logs
+  
     res.render('deposit_scheme', {
-      deposits
+      deposits,
+      recentDeposits,
+      redeemedDeposits
     });
 
   } catch (error) {
-
     console.log(error);
     res.status(500).send('Server Error');
-
   }
 });
+
 // Make a New Deposit
 router.post('/deposit', async (req, res) => {
   try {

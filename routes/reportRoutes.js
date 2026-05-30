@@ -3,21 +3,27 @@ const router = express.Router();
 
 const Sale = require('../models/Sale');
 const Stock = require('../models/Stock');
+const Expense = require('../models/Expense'); 
 
 router.get('/reports', async (req, res) => {
   try {
     // Get all sales
-    const sales = await Sale.find().sort({ date: -1 }).limit(100);
+    const sales = await Sale.find().sort({ date: -1 }).limit(100).lean();
 
     // Calculate financials
     const totalRevenue = sales.reduce((sum, sale) => sum + (sale.totalAmount || sale.sellingprice * sale.qty || 0), 0);
 
     const totalCost = sales.reduce((sum, sale) => {
-      return sum + ((sale.costPrice || 0) * (sale.quantity || sale.qty || 0));
+     const saleCost = sale.items.reduce((s, item) => {
+      return s + ((item.costPrice || 0) * (item.quantity || 0));
     }, 0);
+    return sum + saleCost;
+  }, 0);
 
-    const grossProfit = totalRevenue - totalCost;
-    const expenses = 9200000; // You can make this dynamic later from an Expenses model
+  const grossProfit = totalRevenue - totalCost;
+
+   const expenseRecords = await Expense.find().lean();
+    const expenses = expenseRecords.reduce((sum, e) => sum + (e.amount || 0), 0);
     const netProfit = grossProfit - expenses;
 
     // Low Stock - Safe query (no populate if not needed)

@@ -71,7 +71,8 @@ app.use('/', require('./routes/creditRoutes'))
 app.use('/', require('./routes/depositRoutes'))
 app.use('/products', require('./routes/productRoutes'))
 app.use('/', require('./routes/reportRoutes'))  
-app.use('/users', require('./routes/userRoutes'))  
+app.use('/users', require('./routes/userRoutes'))
+app.use('/', require('./routes/expenseRoutes'))
 
 
 // This is the second last chunk of code

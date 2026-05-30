@@ -11,6 +11,7 @@ const saleSchema = new mongoose.Schema({
     name: String,
     quantity: Number,
     unitPrice: Number,
+    costPrice: {type: Number, default: 0 },
     amount: Number
   }],
   totalAmount: { type: Number, required: true },

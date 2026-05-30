@@ -1,125 +1,87 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Sales Attendant Dashboard - Nyondo Hardware
-  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css')
-  link(rel='stylesheet' href='/css/mdb.min.css')
-  link(rel='stylesheet' href='/nyondo.css')
-.bg-image.min-vh-100.d-flex(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  .mask.mask-custom.flex-grow-1.d-flex(style='background-color: rgba(25, 12, 36, 0.75);')
-    // Sidebar
-    nav.sidebar.p-3.text-white.flex-shrink-0.overflow-auto(style='width: 260px; background: rgba(152, 124, 152, 0.349); color: #333; box-shadow: 2px 0 10px rgba(0,0,0,0.15);')
-      .logo.mx-auto.mb-4.text-center(style="background-image: url('/images/logo.png'); \
-      width: 140px; height: 140px; \
-      background-size: contain; background-repeat: no-repeat;")
-      ul.nav.flex-column
-        li.nav-item
-          a.nav-link.text-white.active(href='#')
-            i.fas.fa-tachometer-alt
-            |  My Dashboard
-        li.nav-item
-          a.nav-link.text-white(href='add-sale.html')
-            i.fas.fa-plus-circle
-            |  New Sale
-        li.nav-item
-          a.nav-link.text-white(href='sales.html')
-            i.fas.fa-shopping-cart
-            |  Today&apos;s Sales
-        li.nav-item
-          a.nav-link.text-white(href='products.html')
-            i.fas.fa-boxes
-            |  Products
-        li.nav-item
-          a.nav-link.text-white(href='deposits.html')
-            i.fas.fa-hand-holding-usd
-            |  Deposits
-        li.nav-item
-          a.nav-link.text-white(href='offline.html')
-            i.fas.fa-wifi
-            |  Offline Mode
-      .mt-auto.pt-4
-        
-            
-        button.btn.btn-outline-warning.w-100(onclick='logout()') Logout
-    // Main Content
-    .flex-grow-1.p-4.overflow-auto
-      .container-fluid
-        .d-flex.justify-content-between.align-items-center.mb-4.text-warning
-          h2 Welcome back, Carol!
-          .text-end
-            #currentDate.fw-bold.text-white
-        // Quick Stats
-        .row.g-4.mb-5
-          .col-xl-3.col-md-6
-            .card.border-0.shadow.h-100
-              .card-body
-                h5.text-muted.fw-bold Today&apos;s Sales
-                h3.text-success.fw-bold UGX 1,245,000
-                small.text-success 8 Transactions
-          .col-xl-3.col-md-6
-            .card.border-0.shadow.h-100
-              .card-body
-                h5.text-muted.fw-bold Items Sold
-                h3.fw-bold 47
-          .col-xl-3.col-md-6
-            .card.border-0.shadow.h-100
-              .card-body
-                h5.text-muted.fw-bold Average Sale
-                h3.fw-bold UGX 155,625
-          .col-xl-3.col-md-6
-            .card.border-0.shadow.h-100
-              .card-body
-                h5.text-muted.fw-bold Cash Collected
-                h3.text-primary.fw-bold UGX 980,000
-        // Quick Actions
-        .row.mb-5
-          .col-md-6.col-lg-3.mb-3
-            a.btn.btn-success.btn-lg.w-100.py-4.shadow(href='add-sale.html')
-              i.fas.fa-plus.fa-2x.mb-2.d-block
-              h5.mb-0.fw-bold New Sale
-          .col-md-6.col-lg-3.mb-3
-            button.btn.btn-primary.btn-lg.w-100.py-4.shadow
-              i.fas.fa-search.fa-2x.mb-2.d-block
-              h5.mb-0.fw-bold Search Product
-          .col-md-6.col-lg-3.mb-3
-            button.btn.btn-warning.btn-lg.w-100.py-4.shadow
-              i.fas.fa-hand-holding-usd.fa-2x.mb-2.d-block
-              h5.mb-0.fw-bold Check Stock
-          .col-md-6.col-lg-3.mb-3
-            button.btn.btn-info.btn-lg.w-100.py-4.shadow.text-white
-              i.fas.fa-history.fa-2x.mb-2.d-block
-              h5.mb-0.fw-bold Today&apos;s Report
-        // Recent Sales
-        .card.shadow
-          .card-header.bg-white
-            h5.fw-bold Recent Sales (Today)
-          .card-body.p-0
-            .table-responsive
-              table.table.table-hover.mb-0
-                thead.table-light
-                  tr
-                    th Time
-                    th Customer
-                    th Items
-                    th.text-end Amount
-                    th.text-center Payment
-                tbody
-                  tr
-                    td 11:45 AM
-                    td John Bosco
-                    td 8
-  td Paint
-          td 3
-script(src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js')
-script.
-  const today = new Date();
+extends layout
 
-  document.getElementById('currentDate').innerText =
-    today.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+block content
+  .flex-grow-1.p-4.overflow-auto
+    .container-fluid
+
+      .d-flex.justify-content-between.align-items-center.mb-4.text-warning
+        h2 Welcome back, #{user.username}!
+        .text-end
+          #currentDate.fw-bold.text-white
+
+      // Quick Stats
+      .row.g-4.mb-5
+        .col-xl-3.col-md-6
+          .card.border-0.shadow.h-100
+            .card-body
+              h5.text-muted.fw-bold Today's Sales
+              h3.text-success.fw-bold UGX #{todayRevenue ? todayRevenue.toLocaleString() : '0'}
+              small.text-success= transactionCount + ' Transactions'
+
+        .col-xl-3.col-md-6
+          .card.border-0.shadow.h-100
+            .card-body
+              h5.text-muted.fw-bold Items Sold
+              h3.fw-bold= itemsSold || '0'
+
+        .col-xl-3.col-md-6
+          .card.border-0.shadow.h-100
+            .card-body
+              h5.text-muted.fw-bold Average Sale
+              h3.fw-bold UGX #{averageSale ? averageSale.toLocaleString() : '0'}
+
+        .col-xl-3.col-md-6
+          .card.border-0.shadow.h-100
+            .card-body
+              h5.text-muted.fw-bold Cash Collected
+              h3.text-primary.fw-bold UGX #{cashCollected ? cashCollected.toLocaleString() : '0'}
+
+      // Quick Actions
+      .row.mb-5
+        .col-md-6.col-lg-3.mb-3
+          a.btn.btn-success.btn-lg.w-100.py-4.shadow(href='/addsale')
+            i.fas.fa-plus.fa-2x.mb-2.d-block
+            h5.mb-0.fw-bold New Sale
+
+        .col-md-6.col-lg-3.mb-3
+          a.btn.btn-warning.btn-lg.w-100.py-4.shadow(href='/products')
+            i.fas.fa-boxes.fa-2x.mb-2.d-block
+            h5.mb-0.fw-bold Products
+      // Recent Sales
+      .card.shadow
+        .card-header.bg-white
+          h5.fw-bold Recent Sales (Today)
+        .card-body.p-0
+          .table-responsive
+            table.table.table-hover.mb-0
+              thead.table-light
+                tr
+                  th Time
+                  th Customer
+                  th Items
+                  th.text-end Amount
+                  th.text-center Payment
+
+              tbody
+                if recentSales.length > 0
+                  each sale in recentSales
+                    tr
+                      td= new Date(sale.createdAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+                      td= sale.customerName
+                      td= sale.items.length
+                      td.text-end.fw-bold= 'UGX ' + sale.totalAmount.toLocaleString()
+                      td.text-center
+                        - var badgeClass = sale.paymentStatus === 'paid' ? 'bg-success' : sale.paymentStatus === 'pending' ? 'bg-warning' : 'bg-info'
+                        span.badge(class=badgeClass)= sale.paymentStatus
+                else
+                  tr
+                    td(colspan='5').text-center.text-muted No sales recorded today
+
+  script.
+    // Display current date
+    const dateEl = document.getElementById('currentDate');
+    if (dateEl) {
+      dateEl.textContent = new Date().toLocaleDateString('en-UG', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
