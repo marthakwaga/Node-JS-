@@ -22,6 +22,7 @@ router.get('/stock_list',isManager, (req,res)=>{
 })
 router.post('/stock_list',(req,res)=>{
     console.log(req.body);
+    console.log(req.file);
 });
 
 //Add stock to the Db
@@ -51,7 +52,6 @@ router.post('/add_stock', requireAdminOrManager,upload.single('itemImage'), asyn
         sellingPrice,
         comment,
         total,
-        product,
         itemImage: req.file ? req.file.path : null
      }) 
      console.log(newProduct);

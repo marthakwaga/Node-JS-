@@ -49,7 +49,13 @@ const DepositSchema = new mongoose.Schema({
   },
   notes: {
     type: String
-  }
+  },
+  redemptions: [{
+  amount: { type: Number, required: true },
+  notes: { type: String, default: '' },
+  itemDescription: { type: String, default: '' },
+  redeemedAt: { type: Date, default: Date.now }
+}]
 }, { timestamps: true });
 
 // Pre-save middleware to calculate endDate and remainingAmount

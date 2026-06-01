@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const Registration = require('../models/Registration'); // ← use Registration not User
 
-// Middleware to check if user is Admin
 const isAdmin = (req, res, next) => {
-  if (req.user && req.user.userrole === 'admin') {
-    return next();
-  }
+  if (req.user && req.user.userRole === 'admin') return next();
   res.status(403).json({ message: "Access denied. Admin only." });
 };
 
-// GET All Users (API)
+// GET all users — API for the frontend table
 router.get('/api', async (req, res) => {
   try {
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    const users = await Registration.find()
+      .select('-hash -salt -password')
+      .sort({ createdAt: -1 })
+      .lean();
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -21,48 +21,18 @@ router.get('/api', async (req, res) => {
   }
 });
 
-// POST Register New User (Admin Only)
-router.post('/user_reg', isAdmin, async (req, res) => {
-  try { 
-    const { fullname, username, password, userrole } = req.body;
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error creating user" });
-  }
-});
-//     // Hash password
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(password, salt);
-
-//     const newUser = new User({
-//       fullname,
-//       username,
-//       password: hashedPassword,
-//       userrole: userrole || 'sales'
-//     });
-
-//     await newUser.save();
-//     res.status(201).json({ message: "User created successfully", user: newUser });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Error creating user" });
-//   }
-// });
-
-// DELETE User (Admin Only)
+// DELETE user (admin only)
 router.delete('/:id', isAdmin, async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
+    if (req.user._id.toString() === req.params.id) {
+      return res.status(400).json({ message: "You cannot delete your own account" });
+    }
+    await Registration.findByIdAndDelete(req.params.id);
     res.json({ message: "User deleted successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error deleting user" });
   }
 });
+
 module.exports = router;

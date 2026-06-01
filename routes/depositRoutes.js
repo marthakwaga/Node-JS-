@@ -105,15 +105,29 @@ router.get('/api/deposit', async (req, res) => {
 // Redeem / Update Deposit (when customer uses money)
 router.post('/deposit/redeem/:id', async (req, res) => {
   try {
-    const { amountRedeemed } = req.body;
+    const { amountRedeemed, notes, itemDescription } = req.body;
     const deposit = await Deposit.findById(req.params.id);
 
     if (!deposit) return res.status(404).send('Deposit not found');
 
-    deposit.amountRedeemed += Number(amountRedeemed);
+    const amount = Number(amountRedeemed);
+
+    if (amount <= 0) return res.status(400).send('Amount must be greater than 0');
+    if (amount > deposit.remainingAmount) return res.status(400).send('Amount exceeds remaining balance');
+
+    // Push individual redemption record
+    deposit.redemptions.push({
+      amount,
+      notes: notes || '',
+      itemDescription: itemDescription || '',
+      redeemedAt: new Date()
+    });
+
+    deposit.amountRedeemed += amount;
     deposit.remainingAmount = deposit.depositAmount - deposit.amountRedeemed;
 
     if (deposit.remainingAmount <= 0) {
+      deposit.remainingAmount = 0;
       deposit.status = 'Redeemed';
     }
 

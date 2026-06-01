@@ -1,9 +1,9 @@
-extends layout 
+extends layout
 
 block content
-
   .flex-grow-1.p-4.overflow-auto
     .container-fluid
+
       .d-flex.justify-content-between.align-items-center.mb-4
         h2.text-white Business Reports
         div
@@ -13,6 +13,30 @@ block content
           button.btn.btn-outline-light(onclick='window.print()')
             i.fas.fa-print
             |  Print
+
+      // Range Filter Buttons
+      .mb-4
+        .btn-group
+          a.btn(
+            href='/reports?range=all'
+            class=range === 'all' ? 'btn-warning' : 'btn-outline-light'
+          ) All Time
+          a.btn(
+            href='/reports?range=weekly'
+            class=range === 'weekly' ? 'btn-warning' : 'btn-outline-light'
+          ) This Week
+          a.btn(
+            href='/reports?range=monthly'
+            class=range === 'monthly' ? 'btn-warning' : 'btn-outline-light'
+          ) This Month
+
+      // Active range label
+      .mb-3
+        span.text-white.fw-bold
+          | Showing:&nbsp;
+          span.text-warning= range === 'weekly' ? 'Last 7 Days' : range === 'monthly' ? 'Last 30 Days' : 'All Time'
+        span.text-white.ms-3
+          | #{transactions} transaction(s)
 
       if error
         .alert.alert-danger= error
@@ -41,6 +65,7 @@ block content
               h3 UGX #{expenses ? expenses.toLocaleString() : '0'}
 
       .row
+        // Profit & Loss Statement
         .col-12.mb-4
           .card
             .card-header.bg-dark.text-white
@@ -70,6 +95,7 @@ block content
                       strong Net Profit
                     td.text-end.fw-bold UGX #{netProfit ? netProfit.toLocaleString() : '0'}
 
+        // Low Stock Alert
         .col-lg-6.mb-4
           .card
             .card-header.bg-warning
@@ -85,15 +111,40 @@ block content
                   tbody
                     each item in lowStock
                       tr
-                        td #{item.productName}
-                        td.text-danger #{item.quantity} #{item.unitOfMeasure || ''}
+                        td= item.productName
+                        td.text-danger= item.quantity + ' ' + (item.unitOfMeasure || '')
                         td
                           span.badge.bg-danger Low
               else
                 p.text-muted No low stock items at the moment.
 
-  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+        // Recent Transactions
+        .col-lg-6.mb-4
+          .card
+            .card-header.bg-dark.text-white
+              h5.fw-bold Recent Transactions
+            .card-body.p-0
+              .table-responsive
+                table.table.table-hover.mb-0
+                  thead.table-light
+                    tr
+                      th Date
+                      th Customer
+                      th Items
+                      th.text-end Amount
+                  tbody
+                    if sales && sales.length > 0
+                      each sale in sales.slice(0, 8)
+                        tr
+                          td= new Date(sale.createdAt).toLocaleDateString()
+                          td= sale.customerName
+                          td= sale.items.length
+                          td.text-end.fw-bold= 'UGX ' + sale.totalAmount.toLocaleString()
+                    else
+                      tr
+                        td(colspan='4').text-center.text-muted No transactions found
 
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
   script.
     function exportToPDF() {
       window.print();

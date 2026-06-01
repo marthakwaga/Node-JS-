@@ -52,11 +52,6 @@ comment: {
     type: Number,
     min: 0
   },
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
-  },
 
 });
 

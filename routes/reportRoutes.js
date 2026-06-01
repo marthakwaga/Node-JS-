@@ -3,33 +3,59 @@ const router = express.Router();
 
 const Sale = require('../models/Sale');
 const Stock = require('../models/Stock');
-const Expense = require('../models/Expense'); 
+const Expense = require('../models/Expense');
 
 router.get('/reports', async (req, res) => {
   try {
-    // Get all sales
-    const sales = await Sale.find().sort({ date: -1 }).limit(100).lean();
+    const range = req.query.range || 'all';
 
-    // Calculate financials
-    const totalRevenue = sales.reduce((sum, sale) => sum + (sale.totalAmount || sale.sellingprice * sale.qty || 0), 0);
+    // Build date filter based on range
+    const dateFilter = {};
+    const now = new Date();
+
+    if (range === 'weekly') {
+      const weekAgo = new Date(now);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      dateFilter.createdAt = { $gte: weekAgo };
+    } else if (range === 'monthly') {
+      const monthAgo = new Date(now);
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      dateFilter.createdAt = { $gte: monthAgo };
+    }
+
+    const sales = await Sale.find(dateFilter).sort({ createdAt: -1 }).lean();
+
+    const totalRevenue = sales.reduce((sum, sale) => sum + (sale.totalAmount || 0), 0);
 
     const totalCost = sales.reduce((sum, sale) => {
-     const saleCost = sale.items.reduce((s, item) => {
-      return s + ((item.costPrice || 0) * (item.quantity || 0));
+      const saleCost = sale.items.reduce((s, item) => {
+        return s + ((item.costPrice || 0) * (item.quantity || 0));
+      }, 0);
+      return sum + saleCost;
     }, 0);
-    return sum + saleCost;
-  }, 0);
 
-  const grossProfit = totalRevenue - totalCost;
+    const grossProfit = totalRevenue - totalCost;
 
-   const expenseRecords = await Expense.find().lean();
+    // Filter expenses by range too
+    const expenseFilter = {};
+    if (range === 'weekly') {
+      const weekAgo = new Date(now);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      expenseFilter.date = { $gte: weekAgo };
+    } else if (range === 'monthly') {
+      const monthAgo = new Date(now);
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      expenseFilter.date = { $gte: monthAgo };
+    }
+
+    const expenseRecords = await Expense.find(expenseFilter).lean();
     const expenses = expenseRecords.reduce((sum, e) => sum + (e.amount || 0), 0);
     const netProfit = grossProfit - expenses;
 
-    // Low Stock - Safe query (no populate if not needed)
     const lowStock = await Stock.find({ quantity: { $lt: 20 } })
       .sort({ quantity: 1 })
-      .limit(8);
+      .limit(8)
+      .lean();
 
     res.render('reports', {
       totalRevenue,
@@ -38,7 +64,8 @@ router.get('/reports', async (req, res) => {
       expenses,
       transactions: sales.length,
       lowStock,
-      sales // Pass recent sales if needed
+      sales,
+      range
     });
 
   } catch (error) {
@@ -51,6 +78,7 @@ router.get('/reports', async (req, res) => {
       transactions: 0,
       lowStock: [],
       sales: [],
+      range: 'all',
       error: "Failed to generate reports. Please try again."
     });
   }

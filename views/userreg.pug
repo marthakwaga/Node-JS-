@@ -1,97 +1,126 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title HOMEPAGE
-  // MDB
-  link(href='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css' rel='stylesheet')
-  link(rel='stylesheet' href='/css/mdb.min.css')
-  link(rel='stylesheet' href='/css/nyondo.css')
-// Background Image Container
-#intro-example.bg-image.d-flex.align-items-center.justify-content-center.min-vh-100.p-4(style="background-image: url('https://images.pexels.com/photos/4312849/pexels-photo-4312849.jpeg');")
-  // Dark Overlay
-  .mask.mask-custom(style='background-color: rgba(25, 12, 36, 0.75);')
-    .register-card.p-5.mx-auto(style='max-width: 700px;')
-      .bg-danger.bg-opacity-10.p-4.rounded.shadow
-        h4.text-center.mb-4.text-white
+extends layout
+
+block content
+  .flex-grow-1.p-4.overflow-auto
+    .container-fluid
+      // Registration Form
+      .bg-light.bg-opacity-10.p-4.rounded.shadow.mb-5
+        h4.text-center.mb-4.text-white.fw-bold
           u REGISTER NEW STAFF
-        form#registerForm(action='/user_reg' method='post')
+
+        form#registerForm(action='/user_reg' method='post' autocomplete='off')
           .row
             .col-md-6.mb-3
               label.form-label.text-white Full Name
-              input#fullName.form-control(name='fullName' type='text' required='' placeholder='Full name')
+              input#fullName.form-control(name='fullName' type='text' required placeholder='Full name')
             .col-md-6.mb-3
               label.form-label.text-white Phone Number
-              input#phoneNumber.form-control(name='phoneNumber' type='number' placeholder=' 0782xxxxxx' required='')
+              input#phoneNumber.form-control(name='phoneNumber' type='tel' placeholder='07XXXXXXXX' required)
+
           .mb-3
-            label.form-label.text-white Email:
-            input#email.form-control(name='email' type='email' placeholder='Email'  autocomplete='off')
+            label.form-label.text-white Email
+            input#email.form-control(name='email' type='email' placeholder='Email' autocomplete='off')
+
           .row
             .col-md-6.mb-3
               label.form-label.text-white Password
-              input#password.form-control(name='password' type='password' placeholder='Enter password' required='')
+              input#password.form-control(name='password' type='password' placeholder='Enter password' autocomplete='new password')
             .col-md-6.mb-3
-              label.form-label.text-white NIN 
-              input#NIN.form-control(name='NIN' type='text' placeholder='' required='')
+              label.form-label.text-white NIN
+              input#NIN.form-control(name='NIN' type='text' placeholder='CF or CM followed by 12 characters' required)
+
           .mb-4
             label.form-label.text-white User Role
-            select#userRole.form-select(name='userRole' required='')
+            select#userRole.form-select(name='userRole' required)
               option(value='') Select Role
               option(value='attendant') Sales Attendant
               option(value='manager') Store Manager
               option(value='admin') Accounts / Admin
-          .d-grid
-            button.btn.btn-warning.btn-lg(type='submit')
-              i.fas.fa-user-plus
+
+          .d-flex.justify-content-center.mt-3
+            button.btn.btn-warning.px-5(type='submit')
+              i.fas.fa-user-plus.me-2
               |  Create Account
-        .text-center.mt-4
-          p.mb-0.text-white
-            | Already have an account? 
-            a.text-warning.fw-bold(href='/login') Login Here
-      .text-center.mt-5
+      // Registered Users Table
+      .card.shadow
+        .card-header.bg-warning.text-dark.d-flex.justify-content-between.align-items-center
+          h5.mb-0.fw-bold
+            i.fas.fa-users.me-2
+            | Registered Staff
+          span.badge.bg-dark= users ? users.length + ' users' : '0 users'
+
+        .card-body.p-0
+          .table-responsive
+            table.table.table-hover.mb-0
+              thead.table-dark
+                tr
+                  th Full Name
+                  th Phone
+                  th Email
+                  th NIN
+                  th Role
+                  th Registered On
+
+              tbody
+                if users && users.length > 0
+                  each u in users
+                    tr
+                      td.fw-bold= u.fullName || '-'
+                      td= u.phoneNumber || '-'
+                      td= u.email || '-'
+                      td
+                        code= u.NIN || '-'
+                      td
+                        - const roleMap = { admin: ['bg-danger', 'Admin'], manager: ['bg-primary', 'Store Manager'], attendant: ['bg-success', 'Sales Attendant'] }
+                        - const roleInfo = roleMap[u.userRole] || ['bg-secondary', u.userRole || 'Unknown']
+                        span.badge(class=roleInfo[0])= roleInfo[1]
+                      td= u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'
+                else
+                  tr
+                    td(colspan='6').text-center.text-muted.py-4 No staff registered yet
+
+      .text-center.mt-4
         small.text-muted Nyondo General Hardware LTD
-// Scripts
-script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
 
-script.
-  document.getElementById("registerForm").addEventListener("submit", function(e) {
-    const phone = document.getElementById("phoneNumber").value.trim();
-    const nin = document.getElementById("NIN").value.trim();
-    let valid = true;
+  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js')
+  script.
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      const phone = document.getElementById("phoneNumber").value.trim();
+      const nin = document.getElementById("NIN").value.trim();
+      let valid = true;
 
-    // Clear previous errors
-    document.querySelectorAll(".validation-error").forEach(el => el.remove());
+      document.querySelectorAll(".validation-error").forEach(function(el) { el.remove(); });
+      document.querySelectorAll(".is-invalid").forEach(function(el) { el.classList.remove("is-invalid"); });
 
-    // Phone validation
-    if (!/^07\d{8}$/.test(phone)) {
-      valid = false;
-      showError("phoneNumber", "Phone number must be 10 digits and start with 07");
+      if (!/^07\d{8}$/.test(phone)) {
+        valid = false;
+        showError("phoneNumber", "Phone number must be 10 digits and start with 07");
+      }
+
+      if (!/^C[FM][A-Z0-9]{12}$/.test(nin)) {
+        valid = false;
+        showError("NIN", "NIN must be 14 characters, start with CF or CM, and be uppercase");
+      }
+
+      if (!valid) e.preventDefault();
+    });
+
+    document.getElementById("NIN").addEventListener("input", function() {
+      this.value = this.value.toUpperCase();
+    });
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      const error = document.createElement("div");
+      error.className = "validation-error text-danger small mt-1";
+      error.textContent = message;
+      field.classList.add("is-invalid");
+      field.parentNode.appendChild(error);
+      field.addEventListener("input", function() {
+        field.classList.remove("is-invalid");
+        const err = field.parentNode.querySelector(".validation-error");
+        if (err) err.remove();
+      }, { once: true });
     }
-
-    // NIN validation
-    if (!/^C[FM][A-Z0-9]{12}$/.test(nin)) {
-      valid = false;
-      showError("NIN", "NIN must be 14 characters, start with CF or CM, and be uppercase");
-    }
-
-    if (!valid) e.preventDefault();
-  });
-
-  // Auto uppercase NIN as user types
-  document.getElementById("NIN").addEventListener("input", function() {
-    this.value = this.value.toUpperCase();
-  });
-
-  function showError(fieldId, message) {
-    const field = document.getElementById(fieldId);
-    const error = document.createElement("div");
-    error.className = "validation-error text-danger small mt-1";
-    error.textContent = message;
-    field.classList.add("is-invalid");
-    field.parentNode.appendChild(error);
-    field.addEventListener("input", function() {
-      field.classList.remove("is-invalid");
-      const err = field.parentNode.querySelector(".validation-error");
-      if (err) err.remove();
-    }, { once: true });
-  }

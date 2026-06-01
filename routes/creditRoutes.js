@@ -5,8 +5,17 @@ const Credit = require('../models/Credit.js');
 // GET - Credit Dashboard
 router.get('/supplier', async (req, res) => {
   try {
-    const credits = await Credit.find().sort({ dueDate: 1 });
-    res.render('credit', { credits });
+    const credits = await Credit.find().sort({ dueDate: 1 }).lean();
+
+    const totalOwed = credits.reduce((sum, c) => sum + (c.balance || 0), 0);
+    const totalPaid = credits.reduce((sum, c) => sum + (c.amountPaid || 0), 0);
+    const overdueCount = credits.filter(c => c.status === 'Overdue').length;
+
+    console.log('Credits found:', credits.length);      
+    console.log('Total owed:', totalOwed);               
+    console.log('Total paid:', totalPaid);  
+
+    res.render('credit', { credits, totalOwed, totalPaid, overdueCount });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
